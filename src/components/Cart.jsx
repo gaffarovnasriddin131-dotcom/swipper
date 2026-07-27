@@ -42,12 +42,12 @@ export default function Cart({
     e.preventDefault();
 
     if (!name || !phone || !email || !address) {
-      setMessage("Iltimos, barcha ma'lumotlarni to'ldiring");
+      setMessage(t("fillAllFields"));
       return;
     }
 
     if (cart.length === 0) {
-      setMessage("Savat bo'sh");
+      setMessage(t("emptyCart"));
       return;
     }
 
@@ -84,11 +84,11 @@ export default function Cart({
 
       if (!response.ok) {
         throw new Error(
-          data.message || "Buyurtma yuborishda xatolik"
+          data.message || t("orderError")
         );
       }
 
-      setMessage("✅ Buyurtma muvaffaqiyatli yuborildi!");
+      setMessage(`✅ ${t("orderSuccess")}`);
 
       setName("");
       setPhone("");
@@ -99,11 +99,11 @@ export default function Cart({
         setShowOrder(false);
         setMessage("");
       }, 3000);
-
     } catch (error) {
       console.error("Order error:", error);
+
       setMessage(
-        "❌ Buyurtma yuborilmadi. Serverni tekshiring."
+        `❌ ${t("orderFailed")}`
       );
     } finally {
       setLoading(false);
@@ -297,11 +297,11 @@ export default function Cart({
           <div className="bg-white w-full max-w-md rounded-3xl shadow-2xl p-7">
 
             <h2 className="text-3xl font-bold text-gray-900 mb-2">
-              Buyurtma berish
+              {t("orderTitle")}
             </h2>
 
             <p className="text-gray-500 mb-6">
-              Buyurtmani rasmiylashtirish uchun ma'lumotlaringizni kiriting.
+              {t("orderDescription")}
             </p>
 
             <form
@@ -311,7 +311,7 @@ export default function Cart({
 
               <input
                 type="text"
-                placeholder="Ism va familiya"
+                placeholder={t("fullName")}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 className="w-full border border-gray-300 rounded-xl p-3 outline-none focus:border-blue-500"
@@ -319,7 +319,7 @@ export default function Cart({
 
               <input
                 type="tel"
-                placeholder="Telefon raqam"
+                placeholder={t("phoneNumber")}
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 className="w-full border border-gray-300 rounded-xl p-3 outline-none focus:border-blue-500"
@@ -327,7 +327,7 @@ export default function Cart({
 
               <input
                 type="email"
-                placeholder="Email"
+                placeholder={t("email")}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full border border-gray-300 rounded-xl p-3 outline-none focus:border-blue-500"
@@ -335,7 +335,7 @@ export default function Cart({
 
               <input
                 type="text"
-                placeholder="Yetkazib berish manzili"
+                placeholder={t("deliveryAddress")}
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
                 className="w-full border border-gray-300 rounded-xl p-3 outline-none focus:border-blue-500"
@@ -353,8 +353,8 @@ export default function Cart({
                 className="w-full bg-green-600 text-white py-3 rounded-xl font-bold hover:bg-green-700 transition disabled:opacity-50"
               >
                 {loading
-                  ? "Yuborilmoqda..."
-                  : "Buyurtmani tasdiqlash"}
+                  ? t("sending")
+                  : t("confirmOrder")}
               </button>
 
               <button
@@ -362,7 +362,7 @@ export default function Cart({
                 onClick={() => setShowOrder(false)}
                 className="w-full border border-gray-300 py-3 rounded-xl font-semibold hover:bg-gray-100 transition"
               >
-                Bekor qilish
+                {t("cancel")}
               </button>
 
             </form>

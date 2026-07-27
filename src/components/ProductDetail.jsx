@@ -10,7 +10,7 @@ import {
 export default function ProductDetail({ addToCart }) {
   const location = useLocation();
   const navigate = useNavigate();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const product = location.state;
 
@@ -19,14 +19,12 @@ export default function ProductDetail({ addToCart }) {
   );
 
   const [rating, setRating] = useState(() => {
-  const savedRating = localStorage.getItem(
-    `rating-${product?.id}`
-  );
+    const savedRating = localStorage.getItem(
+      `rating-${product?.id}`
+    );
 
-  return savedRating
-    ? Number(savedRating)
-    : 0;
-});
+    return savedRating ? Number(savedRating) : 0;
+  });
 
   if (!product) {
     return (
@@ -35,7 +33,7 @@ export default function ProductDetail({ addToCart }) {
           onClick={() => navigate("/katalog")}
           className="bg-blue-600 text-white px-6 py-3 rounded-xl"
         >
-          Katalogga qaytish
+          {t("productBack")}
         </button>
       </div>
     );
@@ -86,7 +84,7 @@ export default function ProductDetail({ addToCart }) {
           className="flex items-center gap-2 mb-8 text-gray-600 hover:text-blue-600 font-semibold"
         >
           <FaArrowLeft />
-          Katalogga qaytish
+          {t("productBack")}
         </button>
 
         <div className="bg-white rounded-3xl shadow-2xl overflow-hidden grid md:grid-cols-2">
@@ -119,7 +117,7 @@ export default function ProductDetail({ addToCart }) {
               <div className="mt-8">
 
                 <h3 className="text-lg font-bold text-gray-900 mb-4">
-                  Xotirani tanlang
+                  {t("selectStorage")}
                 </h3>
 
                 <div className="flex flex-wrap gap-3">
@@ -146,37 +144,40 @@ export default function ProductDetail({ addToCart }) {
             <div className="mt-8">
 
               <h3 className="text-lg font-bold text-gray-900 mb-4">
-                Mahsulotga baho bering
+                {t("rateProduct")}
               </h3>
 
               <div className="flex items-center gap-2">
 
                 {[1, 2, 3, 4, 5].map((item) => (
-               <button
-               key={item}
-              onClick={() => {
-              setRating(item);
-           localStorage.setItem(`rating-${product.id}`, item);
-           }}
-    className="hover:scale-125 transition"
-  >
-    <FaStar
-      size={35}
-      className={
-        item <= rating
-          ? "text-yellow-400"
-          : "text-gray-300"
-      }
-    />
-  </button>
-))}
+                  <button
+                    key={item}
+                    onClick={() => {
+                      setRating(item);
+                      localStorage.setItem(
+                        `rating-${product.id}`,
+                        item
+                      );
+                    }}
+                    className="hover:scale-125 transition"
+                  >
+                    <FaStar
+                      size={35}
+                      className={
+                        item <= rating
+                          ? "text-yellow-400"
+                          : "text-gray-300"
+                      }
+                    />
+                  </button>
+                ))}
 
               </div>
 
               <p className="text-gray-500 mt-3">
                 {rating === 0
-                  ? "Baho berish uchun yulduz tanlang"
-                  : `Siz ${rating} / 5 baho berdingiz`}
+                  ? t("selectRating")
+                  : `${t("yourRating")}: ${rating} / 5`}
               </p>
 
             </div>
@@ -189,7 +190,7 @@ export default function ProductDetail({ addToCart }) {
 
               {storage && (
                 <p className="text-gray-500 mt-2">
-                  Tanlangan xotira: {storage}
+                  {t("selectedStorage")}: {storage}
                 </p>
               )}
 
@@ -200,7 +201,7 @@ export default function ProductDetail({ addToCart }) {
               className="w-full mt-8 bg-blue-600 text-white py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-3 hover:bg-blue-700 hover:scale-105 transition"
             >
               <FaShoppingCart />
-              Savatga qo'shish
+              {t("addToCart")}
             </button>
 
           </div>

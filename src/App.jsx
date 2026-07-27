@@ -8,7 +8,7 @@ import Cart from "./components/Cart";
 import ProductDetail from "./components/ProductDetail";
 import Contact from "./components/Contact";
 
-import AdminPanel from "./Pages/Adminpanel";
+import AdminPanel from "./Pages/AdminPanel";
 import Dashboard from "./Pages/Dashboard";
 import Products from "./Pages/Products";
 import Orders from "./Pages/Orders";
@@ -21,10 +21,7 @@ export default function App() {
   const [password, setPassword] = useState("");
   const [success, setSuccess] = useState(false);
 
-  // =========================
-  // SAVAT
-  // =========================
-
+  
   const [cart, setCart] = useState(() => {
     const savedCart = localStorage.getItem("cart");
 
@@ -45,9 +42,7 @@ export default function App() {
   const navigate = useNavigate();
 
 
-  // =========================
-  // LOGIN
-  // =========================
+  
 
   function handleLogin() {
     if (
