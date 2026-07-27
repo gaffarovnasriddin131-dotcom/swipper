@@ -63,7 +63,7 @@ export default function Cart({
 
     try {
       const response = await fetch(
-        "http://localhost:5001/api/order",
+        "https://SENING-BACKEND-URLING.onrender.com/api/order",
         {
           method: "POST",
           headers: {

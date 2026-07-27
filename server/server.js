@@ -5,11 +5,15 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const app = express();
-const PORT = 5001;
+
+const PORT = process.env.PORT || 5001;
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: [
+      "http://localhost:5173",
+      "https://swipper.onrender.com",
+    ],
     methods: ["GET", "POST", "OPTIONS"],
     allowedHeaders: ["Content-Type"],
   })
@@ -103,7 +107,7 @@ ${productText}
       });
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: "Buyurtma muvaffaqiyatli yuborildi",
     });
@@ -111,7 +115,7 @@ ${productText}
   } catch (error) {
     console.error("SERVER ERROR:", error);
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: "Serverda xatolik yuz berdi",
     });
@@ -119,5 +123,5 @@ ${productText}
 });
 
 app.listen(PORT, () => {
-  console.log(`Server http://localhost:${PORT} da ishlayapti`);
+  console.log(`Server ${PORT} portda ishlayapti`);
 });
