@@ -1,3 +1,4 @@
+```js
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 
@@ -37,6 +38,21 @@ const resources = {
       orderNow: "Order Now",
       remove: "Remove",
       quantity: "Quantity",
+
+      checkout: "Checkout",
+      orderTitle: "Place an Order",
+      orderDescription: "Enter your information to place your order.",
+      fullName: "Full Name",
+      phoneNumber: "Phone Number",
+      email: "Email",
+      deliveryAddress: "Delivery Address",
+      fillAllFields: "Please fill in all fields.",
+      orderError: "An error occurred while placing the order.",
+      orderSuccess: "Your order has been successfully sent!",
+      orderFailed: "Failed to send the order.",
+      sending: "Sending...",
+      confirmOrder: "Confirm Order",
+      cancel: "Cancel",
 
       contactUs: "CONTACT US",
       contactTitle: "Contact Us",
@@ -108,6 +124,22 @@ const resources = {
       remove: "O'chirish",
       quantity: "Miqdor",
 
+      checkout: "Buyurtma berish",
+      orderTitle: "Buyurtma berish",
+      orderDescription:
+        "Buyurtma berish uchun ma'lumotlaringizni kiriting.",
+      fullName: "To'liq ism",
+      phoneNumber: "Telefon raqami",
+      email: "Elektron pochta",
+      deliveryAddress: "Yetkazib berish manzili",
+      fillAllFields: "Iltimos, barcha maydonlarni to'ldiring.",
+      orderError: "Buyurtma berishda xatolik yuz berdi.",
+      orderSuccess: "Buyurtmangiz muvaffaqiyatli yuborildi!",
+      orderFailed: "Buyurtmani yuborib bo'lmadi.",
+      sending: "Yuborilmoqda...",
+      confirmOrder: "Buyurtmani tasdiqlash",
+      cancel: "Bekor qilish",
+
       contactUs: "BIZ BILAN BOG'LANING",
       contactTitle: "Biz bilan bog'laning",
       contactText:
@@ -153,3 +185,4 @@ i18n.use(initReactI18next).init({
 });
 
 export default i18n;
+```

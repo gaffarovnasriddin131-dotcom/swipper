@@ -1,3 +1,4 @@
+
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
@@ -12,7 +13,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://swipper.onrender.com",
+      "https://swipper-server.onrender.com",
     ],
     methods: ["GET", "POST", "OPTIONS"],
     allowedHeaders: ["Content-Type"],
@@ -55,19 +56,30 @@ app.post("/api/order", async (req, res) => {
       });
     }
 
+    if (!process.env.BOT_TOKEN) {
+      return res.status(500).json({
+        success: false,
+        message: "BOT_TOKEN topilmadi",
+      });
+    }
+
+    if (!process.env.CHAT_ID) {
+      return res.status(500).json({
+        success: false,
+        message: "CHAT_ID topilmadi",
+      });
+    }
+
     const productText = products
       .map((product, index) => {
-        return `
-${index + 1}. 📱 ${product.name}
+        return `${index + 1}. 📱 ${product.name}
 💾 Xotira: ${product.storage || "Ko'rsatilmagan"}
 🔢 Soni: ${product.quantity}
-💰 Narxi: ${product.price}
-`;
+💰 Narxi: ${product.price}`;
       })
-      .join("\n");
+      .join("\n\n");
 
-    const message = `
-🛍 YANGI BUYURTMA
+    const message = `🛍 YANGI BUYURTMA
 
 👤 Mijoz: ${name}
 📞 Telefon: ${phone}
@@ -75,15 +87,14 @@ ${index + 1}. 📱 ${product.name}
 📍 Manzil: ${address}
 
 📦 MAHSULOTLAR:
+
 ${productText}
 
 💵 JAMI: ${total}
 
-✅ Buyurtma qabul qilindi
-`;
+✅ Buyurtma qabul qilindi`;
 
-    const telegramUrl =
-      `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`;
+    const telegramUrl = `https://api.telegram.org/bot${process.env.BOT_TOKEN}/sendMessage`;
 
     const telegramResponse = await fetch(telegramUrl, {
       method: "POST",
@@ -91,7 +102,7 @@ ${productText}
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        chat_id: process.env.TELEGRAM_CHAT_ID,
+        chat_id: process.env.CHAT_ID,
         text: message,
       }),
     });
@@ -100,10 +111,11 @@ ${productText}
 
     console.log("Telegram javobi:", telegramData);
 
-    if (!telegramData.ok) {
+    if (!telegramResponse.ok || !telegramData.ok) {
       return res.status(500).json({
         success: false,
         message: "Telegramga yuborishda xatolik",
+        telegramError: telegramData,
       });
     }
 
@@ -111,7 +123,6 @@ ${productText}
       success: true,
       message: "Buyurtma muvaffaqiyatli yuborildi",
     });
-
   } catch (error) {
     console.error("SERVER ERROR:", error);
 
@@ -125,3 +136,4 @@ ${productText}
 app.listen(PORT, () => {
   console.log(`Server ${PORT} portda ishlayapti`);
 });
+
