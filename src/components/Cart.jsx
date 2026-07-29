@@ -28,40 +28,62 @@ export default function Cart({
   const [address, setAddress] = useState("");
 
   const jami = cart.reduce(
-    (sum, item) => sum + item.narx * item.quantity,
+    (sum, item) => sum + Number(item.narx) * Number(item.quantity),
     0
   );
 
   function narx(price) {
+    const numberPrice = Number(price) || 0;
+
     if (i18n.language === "uz") {
-      return `${(price * 12000).toLocaleString("uz-UZ")} UZS`;
+      return `${(numberPrice * 12000).toLocaleString("uz-UZ")} UZS`;
     }
 
-    return `$${price.toLocaleString("en-US")}`;
+    return `$${numberPrice.toLocaleString("en-US")}`;
   }
 
   async function handleOrder(e) {
     e.preventDefault();
 
-    if (!name.trim() || !phone.trim() || !email.trim() || !address.trim()) {
-      setMessage(`❌ ${t("fillAllFields")}`);
+    if (loading) {
       return;
     }
 
-    if (cart.length === 0) {
-      setMessage(`❌ ${t("emptyCart")}`);
+    if (
+      !name.trim() ||
+      !phone.trim() ||
+      !email.trim() ||
+      !address.trim()
+    ) {
+      setMessage("❌ Barcha ma'lumotlarni to'ldiring");
+      return;
+    }
+
+    if (!cart || cart.length === 0) {
+      setMessage("❌ Savat bo'sh");
       return;
     }
 
     setLoading(true);
-    setMessage("");
+    setMessage("⏳ Buyurtma yuborilmoqda...");
 
     const products = cart.map((item) => ({
-      name: item.nomi,
+      name: item.nomi || "Noma'lum mahsulot",
       storage: item.storage || "",
-      quantity: item.quantity,
-      price: item.narx,
+      quantity: Number(item.quantity) || 1,
+      price: narx(item.narx),
     }));
+
+    const orderData = {
+      name: name.trim(),
+      phone: phone.trim(),
+      email: email.trim(),
+      address: address.trim(),
+      products: products,
+      total: narx(jami),
+    };
+
+    console.log("Yuborilayotgan buyurtma:", orderData);
 
     try {
       const response = await fetch(
@@ -71,24 +93,21 @@ export default function Cart({
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            name: name.trim(),
-            phone: phone.trim(),
-            email: email.trim(),
-            address: address.trim(),
-            products,
-            total: jami,
-          }),
+          body: JSON.stringify(orderData),
         }
       );
 
       const data = await response.json();
 
+      console.log("Server javobi:", data);
+
       if (!response.ok) {
-        throw new Error(data.message || t("orderError"));
+        throw new Error(
+          data.message || "Buyurtma yuborishda xatolik"
+        );
       }
 
-      setMessage(`✅ ${t("orderSuccess")}`);
+      setMessage("✅ Buyurtma muvaffaqiyatli yuborildi!");
 
       setName("");
       setPhone("");
@@ -100,9 +119,11 @@ export default function Cart({
         setMessage("");
       }, 3000);
     } catch (error) {
-      console.error("Order error:", error);
+      console.error("ORDER XATOSI:", error);
 
-      setMessage(`❌ ${t("orderFailed")}`);
+      setMessage(
+        `❌ ${error.message || "Buyurtma yuborilmadi"}`
+      );
     } finally {
       setLoading(false);
     }
@@ -111,6 +132,7 @@ export default function Cart({
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-100 via-white to-blue-100 py-12 px-6">
       <div className="max-w-6xl mx-auto">
+
         <div className="text-center mb-10">
           <div className="flex justify-center mb-4">
             <div className="w-16 h-16 bg-blue-600 text-white rounded-2xl flex items-center justify-center shadow-lg">
@@ -140,12 +162,14 @@ export default function Cart({
           </div>
         ) : (
           <div className="bg-white rounded-3xl shadow-2xl p-6 md:p-8">
+
             <div className="space-y-5">
               {cart.map((item) => (
                 <div
                   key={`${item.id}-${item.storage || "default"}`}
                   className="bg-gray-50 rounded-2xl p-5 flex flex-col lg:flex-row items-center gap-6"
                 >
+
                   <div className="w-28 h-28 bg-white rounded-2xl flex items-center justify-center p-4 shadow-sm">
                     <img
                       src={item.rasm}
@@ -193,7 +217,9 @@ export default function Cart({
                   <div className="flex items-center gap-3">
                     <button
                       type="button"
-                      onClick={() => decreaseQuantity(item.id)}
+                      onClick={() =>
+                        decreaseQuantity(item.id)
+                      }
                       className="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center hover:bg-gray-300 transition"
                     >
                       <FaMinus />
@@ -205,7 +231,9 @@ export default function Cart({
 
                     <button
                       type="button"
-                      onClick={() => increaseQuantity(item.id)}
+                      onClick={() =>
+                        increaseQuantity(item.id)
+                      }
                       className="w-10 h-10 bg-blue-600 text-white rounded-lg flex items-center justify-center hover:bg-blue-700 transition"
                     >
                       <FaPlus />
@@ -218,22 +246,29 @@ export default function Cart({
                     </p>
 
                     <p className="text-xl font-bold text-blue-600 mt-1">
-                      {narx(item.narx * item.quantity)}
+                      {narx(
+                        Number(item.narx) *
+                        Number(item.quantity)
+                      )}
                     </p>
                   </div>
 
                   <button
                     type="button"
-                    onClick={() => removeFromCart(item.id)}
+                    onClick={() =>
+                      removeFromCart(item.id)
+                    }
                     className="w-11 h-11 rounded-xl bg-red-100 text-red-500 flex items-center justify-center hover:bg-red-500 hover:text-white transition"
                   >
                     <FaTrash />
                   </button>
+
                 </div>
               ))}
             </div>
 
             <div className="border-t mt-8 pt-8 flex flex-col md:flex-row justify-between items-center gap-6">
+
               <div className="text-center md:text-left">
                 <p className="text-gray-500">
                   {t("total")}
@@ -254,6 +289,7 @@ export default function Cart({
               >
                 {t("checkout")}
               </button>
+
             </div>
           </div>
         )}
@@ -261,7 +297,9 @@ export default function Cart({
 
       {showOrder && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+
           <div className="bg-white w-full max-w-md rounded-3xl shadow-2xl p-7">
+
             <h2 className="text-3xl font-bold text-gray-900 mb-2">
               {t("orderTitle")}
             </h2>
@@ -270,12 +308,18 @@ export default function Cart({
               {t("orderDescription")}
             </p>
 
-            <form onSubmit={handleOrder} className="space-y-4">
+            <form
+              onSubmit={handleOrder}
+              className="space-y-4"
+            >
+
               <input
                 type="text"
                 placeholder={t("fullName")}
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                onChange={(e) =>
+                  setName(e.target.value)
+                }
                 className="w-full border border-gray-300 rounded-xl p-3 outline-none focus:border-blue-500"
               />
 
@@ -283,7 +327,9 @@ export default function Cart({
                 type="tel"
                 placeholder={t("phoneNumber")}
                 value={phone}
-                onChange={(e) => setPhone(e.target.value)}
+                onChange={(e) =>
+                  setPhone(e.target.value)
+                }
                 className="w-full border border-gray-300 rounded-xl p-3 outline-none focus:border-blue-500"
               />
 
@@ -291,7 +337,9 @@ export default function Cart({
                 type="email"
                 placeholder={t("email")}
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) =>
+                  setEmail(e.target.value)
+                }
                 className="w-full border border-gray-300 rounded-xl p-3 outline-none focus:border-blue-500"
               />
 
@@ -299,7 +347,9 @@ export default function Cart({
                 type="text"
                 placeholder={t("deliveryAddress")}
                 value={address}
-                onChange={(e) => setAddress(e.target.value)}
+                onChange={(e) =>
+                  setAddress(e.target.value)
+                }
                 className="w-full border border-gray-300 rounded-xl p-3 outline-none focus:border-blue-500"
               />
 
@@ -314,7 +364,9 @@ export default function Cart({
                 disabled={loading}
                 className="w-full bg-green-600 text-white py-3 rounded-xl font-bold hover:bg-green-700 transition disabled:opacity-50"
               >
-                {loading ? t("sending") : t("confirmOrder")}
+                {loading
+                  ? "Yuborilmoqda..."
+                  : "Buyurtma berish"}
               </button>
 
               <button
@@ -325,8 +377,9 @@ export default function Cart({
                 }}
                 className="w-full border border-gray-300 py-3 rounded-xl font-semibold hover:bg-gray-100 transition"
               >
-                {t("cancel")}
+                Bekor qilish
               </button>
+
             </form>
           </div>
         </div>
@@ -334,4 +387,3 @@ export default function Cart({
     </div>
   );
 }
-
