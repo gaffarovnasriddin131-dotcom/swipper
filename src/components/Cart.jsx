@@ -28,7 +28,8 @@ export default function Cart({
   const [address, setAddress] = useState("");
 
   const jami = cart.reduce(
-    (sum, item) => sum + Number(item.narx) * Number(item.quantity),
+    (sum, item) =>
+      sum + Number(item.narx || 0) * Number(item.quantity || 0),
     0
   );
 
@@ -79,7 +80,7 @@ export default function Cart({
       phone: phone.trim(),
       email: email.trim(),
       address: address.trim(),
-      products: products,
+      products,
       total: narx(jami),
     };
 
@@ -169,7 +170,6 @@ export default function Cart({
                   key={`${item.id}-${item.storage || "default"}`}
                   className="bg-gray-50 rounded-2xl p-5 flex flex-col lg:flex-row items-center gap-6"
                 >
-
                   <div className="w-28 h-28 bg-white rounded-2xl flex items-center justify-center p-4 shadow-sm">
                     <img
                       src={item.rasm}
@@ -247,8 +247,8 @@ export default function Cart({
 
                     <p className="text-xl font-bold text-blue-600 mt-1">
                       {narx(
-                        Number(item.narx) *
-                        Number(item.quantity)
+                        Number(item.narx || 0) *
+                        Number(item.quantity || 0)
                       )}
                     </p>
                   </div>
@@ -262,7 +262,6 @@ export default function Cart({
                   >
                     <FaTrash />
                   </button>
-
                 </div>
               ))}
             </div>
@@ -289,7 +288,6 @@ export default function Cart({
               >
                 {t("checkout")}
               </button>
-
             </div>
           </div>
         )}
@@ -297,7 +295,6 @@ export default function Cart({
 
       {showOrder && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-
           <div className="bg-white w-full max-w-md rounded-3xl shadow-2xl p-7">
 
             <h2 className="text-3xl font-bold text-gray-900 mb-2">
@@ -312,7 +309,6 @@ export default function Cart({
               onSubmit={handleOrder}
               className="space-y-4"
             >
-
               <input
                 type="text"
                 placeholder={t("fullName")}
@@ -379,8 +375,8 @@ export default function Cart({
               >
                 Bekor qilish
               </button>
-
             </form>
+
           </div>
         </div>
       )}
