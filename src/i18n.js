@@ -1,4 +1,3 @@
-
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 
@@ -46,6 +45,7 @@ const resources = {
       phoneNumber: "Phone Number",
       email: "Email",
       deliveryAddress: "Delivery Address",
+      orderComment: "Comment (optional)",
       fillAllFields: "Please fill in all fields.",
       orderError: "An error occurred while placing the order.",
       orderSuccess: "Your order has been successfully sent!",
@@ -132,6 +132,7 @@ const resources = {
       phoneNumber: "Telefon raqami",
       email: "Elektron pochta",
       deliveryAddress: "Yetkazib berish manzili",
+      orderComment: "Izoh (ixtiyoriy)",
       fillAllFields: "Iltimos, barcha maydonlarni to'ldiring.",
       orderError: "Buyurtma berishda xatolik yuz berdi.",
       orderSuccess: "Buyurtmangiz muvaffaqiyatli yuborildi!",
@@ -185,4 +186,3 @@ i18n.use(initReactI18next).init({
 });
 
 export default i18n;
-

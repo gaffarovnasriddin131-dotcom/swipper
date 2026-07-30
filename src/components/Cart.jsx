@@ -26,6 +26,7 @@ export default function Cart({
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
+  const [comment, setComment] = useState("");
 
   const jami = cart.reduce(
     (sum, item) =>
@@ -41,6 +42,12 @@ export default function Cart({
     }
 
     return `$${numberPrice.toLocaleString("en-US")}`;
+  }
+
+  function handlePhoneChange(e) {
+    const onlyDigits = e.target.value.replace(/\D/g, "");
+
+    setPhone(onlyDigits.slice(0, 9));
   }
 
   async function handleOrder(e) {
@@ -77,9 +84,10 @@ export default function Cart({
 
     const orderData = {
       name: name.trim(),
-      phone: phone.trim(),
+      phone: `+998${phone.trim()}`,
       email: email.trim(),
       address: address.trim(),
+      comment: comment.trim(),
       products,
       total: narx(jami),
     };
@@ -114,6 +122,7 @@ export default function Cart({
       setPhone("");
       setEmail("");
       setAddress("");
+      setComment("");
 
       setTimeout(() => {
         setShowOrder(false);
@@ -319,15 +328,21 @@ export default function Cart({
                 className="w-full border border-gray-300 rounded-xl p-3 outline-none focus:border-blue-500"
               />
 
-              <input
-                type="tel"
-                placeholder={t("phoneNumber")}
-                value={phone}
-                onChange={(e) =>
-                  setPhone(e.target.value)
-                }
-                className="w-full border border-gray-300 rounded-xl p-3 outline-none focus:border-blue-500"
-              />
+              <div className="flex items-stretch border border-gray-300 rounded-xl overflow-hidden focus-within:border-blue-500">
+                <span className="flex items-center px-3 bg-gray-100 text-gray-700 font-semibold border-r border-gray-300">
+                  +998
+                </span>
+
+                <input
+                  type="tel"
+                  inputMode="numeric"
+                  placeholder="90 123 45 67"
+                  value={phone}
+                  onChange={handlePhoneChange}
+                  maxLength={9}
+                  className="flex-1 p-3 outline-none"
+                />
+              </div>
 
               <input
                 type="email"
@@ -347,6 +362,16 @@ export default function Cart({
                   setAddress(e.target.value)
                 }
                 className="w-full border border-gray-300 rounded-xl p-3 outline-none focus:border-blue-500"
+              />
+
+              <textarea
+                placeholder={t("orderComment")}
+                value={comment}
+                onChange={(e) =>
+                  setComment(e.target.value)
+                }
+                rows={3}
+                className="w-full border border-gray-300 rounded-xl p-3 outline-none focus:border-blue-500 resize-none"
               />
 
               {message && (
