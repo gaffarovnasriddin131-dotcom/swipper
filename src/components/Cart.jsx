@@ -386,8 +386,8 @@ export default function Cart({
                 className="w-full bg-green-600 text-white py-3 rounded-xl font-bold hover:bg-green-700 transition disabled:opacity-50"
               >
                 {loading
-                  ? "Yuborilmoqda..."
-                  : "Buyurtma berish"}
+                  ? t("sending")
+                  : t("placeOrder")}
               </button>
 
               <button
@@ -398,7 +398,7 @@ export default function Cart({
                 }}
                 className="w-full border border-gray-300 py-3 rounded-xl font-semibold hover:bg-gray-100 transition"
               >
-                Bekor qilish
+                {t("cancel")}
               </button>
             </form>
 

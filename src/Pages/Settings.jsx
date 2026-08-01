@@ -1,6 +1,9 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function Settings() {
+  const { t } = useTranslation();
+
   const [storeName, setStoreName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -49,11 +52,11 @@ export default function Settings() {
 
             <div>
               <h2 className="font-bold text-lg">
-                Xatolik!
+                {t("errorTitle")}!
               </h2>
 
               <p className="text-sm">
-                Iltimos, barcha maydonlarni to'liq to'ldiring.
+                {t("fillAllSettings")}
               </p>
             </div>
 
@@ -70,11 +73,11 @@ export default function Settings() {
 
             <div>
               <h2 className="font-bold text-lg">
-                Success!
+                {t("successTitle")}!
               </h2>
 
               <p className="text-sm">
-                Settings muvaffaqiyatli saqlandi.
+                {t("settingsSaved")}
               </p>
             </div>
 
@@ -85,12 +88,12 @@ export default function Settings() {
       <div className="w-full max-w-2xl bg-white rounded-3xl shadow-2xl p-8 hover:shadow-blue-300 hover:scale-[1.02] transition-all duration-500">
 
         <h1 className="text-4xl font-bold text-center text-blue-600 mb-8">
-          ⚙️ Settings
+          ⚙️ {t("settings")}
         </h1>
 
         <div className="mb-5">
           <label className="block font-semibold mb-2">
-            🏪 Store Name
+            🏪 {t("storeName")}
           </label>
 
           <input
@@ -104,7 +107,7 @@ export default function Settings() {
 
         <div className="mb-5">
           <label className="block font-semibold mb-2">
-            📧 Email
+            📧 {t("email")}
           </label>
 
           <input
@@ -118,7 +121,7 @@ export default function Settings() {
 
         <div className="mb-5">
           <label className="block font-semibold mb-2">
-            📞 Phone
+            📞 {t("phoneNumber")}
           </label>
 
           <input
@@ -132,7 +135,7 @@ export default function Settings() {
 
         <div className="mb-6">
           <label className="block font-semibold mb-2">
-            📍 Address
+            📍 {t("address")}
           </label>
 
           <textarea
@@ -148,7 +151,7 @@ export default function Settings() {
           onClick={handleSave}
           className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-3 rounded-xl font-bold text-lg hover:scale-105 hover:shadow-xl transition-all duration-300"
         >
-          💾 Save Changes
+          💾 {t("saveChanges")}
         </button>
 
       </div>

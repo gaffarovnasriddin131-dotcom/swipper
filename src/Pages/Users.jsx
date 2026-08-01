@@ -1,6 +1,9 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 export default function Users() {
+  const { t } = useTranslation();
+
   const users = [
     {
       id: 1,
@@ -25,7 +28,7 @@ export default function Users() {
   return (
     <div>
       <h1 className="text-3xl font-bold mb-6">
-        Users
+        {t("users")}
       </h1>
 
       <div className="bg-white rounded-xl shadow overflow-hidden">
@@ -35,10 +38,10 @@ export default function Users() {
           <thead className="bg-gray-100">
 
             <tr>
-              <th className="p-4 text-left">Name</th>
-              <th className="p-4 text-left">Email</th>
-              <th className="p-4 text-left">Role</th>
-              <th className="p-4 text-left">Actions</th>
+              <th className="p-4 text-left">{t("fullName")}</th>
+              <th className="p-4 text-left">{t("email")}</th>
+              <th className="p-4 text-left">{t("role")}</th>
+              <th className="p-4 text-left">{t("actions")}</th>
             </tr>
 
           </thead>
@@ -68,11 +71,11 @@ export default function Users() {
                 <td className="p-4">
 
                   <button className="bg-yellow-500 text-white px-3 py-1 rounded mr-2">
-                    Edit
+                    {t("edit")}
                   </button>
 
                   <button className="bg-red-600 text-white px-3 py-1 rounded">
-                    Delete
+                    {t("delete")}
                   </button>
 
                 </td>

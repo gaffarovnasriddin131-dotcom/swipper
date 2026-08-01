@@ -1,14 +1,17 @@
 import React from "react";
 import { NavLink, Outlet } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export default function AdminPanel() {
+  const { t } = useTranslation();
+
   return (
     <div className="min-h-screen flex bg-gray-100">
      
       <aside className="w-64 bg-gray-900 text-white p-6">
 
         <h1 className="text-2xl font-bold mb-10">
-          Admin Panel
+          {t("adminPanel")}
         </h1>
 
         <nav>
@@ -26,7 +29,7 @@ export default function AdminPanel() {
                   }`
                 }
               >
-                📊 Dashboard
+                📊 {t("dashboard")}
               </NavLink>
             </li>
 
@@ -41,7 +44,7 @@ export default function AdminPanel() {
                   }`
                 }
               >
-                📦 Products
+                📦 {t("products")}
               </NavLink>
             </li>
 
@@ -56,7 +59,7 @@ export default function AdminPanel() {
                   }`
                 }
               >
-                🛒 Orders
+                🛒 {t("orders")}
               </NavLink>
             </li>
 
@@ -71,7 +74,7 @@ export default function AdminPanel() {
                   }`
                 }
               >
-                👤 Users
+                👤 {t("users")}
               </NavLink>
             </li>
 
@@ -86,7 +89,7 @@ export default function AdminPanel() {
                   }`
                 }
               >
-                ⚙️ Settings
+                ⚙️ {t("settings")}
               </NavLink>
             </li>
 
@@ -101,11 +104,11 @@ export default function AdminPanel() {
        
         <header className="bg-white shadow px-8 py-5 flex justify-between items-center">
           <h2 className="text-3xl font-bold">
-            Admin Dashboard
+            {t("adminDashboard")}
           </h2>
 
           <div className="bg-blue-600 text-white px-4 py-2 rounded-lg">
-            Admin
+            {t("admin")}
           </div>
         </header>
 

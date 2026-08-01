@@ -39,6 +39,14 @@ export default function ProductDetail({ addToCart }) {
     );
   }
 
+  function getDescription() {
+    if (product.malumot && typeof product.malumot === "object") {
+      return product.malumot[i18n.language] || product.malumot.uz;
+    }
+
+    return product.malumot;
+  }
+
   function formatPrice(price) {
     if (i18n.language === "uz") {
       return `${(price * 12000).toLocaleString("uz-UZ")} UZS`;
@@ -67,6 +75,7 @@ export default function ProductDetail({ addToCart }) {
     addToCart({
       ...product,
       narx: currentPrice,
+      malumot: getDescription(),
       storage: storage,
       rating: rating,
     });
@@ -110,7 +119,7 @@ export default function ProductDetail({ addToCart }) {
             </h1>
 
             <p className="text-gray-500 text-lg mt-5 leading-8">
-              {product.malumot}
+              {getDescription()}
             </p>
 
             {product.xotiralar && (

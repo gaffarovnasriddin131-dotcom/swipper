@@ -1,6 +1,9 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function Products() {
+  const { t } = useTranslation();
+
   const [products, setProducts] = useState([
     {
       name: "iPhone 17 Pro Max",
@@ -76,11 +79,11 @@ export default function Products() {
         <div className="fixed top-6 right-6 animate-bounce z-50">
           <div className="bg-red-500 text-white px-6 py-4 rounded-xl shadow-2xl">
             <h2 className="font-bold text-lg">
-              ⚠ Xatolik
+              ⚠ {t("errorTitle")}
             </h2>
 
             <p>
-              Kodlarni to'liq yozing!
+              {t("fillAllCodes")}
             </p>
           </div>
         </div>
@@ -91,11 +94,11 @@ export default function Products() {
         <div className="fixed top-6 right-6 animate-bounce z-50">
           <div className="bg-green-500 text-white px-6 py-4 rounded-xl shadow-2xl">
             <h2 className="font-bold text-lg">
-              ✅ Muvaffaqiyatli
+              ✅ {t("successTitle")}
             </h2>
 
             <p>
-              Mahsulot qo'shildi.
+              {t("productAdded")}
             </p>
           </div>
         </div>
@@ -106,11 +109,11 @@ export default function Products() {
         <div className="fixed top-6 right-6 animate-bounce z-50">
           <div className="bg-orange-500 text-white px-6 py-4 rounded-xl shadow-2xl">
             <h2 className="font-bold text-lg">
-              🗑 O'chirildi
+              🗑 {t("deletedTitle")}
             </h2>
 
             <p>
-              Mahsulot o'chirildi.
+              {t("productDeleted")}
             </p>
           </div>
         </div>
@@ -119,7 +122,7 @@ export default function Products() {
       <div className="flex justify-between items-center mb-6">
 
         <h1 className="text-3xl font-bold">
-          Products
+          {t("products")}
         </h1>
 
       </div>
@@ -131,7 +134,7 @@ export default function Products() {
 
           <input
             type="text"
-            placeholder="Product Name"
+            placeholder={t("productName")}
             className="border p-3 rounded-lg"
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -139,7 +142,7 @@ export default function Products() {
 
           <input
             type="text"
-            placeholder="Category"
+            placeholder={t("category")}
             className="border p-3 rounded-lg"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
@@ -147,7 +150,7 @@ export default function Products() {
 
           <input
             type="text"
-            placeholder="Price"
+            placeholder={t("price")}
             className="border p-3 rounded-lg"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
@@ -159,7 +162,7 @@ export default function Products() {
           onClick={handleAddProduct}
           className="mt-5 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition hover:scale-105"
         >
-          + Add Product
+          + {t("addProduct")}
         </button>
 
       </div>
@@ -174,19 +177,19 @@ export default function Products() {
             <tr>
 
               <th className="p-4 text-left">
-                Name
+                {t("productName")}
               </th>
 
               <th className="p-4 text-left">
-                Category
+                {t("category")}
               </th>
 
               <th className="p-4 text-left">
-                Price
+                {t("price")}
               </th>
 
               <th className="p-4 text-center">
-                Action
+                {t("action")}
               </th>
 
             </tr>
@@ -220,7 +223,7 @@ export default function Products() {
                     onClick={() => handleDelete(index)}
                     className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition"
                   >
-                    Delete
+                    {t("delete")}
                   </button>
 
                 </td>

@@ -26,11 +26,11 @@ export default function Navbar({ setModal, cart }) {
 
             <div>
               <h1 className="text-xl font-bold text-gray-900 group-hover:text-gray-500 transition-colors duration-300">
-                Apple Store
+                {t("appleStore")}
               </h1>
 
               <p className="text-xs text-gray-400">
-                Premium Technology
+                {t("premiumTechnology")}
               </p>
             </div>
           </Link>

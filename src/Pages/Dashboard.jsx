@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import {
   FaBox,
   FaShoppingCart,
@@ -7,16 +8,18 @@ import {
 } from "react-icons/fa";
 
 export default function Dashboard() {
+  const { t } = useTranslation();
+
   return (
     <div>
       
       <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-8 rounded-2xl shadow-lg mb-8">
         <h1 className="text-4xl font-bold">
-          👋 Welcome Back, Admin
+          👋 {t("welcomeAdmin")}
         </h1>
 
         <p className="mt-2 text-lg">
-          Manage your Apple Store quickly and easily.
+          {t("manageStore")}
         </p>
       </div>
 
@@ -25,25 +28,25 @@ export default function Dashboard() {
 
         <div className="bg-white rounded-2xl shadow-lg p-6 hover:scale-105 transition">
           <FaBox className="text-blue-600 text-4xl mb-3" />
-          <h2 className="text-gray-500">Products</h2>
+          <h2 className="text-gray-500">{t("products")}</h2>
           <p className="text-3xl font-bold">120</p>
         </div>
 
         <div className="bg-white rounded-2xl shadow-lg p-6 hover:scale-105 transition">
           <FaShoppingCart className="text-green-600 text-4xl mb-3" />
-          <h2 className="text-gray-500">Orders</h2>
+          <h2 className="text-gray-500">{t("orders")}</h2>
           <p className="text-3xl font-bold">80</p>
         </div>
 
         <div className="bg-white rounded-2xl shadow-lg p-6 hover:scale-105 transition">
           <FaUsers className="text-purple-600 text-4xl mb-3" />
-          <h2 className="text-gray-500">Users</h2>
+          <h2 className="text-gray-500">{t("users")}</h2>
           <p className="text-3xl font-bold">560</p>
         </div>
 
         <div className="bg-white rounded-2xl shadow-lg p-6 hover:scale-105 transition">
           <FaDollarSign className="text-yellow-500 text-4xl mb-3" />
-          <h2 className="text-gray-500">Revenue</h2>
+          <h2 className="text-gray-500">{t("revenue")}</h2>
           <p className="text-3xl font-bold">$5,000</p>
         </div>
 
@@ -53,7 +56,7 @@ export default function Dashboard() {
       <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
 
         <h2 className="text-2xl font-bold mb-5">
-          📋 Recent Orders
+          📋 {t("recentOrders")}
         </h2>
 
         <table className="w-full">
@@ -62,10 +65,10 @@ export default function Dashboard() {
 
             <tr>
 
-              <th className="text-left p-3">Customer</th>
-              <th className="text-left p-3">Product</th>
-              <th className="text-left p-3">Price</th>
-              <th className="text-left p-3">Status</th>
+              <th className="text-left p-3">{t("customer")}</th>
+              <th className="text-left p-3">{t("product")}</th>
+              <th className="text-left p-3">{t("price")}</th>
+              <th className="text-left p-3">{t("status")}</th>
 
             </tr>
 
@@ -78,7 +81,7 @@ export default function Dashboard() {
               <td className="p-3">iPhone 17 Pro Max</td>
               <td className="p-3">$1500</td>
               <td className="p-3 text-green-600 font-bold">
-                Completed
+                {t("completed")}
               </td>
             </tr>
 
@@ -87,7 +90,7 @@ export default function Dashboard() {
               <td className="p-3">MacBook Pro</td>
               <td className="p-3">$2000</td>
               <td className="p-3 text-yellow-500 font-bold">
-                Pending
+                {t("pending")}
               </td>
             </tr>
 
@@ -96,7 +99,7 @@ export default function Dashboard() {
               <td className="p-3">iPad Pro</td>
               <td className="p-3">$1200</td>
               <td className="p-3 text-red-500 font-bold">
-                Cancelled
+                {t("cancelled")}
               </td>
             </tr>
 
@@ -110,19 +113,19 @@ export default function Dashboard() {
       <div className="grid grid-cols-4 gap-5">
 
         <button className="bg-blue-600 text-white py-4 rounded-xl hover:bg-blue-700 transition">
-          ➕ Add Product
+          ➕ {t("addProduct")}
         </button>
 
         <button className="bg-green-600 text-white py-4 rounded-xl hover:bg-green-700 transition">
-          🛒 View Orders
+          🛒 {t("viewOrders")}
         </button>
 
         <button className="bg-purple-600 text-white py-4 rounded-xl hover:bg-purple-700 transition">
-          👥 Manage Users
+          👥 {t("manageUsers")}
         </button>
 
         <button className="bg-gray-800 text-white py-4 rounded-xl hover:bg-black transition">
-          ⚙️ Settings
+          ⚙️ {t("settings")}
         </button>
 
       </div>
