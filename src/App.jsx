@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
@@ -9,6 +9,7 @@ import ProductDetail from "./components/ProductDetail";
 import Contact from "./components/Contact";
 
 import AdminPanel from "./Pages/AdminPanel";
+import ProtectedRoute from "./components/ProtectedRoute";
 import Dashboard from "./Pages/Dashboard";
 import Products from "./Pages/Products";
 import Orders from "./Pages/Orders";
@@ -40,6 +41,9 @@ export default function App() {
   }, [cart]);
 
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const isAdminPage = location.pathname.startsWith("/admin");
 
 
   
@@ -49,6 +53,8 @@ export default function App() {
       login === "admin" &&
       password === "12345"
     ) {
+      localStorage.setItem("isAdmin", "true");
+
       setModal(false);
 
       setSuccess(true);
@@ -194,10 +200,12 @@ export default function App() {
       {/* NAVBAR */}
       {/* ========================= */}
 
-      <Navbar
-        setModal={setModal}
-        cart={cart}
-      />
+      {!isAdminPage && (
+        <Navbar
+          setModal={setModal}
+          cart={cart}
+        />
+      )}
 
 
       {/* ========================= */}
@@ -294,7 +302,9 @@ export default function App() {
         <Route
           path="/admin"
           element={
-            <AdminPanel />
+            <ProtectedRoute>
+              <AdminPanel />
+            </ProtectedRoute>
           }
         >
 
