@@ -4,6 +4,7 @@ import {
   FaBox,
   FaShoppingCart,
   FaEye,
+  FaDollarSign,
 } from "react-icons/fa";
 
 const BACKEND_URL = "https://swipper-server.onrender.com";
@@ -14,6 +15,7 @@ export default function Dashboard() {
   const [productsCount, setProductsCount] = useState(0);
   const [ordersCount, setOrdersCount] = useState(0);
   const [visitsCount, setVisitsCount] = useState(0);
+  const [revenue, setRevenue] = useState(0);
   const [recentOrders, setRecentOrders] = useState([]);
 
   useEffect(() => {
@@ -35,6 +37,19 @@ export default function Dashboard() {
       if (ordersRes.success) {
         setOrdersCount(ordersRes.orders.length);
         setRecentOrders(ordersRes.orders.slice(0, 3));
+
+        const totalRevenue = ordersRes.orders.reduce(
+          (sum, order) => {
+            const numericValue = Number(
+              String(order.total || "").replace(/\D/g, "")
+            );
+
+            return sum + (isNaN(numericValue) ? 0 : numericValue);
+          },
+          0
+        );
+
+        setRevenue(totalRevenue);
       }
 
       if (visitsRes.success) {
@@ -59,7 +74,7 @@ export default function Dashboard() {
       </div>
 
      
-      <div className="grid grid-cols-3 gap-6 mb-8">
+      <div className="grid grid-cols-4 gap-6 mb-8">
 
         <div className="bg-white rounded-2xl shadow-lg p-6 hover:scale-105 transition">
           <FaBox className="text-blue-600 text-4xl mb-3" />
@@ -77,6 +92,14 @@ export default function Dashboard() {
           <FaEye className="text-yellow-500 text-4xl mb-3" />
           <h2 className="text-gray-500">{t("visits")}</h2>
           <p className="text-3xl font-bold">{visitsCount}</p>
+        </div>
+
+        <div className="bg-white rounded-2xl shadow-lg p-6 hover:scale-105 transition">
+          <FaDollarSign className="text-purple-600 text-4xl mb-3" />
+          <h2 className="text-gray-500">{t("revenue")}</h2>
+          <p className="text-2xl font-bold">
+            {revenue.toLocaleString("uz-UZ")}
+          </p>
         </div>
 
       </div>
