@@ -1,9 +1,15 @@
 import React from "react";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 export default function AdminPanel() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+
+  function handleLogout() {
+    localStorage.removeItem("isAdmin");
+    navigate("/");
+  }
 
   return (
     <div className="min-h-screen flex bg-gray-100">
@@ -44,7 +50,7 @@ export default function AdminPanel() {
                   }`
                 }
               >
-                📦 {t("products")}
+                📦 {t("productsLabel")}
               </NavLink>
             </li>
 
@@ -60,21 +66,6 @@ export default function AdminPanel() {
                 }
               >
                 🛒 {t("orders")}
-              </NavLink>
-            </li>
-
-            <li>
-              <NavLink
-                to="/admin/users"
-                className={({ isActive }) =>
-                  `block p-3 rounded-lg transition ${
-                    isActive
-                      ? "bg-blue-600"
-                      : "hover:bg-gray-700"
-                  }`
-                }
-              >
-                👤 {t("users")}
               </NavLink>
             </li>
 
@@ -107,8 +98,17 @@ export default function AdminPanel() {
             {t("adminDashboard")}
           </h2>
 
-          <div className="bg-blue-600 text-white px-4 py-2 rounded-lg">
-            {t("admin")}
+          <div className="flex items-center gap-3">
+            <div className="bg-blue-600 text-white px-4 py-2 rounded-lg">
+              {t("admin")}
+            </div>
+
+            <button
+              onClick={handleLogout}
+              className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition"
+            >
+              🚪 {t("logout")}
+            </button>
           </div>
         </header>
 

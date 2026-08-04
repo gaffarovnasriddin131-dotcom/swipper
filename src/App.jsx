@@ -13,7 +13,6 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Dashboard from "./Pages/Dashboard";
 import Products from "./Pages/Products";
 import Orders from "./Pages/Orders";
-import Users from "./Pages/Users";
 import Settings from "./Pages/Settings";
 
 export default function App() {
@@ -342,15 +341,6 @@ export default function App() {
             path="orders"
             element={
               <Orders />
-            }
-          />
-
-          {/* USERS */}
-
-          <Route
-            path="users"
-            element={
-              <Users />
             }
           />
 

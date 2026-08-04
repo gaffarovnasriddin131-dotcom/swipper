@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import {
   FaBox,
   FaShoppingCart,
-  FaUsers,
   FaEye,
 } from "react-icons/fa";
 
@@ -60,7 +59,7 @@ export default function Dashboard() {
       </div>
 
      
-      <div className="grid grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-3 gap-6 mb-8">
 
         <div className="bg-white rounded-2xl shadow-lg p-6 hover:scale-105 transition">
           <FaBox className="text-blue-600 text-4xl mb-3" />
@@ -72,12 +71,6 @@ export default function Dashboard() {
           <FaShoppingCart className="text-green-600 text-4xl mb-3" />
           <h2 className="text-gray-500">{t("orders")}</h2>
           <p className="text-3xl font-bold">{ordersCount}</p>
-        </div>
-
-        <div className="bg-white rounded-2xl shadow-lg p-6 hover:scale-105 transition">
-          <FaUsers className="text-purple-600 text-4xl mb-3" />
-          <h2 className="text-gray-500">{t("users")}</h2>
-          <p className="text-3xl font-bold">560</p>
         </div>
 
         <div className="bg-white rounded-2xl shadow-lg p-6 hover:scale-105 transition">
@@ -146,7 +139,7 @@ export default function Dashboard() {
       </div>
 
      
-      <div className="grid grid-cols-4 gap-5">
+      <div className="grid grid-cols-3 gap-5">
 
         <button className="bg-blue-600 text-white py-4 rounded-xl hover:bg-blue-700 transition">
           ➕ {t("addProduct")}
@@ -154,10 +147,6 @@ export default function Dashboard() {
 
         <button className="bg-green-600 text-white py-4 rounded-xl hover:bg-green-700 transition">
           🛒 {t("viewOrders")}
-        </button>
-
-        <button className="bg-purple-600 text-white py-4 rounded-xl hover:bg-purple-700 transition">
-          👥 {t("manageUsers")}
         </button>
 
         <button className="bg-gray-800 text-white py-4 rounded-xl hover:bg-black transition">
