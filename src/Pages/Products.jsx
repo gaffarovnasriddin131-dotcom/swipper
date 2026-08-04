@@ -3,6 +3,15 @@ import { useTranslation } from "react-i18next";
 
 const BACKEND_URL = "https://swipper-server.onrender.com";
 
+const KATEGORIYALAR = [
+  "iPhone",
+  "Mac",
+  "iPad",
+  "AirPods",
+  "Apple Watch",
+  "Aksessuarlar",
+];
+
 export default function Products() {
   const { t } = useTranslation();
 
@@ -10,8 +19,10 @@ export default function Products() {
   const [loading, setLoading] = useState(true);
 
   const [name, setName] = useState("");
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState(KATEGORIYALAR[0]);
   const [price, setPrice] = useState("");
+  const [image, setImage] = useState("");
+  const [description, setDescription] = useState("");
 
   const [showError, setShowError] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -37,7 +48,7 @@ export default function Products() {
   }
 
   async function handleAddProduct() {
-    if (!name || !category || !price) {
+    if (!name || !category || !price || !image) {
       setShowError(true);
 
       setTimeout(() => {
@@ -53,7 +64,13 @@ export default function Products() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ name, category, price }),
+        body: JSON.stringify({
+          name,
+          category,
+          price,
+          image,
+          description,
+        }),
       });
 
       const data = await response.json();
@@ -62,8 +79,9 @@ export default function Products() {
         setProducts([data.product, ...products]);
 
         setName("");
-        setCategory("");
         setPrice("");
+        setImage("");
+        setDescription("");
 
         setShowSuccess(true);
 
@@ -159,10 +177,14 @@ export default function Products() {
 
       </div>
 
+      <p className="text-sm text-gray-500 mb-4 bg-blue-50 border border-blue-200 rounded-lg p-3">
+        ℹ️ Bu yerda qo'shilgan mahsulot saytning "Katalog" sahifasida ham ko'rinadi. Rasm uchun internet havolasini kiriting (masalan unsplash.com'dan).
+      </p>
+
     
       <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
 
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 gap-4 mb-4">
 
           <input
             type="text"
@@ -172,13 +194,17 @@ export default function Products() {
             onChange={(e) => setName(e.target.value)}
           />
 
-          <input
-            type="text"
-            placeholder={t("category")}
+          <select
             className="border p-3 rounded-lg"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-          />
+          >
+            {KATEGORIYALAR.map((kat) => (
+              <option key={kat} value={kat}>
+                {kat}
+              </option>
+            ))}
+          </select>
 
           <input
             type="text"
@@ -188,11 +214,27 @@ export default function Products() {
             onChange={(e) => setPrice(e.target.value)}
           />
 
+          <input
+            type="text"
+            placeholder="Rasm havolasi (URL)"
+            className="border p-3 rounded-lg"
+            value={image}
+            onChange={(e) => setImage(e.target.value)}
+          />
+
         </div>
+
+        <textarea
+          placeholder="Tavsif (ixtiyoriy)"
+          className="border p-3 rounded-lg w-full mb-4"
+          rows={2}
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
 
         <button
           onClick={handleAddProduct}
-          className="mt-5 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition hover:scale-105"
+          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition hover:scale-105"
         >
           + {t("addProduct")}
         </button>
@@ -212,6 +254,8 @@ export default function Products() {
             <thead className="bg-gray-100">
 
               <tr>
+
+                <th className="p-4 text-left">Rasm</th>
 
                 <th className="p-4 text-left">
                   {t("productName")}
@@ -241,6 +285,16 @@ export default function Products() {
                   key={item._id}
                   className="border-t hover:bg-gray-50 transition"
                 >
+
+                  <td className="p-4">
+                    {item.image && (
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="w-12 h-12 object-contain"
+                      />
+                    )}
+                  </td>
 
                   <td className="p-4">
                     {item.name}

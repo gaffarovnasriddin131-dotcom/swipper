@@ -57,6 +57,8 @@ const productSchema = new mongoose.Schema({
   name: String,
   category: String,
   price: String,
+  image: String,
+  description: String,
   createdAt: {
     type: Date,
     default: Date.now,
@@ -295,7 +297,7 @@ app.get("/api/products", async (req, res) => {
 
 app.post("/api/products", async (req, res) => {
   try {
-    const { name, category, price } = req.body;
+    const { name, category, price, image, description } = req.body;
 
     if (!name || !category || !price) {
       return res.status(400).json({
@@ -308,6 +310,8 @@ app.post("/api/products", async (req, res) => {
       name,
       category,
       price,
+      image,
+      description,
     });
 
     res.status(201).json({

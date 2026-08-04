@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
@@ -17,6 +17,29 @@ export default function Katalog({ addToCart }) {
   const { t, i18n } = useTranslation();
 
   const [activeCategory, setActiveCategory] = useState("all");
+  const [adminProducts, setAdminProducts] = useState([]);
+
+  useEffect(() => {
+    fetch("https://swipper-server.onrender.com/api/products")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          const formatted = data.products.map((item) => ({
+            id: item._id,
+            kategoriya: item.category,
+            rasm: item.image,
+            nomi: item.name,
+            malumot: item.description || "",
+            narx: Number(String(item.price).replace(/\D/g, "")) || 0,
+          }));
+
+          setAdminProducts(formatted);
+        }
+      })
+      .catch((error) =>
+        console.error("MAHSULOTLARNI OLISHDA XATOLIK:", error)
+      );
+  }, []);
 
   const mahsulotlar = [
     {
@@ -622,10 +645,12 @@ export default function Katalog({ addToCart }) {
     });
   }
 
+  const allProducts = [...mahsulotlar, ...adminProducts];
+
   const filteredProducts =
     activeCategory === "all"
-      ? mahsulotlar
-      : mahsulotlar.filter(
+      ? allProducts
+      : allProducts.filter(
           (item) => item.kategoriya === activeCategory
         );
 
