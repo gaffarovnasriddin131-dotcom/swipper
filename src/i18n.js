@@ -97,8 +97,11 @@ const resources = {
       admin: "Admin",
       dashboard: "Dashboard",
       orders: "Orders",
+      productsLabel: "Products",
       users: "Users",
       settings: "Settings",
+      logout: "Logout",
+      visits: "Visits",
 
       welcomeAdmin: "Welcome Back, Admin",
       manageStore: "Manage your Apple Store quickly and easily.",
@@ -235,8 +238,11 @@ const resources = {
       admin: "Admin",
       dashboard: "Boshqaruv",
       orders: "Buyurtmalar",
+      productsLabel: "Mahsulotlar",
       users: "Foydalanuvchilar",
       settings: "Sozlamalar",
+      logout: "Chiqish",
+      visits: "Tashriflar",
 
       welcomeAdmin: "Xush kelibsiz, Admin",
       manageStore: "Apple Store'ingizni tez va qulay boshqaring.",

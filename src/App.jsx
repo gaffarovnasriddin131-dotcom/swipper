@@ -45,6 +45,16 @@ export default function App() {
 
   const isAdminPage = location.pathname.startsWith("/admin");
 
+  // TASHRIF HISOBLAGICHI
+
+  useEffect(() => {
+    fetch("https://swipper-server.onrender.com/api/visit", {
+      method: "POST",
+    }).catch((error) =>
+      console.error("VISIT XATOSI:", error)
+    );
+  }, []);
+
 
   
 

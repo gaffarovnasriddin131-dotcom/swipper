@@ -1,26 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+
+const BACKEND_URL = "https://swipper-server.onrender.com";
 
 export default function Products() {
   const { t } = useTranslation();
 
-  const [products, setProducts] = useState([
-    {
-      name: "iPhone 17 Pro Max",
-      category: "Phone",
-      price: "$1500",
-    },
-    {
-      name: "MacBook Pro",
-      category: "Laptop",
-      price: "$2000",
-    },
-    {
-      name: "iPad Pro",
-      category: "Tablet",
-      price: "$1200",
-    },
-  ]);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
@@ -30,7 +17,26 @@ export default function Products() {
   const [showSuccess, setShowSuccess] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
 
-  function handleAddProduct() {
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  async function fetchProducts() {
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/products`);
+      const data = await response.json();
+
+      if (data.success) {
+        setProducts(data.products);
+      }
+    } catch (error) {
+      console.error("MAHSULOTLARNI OLISHDA XATOLIK:", error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleAddProduct() {
     if (!name || !category || !price) {
       setShowError(true);
 
@@ -41,34 +47,60 @@ export default function Products() {
       return;
     }
 
-    setProducts([
-      ...products,
-      {
-        name,
-        category,
-        price,
-      },
-    ]);
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/products`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, category, price }),
+      });
 
-    setName("");
-    setCategory("");
-    setPrice("");
+      const data = await response.json();
 
-    setShowSuccess(true);
+      if (data.success) {
+        setProducts([data.product, ...products]);
 
-    setTimeout(() => {
-      setShowSuccess(false);
-    }, 2500);
+        setName("");
+        setCategory("");
+        setPrice("");
+
+        setShowSuccess(true);
+
+        setTimeout(() => {
+          setShowSuccess(false);
+        }, 2500);
+      }
+    } catch (error) {
+      console.error("MAHSULOT QOSHISHDA XATOLIK:", error);
+    }
   }
 
-  function handleDelete(index) {
-    setProducts(products.filter((_, i) => i !== index));
+  async function handleDelete(id) {
+    try {
+      const response = await fetch(
+        `${BACKEND_URL}/api/products/${id}`,
+        {
+          method: "DELETE",
+        }
+      );
 
-    setShowDelete(true);
+      const data = await response.json();
 
-    setTimeout(() => {
-      setShowDelete(false);
-    }, 2500);
+      if (data.success) {
+        setProducts(
+          products.filter((item) => item._id !== id)
+        );
+
+        setShowDelete(true);
+
+        setTimeout(() => {
+          setShowDelete(false);
+        }, 2500);
+      }
+    } catch (error) {
+      console.error("MAHSULOT OCHIRISHDA XATOLIK:", error);
+    }
   }
 
   return (
@@ -122,7 +154,7 @@ export default function Products() {
       <div className="flex justify-between items-center mb-6">
 
         <h1 className="text-3xl font-bold">
-          {t("products")}
+          {t("productsLabel")}
         </h1>
 
       </div>
@@ -170,71 +202,77 @@ export default function Products() {
       
       <div className="bg-white rounded-xl shadow-lg overflow-hidden">
 
-        <table className="w-full">
+        {loading ? (
+          <p className="p-6 text-gray-500">{t("sending")}</p>
+        ) : products.length === 0 ? (
+          <p className="p-6 text-gray-500">{t("emptyCart")}</p>
+        ) : (
+          <table className="w-full">
 
-          <thead className="bg-gray-100">
+            <thead className="bg-gray-100">
 
-            <tr>
+              <tr>
 
-              <th className="p-4 text-left">
-                {t("productName")}
-              </th>
+                <th className="p-4 text-left">
+                  {t("productName")}
+                </th>
 
-              <th className="p-4 text-left">
-                {t("category")}
-              </th>
+                <th className="p-4 text-left">
+                  {t("category")}
+                </th>
 
-              <th className="p-4 text-left">
-                {t("price")}
-              </th>
+                <th className="p-4 text-left">
+                  {t("price")}
+                </th>
 
-              <th className="p-4 text-center">
-                {t("action")}
-              </th>
-
-            </tr>
-
-          </thead>
-
-          <tbody>
-
-            {products.map((item, index) => (
-
-              <tr
-                key={index}
-                className="border-t hover:bg-gray-50 transition"
-              >
-
-                <td className="p-4">
-                  {item.name}
-                </td>
-
-                <td className="p-4">
-                  {item.category}
-                </td>
-
-                <td className="p-4">
-                  {item.price}
-                </td>
-
-                <td className="p-4 text-center">
-
-                  <button
-                    onClick={() => handleDelete(index)}
-                    className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition"
-                  >
-                    {t("delete")}
-                  </button>
-
-                </td>
+                <th className="p-4 text-center">
+                  {t("action")}
+                </th>
 
               </tr>
 
-            ))}
+            </thead>
 
-          </tbody>
+            <tbody>
 
-        </table>
+              {products.map((item) => (
+
+                <tr
+                  key={item._id}
+                  className="border-t hover:bg-gray-50 transition"
+                >
+
+                  <td className="p-4">
+                    {item.name}
+                  </td>
+
+                  <td className="p-4">
+                    {item.category}
+                  </td>
+
+                  <td className="p-4">
+                    {item.price}
+                  </td>
+
+                  <td className="p-4 text-center">
+
+                    <button
+                      onClick={() => handleDelete(item._id)}
+                      className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition"
+                    >
+                      {t("delete")}
+                    </button>
+
+                  </td>
+
+                </tr>
+
+              ))}
+
+            </tbody>
+
+          </table>
+        )}
 
       </div>
 

@@ -1,14 +1,50 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   FaBox,
   FaShoppingCart,
   FaUsers,
-  FaDollarSign,
+  FaEye,
 } from "react-icons/fa";
+
+const BACKEND_URL = "https://swipper-server.onrender.com";
 
 export default function Dashboard() {
   const { t } = useTranslation();
+
+  const [productsCount, setProductsCount] = useState(0);
+  const [ordersCount, setOrdersCount] = useState(0);
+  const [visitsCount, setVisitsCount] = useState(0);
+  const [recentOrders, setRecentOrders] = useState([]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  async function fetchData() {
+    try {
+      const [productsRes, ordersRes, visitsRes] = await Promise.all([
+        fetch(`${BACKEND_URL}/api/products`).then((r) => r.json()),
+        fetch(`${BACKEND_URL}/api/orders`).then((r) => r.json()),
+        fetch(`${BACKEND_URL}/api/visits`).then((r) => r.json()),
+      ]);
+
+      if (productsRes.success) {
+        setProductsCount(productsRes.products.length);
+      }
+
+      if (ordersRes.success) {
+        setOrdersCount(ordersRes.orders.length);
+        setRecentOrders(ordersRes.orders.slice(0, 3));
+      }
+
+      if (visitsRes.success) {
+        setVisitsCount(visitsRes.count);
+      }
+    } catch (error) {
+      console.error("DASHBOARD MALUMOT XATOSI:", error);
+    }
+  }
 
   return (
     <div>
@@ -28,14 +64,14 @@ export default function Dashboard() {
 
         <div className="bg-white rounded-2xl shadow-lg p-6 hover:scale-105 transition">
           <FaBox className="text-blue-600 text-4xl mb-3" />
-          <h2 className="text-gray-500">{t("products")}</h2>
-          <p className="text-3xl font-bold">120</p>
+          <h2 className="text-gray-500">{t("productsLabel")}</h2>
+          <p className="text-3xl font-bold">{productsCount}</p>
         </div>
 
         <div className="bg-white rounded-2xl shadow-lg p-6 hover:scale-105 transition">
           <FaShoppingCart className="text-green-600 text-4xl mb-3" />
           <h2 className="text-gray-500">{t("orders")}</h2>
-          <p className="text-3xl font-bold">80</p>
+          <p className="text-3xl font-bold">{ordersCount}</p>
         </div>
 
         <div className="bg-white rounded-2xl shadow-lg p-6 hover:scale-105 transition">
@@ -45,9 +81,9 @@ export default function Dashboard() {
         </div>
 
         <div className="bg-white rounded-2xl shadow-lg p-6 hover:scale-105 transition">
-          <FaDollarSign className="text-yellow-500 text-4xl mb-3" />
-          <h2 className="text-gray-500">{t("revenue")}</h2>
-          <p className="text-3xl font-bold">$5,000</p>
+          <FaEye className="text-yellow-500 text-4xl mb-3" />
+          <h2 className="text-gray-500">{t("visits")}</h2>
+          <p className="text-3xl font-bold">{visitsCount}</p>
         </div>
 
       </div>
@@ -59,53 +95,53 @@ export default function Dashboard() {
           📋 {t("recentOrders")}
         </h2>
 
-        <table className="w-full">
+        {recentOrders.length === 0 ? (
+          <p className="text-gray-500">{t("emptyCart")}</p>
+        ) : (
+          <table className="w-full">
 
-          <thead className="bg-gray-100">
+            <thead className="bg-gray-100">
 
-            <tr>
+              <tr>
 
-              <th className="text-left p-3">{t("customer")}</th>
-              <th className="text-left p-3">{t("product")}</th>
-              <th className="text-left p-3">{t("price")}</th>
-              <th className="text-left p-3">{t("status")}</th>
+                <th className="text-left p-3">{t("customer")}</th>
+                <th className="text-left p-3">{t("product")}</th>
+                <th className="text-left p-3">{t("price")}</th>
+                <th className="text-left p-3">{t("status")}</th>
 
-            </tr>
+              </tr>
 
-          </thead>
+            </thead>
 
-          <tbody>
+            <tbody>
 
-            <tr className="border-b">
-              <td className="p-3">Ali</td>
-              <td className="p-3">iPhone 17 Pro Max</td>
-              <td className="p-3">$1500</td>
-              <td className="p-3 text-green-600 font-bold">
-                {t("completed")}
-              </td>
-            </tr>
+              {recentOrders.map((order) => (
+                <tr key={order._id} className="border-b">
+                  <td className="p-3">{order.name}</td>
+                  <td className="p-3">
+                    {order.products
+                      ?.map((p) => p.name)
+                      .join(", ")}
+                  </td>
+                  <td className="p-3">{order.total}</td>
+                  <td
+                    className={`p-3 font-bold ${
+                      order.status === "delivered"
+                        ? "text-green-600"
+                        : order.status === "pending"
+                        ? "text-yellow-500"
+                        : "text-red-500"
+                    }`}
+                  >
+                    {t(order.status)}
+                  </td>
+                </tr>
+              ))}
 
-            <tr className="border-b">
-              <td className="p-3">Vali</td>
-              <td className="p-3">MacBook Pro</td>
-              <td className="p-3">$2000</td>
-              <td className="p-3 text-yellow-500 font-bold">
-                {t("pending")}
-              </td>
-            </tr>
+            </tbody>
 
-            <tr>
-              <td className="p-3">Hasan</td>
-              <td className="p-3">iPad Pro</td>
-              <td className="p-3">$1200</td>
-              <td className="p-3 text-red-500 font-bold">
-                {t("cancelled")}
-              </td>
-            </tr>
-
-          </tbody>
-
-        </table>
+          </table>
+        )}
 
       </div>
 
