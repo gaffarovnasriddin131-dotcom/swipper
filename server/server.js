@@ -88,6 +88,38 @@ app.get("/", (req, res) => {
 });
 
 // ==========================================
+// ADMIN LOGIN
+// ==========================================
+
+app.post("/api/admin/login", (req, res) => {
+  try {
+    const { login, password } = req.body;
+
+    if (
+      login === process.env.ADMIN_LOGIN &&
+      password === process.env.ADMIN_PASSWORD
+    ) {
+      return res.status(200).json({
+        success: true,
+        message: "Kirish muvaffaqiyatli",
+      });
+    }
+
+    return res.status(401).json({
+      success: false,
+      message: "Login yoki parol xato",
+    });
+  } catch (error) {
+    console.error("LOGIN XATOSI:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Serverda xatolik yuz berdi",
+    });
+  }
+});
+
+// ==========================================
 // TASHRIFLAR HISOBLAGICHI
 // ==========================================
 

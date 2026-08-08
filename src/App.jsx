@@ -57,27 +57,42 @@ export default function App() {
 
   
 
-  function handleLogin() {
-    if (
-      login === "admin" &&
-      password === "12345"
-    ) {
-      localStorage.setItem("isAdmin", "true");
+  async function handleLogin() {
+    try {
+      const response = await fetch(
+        "https://swipper-server.onrender.com/api/admin/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ login, password }),
+        }
+      );
 
-      setModal(false);
+      const data = await response.json();
 
-      setSuccess(true);
+      if (data.success) {
+        localStorage.setItem("isAdmin", "true");
 
-      setLogin("");
-      setPassword("");
+        setModal(false);
 
-      navigate("/admin");
+        setSuccess(true);
 
-      setTimeout(() => {
-        setSuccess(false);
-      }, 3000);
-    } else {
-      alert("Login yoki parol xato!");
+        setLogin("");
+        setPassword("");
+
+        navigate("/admin");
+
+        setTimeout(() => {
+          setSuccess(false);
+        }, 3000);
+      } else {
+        alert("Login yoki parol xato!");
+      }
+    } catch (error) {
+      console.error("LOGIN XATOSI:", error);
+      alert("Serverga ulanishda xatolik yuz berdi");
     }
   }
 
