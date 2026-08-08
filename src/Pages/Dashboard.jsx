@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   FaBox,
@@ -11,6 +12,7 @@ const BACKEND_URL = "https://swipper-server.onrender.com";
 
 export default function Dashboard() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const [productsCount, setProductsCount] = useState(0);
   const [ordersCount, setOrdersCount] = useState(0);
@@ -164,15 +166,24 @@ export default function Dashboard() {
      
       <div className="grid grid-cols-3 gap-5">
 
-        <button className="bg-blue-600 text-white py-4 rounded-xl hover:bg-blue-700 transition">
+        <button
+          onClick={() => navigate("/admin/products")}
+          className="bg-blue-600 text-white py-4 rounded-xl hover:bg-blue-700 transition"
+        >
           ➕ {t("addProduct")}
         </button>
 
-        <button className="bg-green-600 text-white py-4 rounded-xl hover:bg-green-700 transition">
+        <button
+          onClick={() => navigate("/admin/orders")}
+          className="bg-green-600 text-white py-4 rounded-xl hover:bg-green-700 transition"
+        >
           🛒 {t("viewOrders")}
         </button>
 
-        <button className="bg-gray-800 text-white py-4 rounded-xl hover:bg-black transition">
+        <button
+          onClick={() => navigate("/admin/settings")}
+          className="bg-gray-800 text-white py-4 rounded-xl hover:bg-black transition"
+        >
           ⚙️ {t("settings")}
         </button>
 
