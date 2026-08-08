@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   FaStar,
@@ -7,26 +7,117 @@ import {
   FaArrowLeft,
 } from "react-icons/fa";
 
+import { mahsulotlar } from "../data/products";
+
+const BACKEND_URL = "https://swipper-server.onrender.com";
+
 export default function ProductDetail({ addToCart }) {
   const location = useLocation();
   const navigate = useNavigate();
+  const { id } = useParams();
   const { t, i18n } = useTranslation();
 
-  const product = location.state;
+  const [product, setProduct] = useState(location.state || null);
+  const [loading, setLoading] = useState(!location.state);
+  const [notFound, setNotFound] = useState(false);
 
   const [storage, setStorage] = useState(
-    product?.xotiralar?.[0]?.nomi || ""
+    location.state?.xotiralar?.[0]?.nomi || ""
   );
 
-  const [rating, setRating] = useState(() => {
-    const savedRating = localStorage.getItem(
-      `rating-${product?.id}`
+  const [rating, setRating] = useState(0);
+
+  useEffect(() => {
+    if (location.state) {
+      setProduct(location.state);
+
+      setStorage(
+        location.state.xotiralar?.[0]?.nomi || ""
+      );
+
+      const savedRating = localStorage.getItem(
+        `rating-${location.state.id}`
+      );
+
+      setRating(savedRating ? Number(savedRating) : 0);
+
+      setLoading(false);
+
+      return;
+    }
+
+    const staticProduct = mahsulotlar.find(
+      (item) => String(item.id) === String(id)
     );
 
-    return savedRating ? Number(savedRating) : 0;
-  });
+    if (staticProduct) {
+      setProduct(staticProduct);
 
-  if (!product) {
+      setStorage(
+        staticProduct.xotiralar?.[0]?.nomi || ""
+      );
+
+      const savedRating = localStorage.getItem(
+        `rating-${staticProduct.id}`
+      );
+
+      setRating(savedRating ? Number(savedRating) : 0);
+
+      setLoading(false);
+
+      return;
+    }
+
+    fetch(`${BACKEND_URL}/api/products`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          const found = data.products.find(
+            (item) => item._id === id
+          );
+
+          if (found) {
+            const formatted = {
+              id: found._id,
+              kategoriya: found.category,
+              rasm: found.image,
+              nomi: found.name,
+              malumot: found.description || "",
+              narx:
+                Number(
+                  String(found.price).replace(/\D/g, "")
+                ) || 0,
+            };
+
+            setProduct(formatted);
+
+            const savedRating = localStorage.getItem(
+              `rating-${formatted.id}`
+            );
+
+            setRating(
+              savedRating ? Number(savedRating) : 0
+            );
+          } else {
+            setNotFound(true);
+          }
+        } else {
+          setNotFound(true);
+        }
+      })
+      .catch(() => setNotFound(true))
+      .finally(() => setLoading(false));
+  }, [id, location.state]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-gray-500">{t("sending")}</p>
+      </div>
+    );
+  }
+
+  if (notFound || !product) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <button
