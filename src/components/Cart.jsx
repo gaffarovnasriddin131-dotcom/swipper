@@ -67,6 +67,18 @@ export default function Cart({
       return;
     }
 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+    if (!emailRegex.test(email.trim())) {
+      setMessage("❌ Email manzilini to'g'ri kiriting (masalan: ism@gmail.com)");
+      return;
+    }
+
+    if (phone.trim().length !== 9) {
+      setMessage("❌ Telefon raqamini to'liq kiriting (9 ta raqam)");
+      return;
+    }
+
     if (!cart || cart.length === 0) {
       setMessage("❌ Savat bo'sh");
       return;
