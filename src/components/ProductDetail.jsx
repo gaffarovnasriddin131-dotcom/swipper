@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
-  FaStar,
   FaShoppingCart,
   FaArrowLeft,
+  FaStar,
 } from "react-icons/fa";
 
 import { mahsulotlar } from "../data/products";
@@ -25,7 +25,10 @@ export default function ProductDetail({ addToCart }) {
     location.state?.xotiralar?.[0]?.nomi || ""
   );
 
-  const [rating, setRating] = useState(0);
+  const [averageRating, setAverageRating] = useState(0);
+  const [ratingCount, setRatingCount] = useState(0);
+  const [myRating, setMyRating] = useState(0);
+  const [hasRated, setHasRated] = useState(false);
 
   useEffect(() => {
     if (location.state) {
@@ -34,12 +37,6 @@ export default function ProductDetail({ addToCart }) {
       setStorage(
         location.state.xotiralar?.[0]?.nomi || ""
       );
-
-      const savedRating = localStorage.getItem(
-        `rating-${location.state.id}`
-      );
-
-      setRating(savedRating ? Number(savedRating) : 0);
 
       setLoading(false);
 
@@ -56,12 +53,6 @@ export default function ProductDetail({ addToCart }) {
       setStorage(
         staticProduct.xotiralar?.[0]?.nomi || ""
       );
-
-      const savedRating = localStorage.getItem(
-        `rating-${staticProduct.id}`
-      );
-
-      setRating(savedRating ? Number(savedRating) : 0);
 
       setLoading(false);
 
@@ -90,14 +81,6 @@ export default function ProductDetail({ addToCart }) {
             };
 
             setProduct(formatted);
-
-            const savedRating = localStorage.getItem(
-              `rating-${formatted.id}`
-            );
-
-            setRating(
-              savedRating ? Number(savedRating) : 0
-            );
           } else {
             setNotFound(true);
           }
@@ -108,6 +91,66 @@ export default function ProductDetail({ addToCart }) {
       .catch(() => setNotFound(true))
       .finally(() => setLoading(false));
   }, [id, location.state]);
+
+  useEffect(() => {
+    if (!product) {
+      return;
+    }
+
+    fetch(`${BACKEND_URL}/api/ratings/${product.id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          setAverageRating(data.average);
+          setRatingCount(data.count);
+        }
+      })
+      .catch((error) =>
+        console.error("BAHOLARNI OLISHDA XATOLIK:", error)
+      );
+
+    const rated = localStorage.getItem(`rated-${product.id}`);
+
+    if (rated) {
+      setHasRated(true);
+      setMyRating(Number(rated));
+    } else {
+      setHasRated(false);
+      setMyRating(0);
+    }
+  }, [product]);
+
+  async function handleRate(stars) {
+    if (hasRated || !product) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/ratings`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          productId: product.id,
+          stars,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setAverageRating(data.average);
+        setRatingCount(data.count);
+        setMyRating(stars);
+        setHasRated(true);
+
+        localStorage.setItem(`rated-${product.id}`, stars);
+      }
+    } catch (error) {
+      console.error("BAHO YUBORISHDA XATOLIK:", error);
+    }
+  }
 
   if (loading) {
     return (
@@ -168,7 +211,6 @@ export default function ProductDetail({ addToCart }) {
       narx: currentPrice,
       malumot: getDescription(),
       storage: storage,
-      rating: rating,
     });
 
     navigate("/cart");
@@ -243,42 +285,56 @@ export default function ProductDetail({ addToCart }) {
 
             <div className="mt-8">
 
-              <h3 className="text-lg font-bold text-gray-900 mb-4">
+              <h3 className="text-lg font-bold text-gray-900 mb-3">
                 {t("rateProduct")}
               </h3>
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 mb-2">
 
-                {[1, 2, 3, 4, 5].map((item) => (
-                  <button
-                    key={item}
-                    onClick={() => {
-                      setRating(item);
-                      localStorage.setItem(
-                        `rating-${product.id}`,
-                        item
-                      );
-                    }}
-                    className="hover:scale-125 transition"
-                  >
-                    <FaStar
-                      size={35}
-                      className={
-                        item <= rating
-                          ? "text-yellow-400"
-                          : "text-gray-300"
-                      }
-                    />
-                  </button>
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <FaStar
+                    key={star}
+                    size={22}
+                    className={
+                      star <= Math.round(averageRating)
+                        ? "text-yellow-400"
+                        : "text-gray-300"
+                    }
+                  />
                 ))}
+
+                <span className="text-gray-500 text-sm ml-1">
+                  {averageRating.toFixed(1)} ({ratingCount})
+                </span>
 
               </div>
 
-              <p className="text-gray-500 mt-3">
-                {rating === 0
-                  ? t("selectRating")
-                  : `${t("yourRating")}: ${rating} / 5`}
-              </p>
+              {hasRated ? (
+                <p className="text-sm text-gray-500">
+                  {t("yourRating")}: {myRating}/5
+                </p>
+              ) : (
+                <div className="flex items-center gap-2">
+
+                  <span className="text-sm text-gray-500">
+                    {t("selectRating")}:
+                  </span>
+
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                      key={star}
+                      onClick={() => handleRate(star)}
+                      className="hover:scale-125 transition"
+                    >
+                      <FaStar
+                        size={20}
+                        className="text-gray-300 hover:text-yellow-400"
+                      />
+                    </button>
+                  ))}
+
+                </div>
+              )}
 
             </div>
 

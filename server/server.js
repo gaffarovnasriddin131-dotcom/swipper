@@ -72,6 +72,25 @@ const visitSchema = new mongoose.Schema({
   },
 });
 
+const ratingSchema = new mongoose.Schema({
+  productId: {
+    type: String,
+    required: true,
+  },
+  stars: {
+    type: Number,
+    required: true,
+    min: 1,
+    max: 5,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
+
+const Rating = mongoose.model("Rating", ratingSchema);
+
 const Order = mongoose.model("Order", orderSchema);
 const Product = mongoose.model("Product", productSchema);
 const Visit = mongoose.model("Visit", visitSchema);
@@ -301,6 +320,73 @@ ${productText}
     return res.status(500).json({
       success: false,
       message: "Serverda xatolik yuz berdi",
+    });
+  }
+});
+
+// ==========================================
+// BAHOLASH (RATING)
+// ==========================================
+
+app.get("/api/ratings/:productId", async (req, res) => {
+  try {
+    const ratings = await Rating.find({
+      productId: req.params.productId,
+    });
+
+    const count = ratings.length;
+
+    const average =
+      count === 0
+        ? 0
+        : ratings.reduce((sum, r) => sum + r.stars, 0) / count;
+
+    res.status(200).json({
+      success: true,
+      average,
+      count,
+    });
+  } catch (error) {
+    console.error("RATING FETCH XATOSI:", error);
+
+    res.status(500).json({
+      success: false,
+      message: "Baholarni olishda xatolik",
+    });
+  }
+});
+
+app.post("/api/ratings", async (req, res) => {
+  try {
+    const { productId, stars } = req.body;
+
+    if (!productId || !stars) {
+      return res.status(400).json({
+        success: false,
+        message: "Malumot yetarli emas",
+      });
+    }
+
+    await Rating.create({ productId, stars });
+
+    const ratings = await Rating.find({ productId });
+
+    const count = ratings.length;
+
+    const average =
+      ratings.reduce((sum, r) => sum + r.stars, 0) / count;
+
+    res.status(201).json({
+      success: true,
+      average,
+      count,
+    });
+  } catch (error) {
+    console.error("RATING SAVE XATOSI:", error);
+
+    res.status(500).json({
+      success: false,
+      message: "Bahoni saqlashda xatolik",
     });
   }
 });
