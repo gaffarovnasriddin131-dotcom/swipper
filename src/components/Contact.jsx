@@ -12,7 +12,7 @@ export default function Contact() {
   return (
     <section
       id="aloqa"
-      className="relative py-24 px-6 overflow-hidden"
+      className="relative min-h-screen py-24 px-6 overflow-hidden flex items-center"
       style={{
         background:
           "linear-gradient(180deg, #f0f6ff 0%, #ffffff 50%, #f0f6ff 100%)",
