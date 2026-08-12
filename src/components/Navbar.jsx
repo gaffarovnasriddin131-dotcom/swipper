@@ -21,7 +21,7 @@ export default function Navbar({ setModal, cart }) {
         <div className="h-20 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-3 group">
             <div className="w-11 h-11 rounded-full text-black flex items-center justify-center group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
-              <FaApple className="text-2xl" />
+              <FaApple className="text-4xl" />
             </div>
 
             <div>
