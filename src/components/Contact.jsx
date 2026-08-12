@@ -4,7 +4,6 @@ import {
   FaPhoneAlt,
   FaTelegramPlane,
   FaClock,
-  FaApple,
   FaArrowRight,
 } from "react-icons/fa";
 
@@ -23,10 +22,6 @@ export default function Contact() {
       <div className="relative z-10 max-w-6xl mx-auto">
 
         <div className="text-center mb-12 contact-animation">
-
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-black text-white rounded-2xl shadow-xl mb-5 apple-animation">
-            <FaApple className="text-3xl" />
-          </div>
 
           <span className="text-blue-600 font-bold tracking-[4px] text-sm">
             {t("contactUs")}
