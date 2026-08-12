@@ -174,35 +174,19 @@ export default function Katalog({ addToCart }) {
 
                   ${
                     activeCategory === category.nomi
-                      ? "bg-blue-600 text-white shadow-xl shadow-blue-300 scale-105"
-                      : "bg-white text-gray-600 shadow-md hover:-translate-y-2 hover:shadow-xl hover:text-blue-600"
+                      ? "bg-blue-600 text-white"
+                      : "bg-white text-gray-600 hover:text-blue-600"
                   }
                 `}
               >
 
-                <span
-                  className={`
-                    text-xl
-                    transition-transform
-                    duration-300
-
-                    ${
-                      activeCategory === category.nomi
-                        ? "scale-125 rotate-12"
-                        : "group-hover:scale-125"
-                    }
-                  `}
-                >
+                <span className="text-xl">
                   {category.icon}
                 </span>
 
                 <span>
                   {t(category.label)}
                 </span>
-
-                {activeCategory === category.nomi && (
-                  <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-10 h-1 bg-blue-600 rounded-full" />
-                )}
 
               </button>
 
