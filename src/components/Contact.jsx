@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import {
   FaPhoneAlt,
   FaTelegramPlane,
-  FaInstagram,
   FaArrowRight,
 } from "react-icons/fa";
 
@@ -37,7 +36,7 @@ export default function Contact() {
 
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
 
           <a
             href="tel:+998930351117"
@@ -84,32 +83,6 @@ export default function Contact() {
 
             <div className="flex items-center gap-2 text-sky-500 font-bold">
               <span>{t("writeTelegram")}</span>
-              <FaArrowRight className="group-hover:translate-x-2 transition" />
-            </div>
-
-          </a>
-
-          <a
-            href="https://instagram.com/11_gaffarov_"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group bg-white rounded-3xl p-7 border border-gray-100 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-500"
-          >
-
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400 text-white flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 mb-5">
-              <FaInstagram className="text-2xl" />
-            </div>
-
-            <p className="text-sm text-gray-400 mb-1">
-              Instagram
-            </p>
-
-            <h3 className="text-lg font-black text-gray-900 group-hover:text-pink-600 transition mb-4">
-              @11_gaffarov_
-            </h3>
-
-            <div className="flex items-center gap-2 text-pink-600 font-bold">
-              <span>Instagram'da kuzatish</span>
               <FaArrowRight className="group-hover:translate-x-2 transition" />
             </div>
 
