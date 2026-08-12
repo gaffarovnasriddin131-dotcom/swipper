@@ -12,11 +12,18 @@ export default function Contact() {
   return (
     <section
       id="aloqa"
-      className="relative py-24 px-6 bg-gray-50 overflow-hidden"
+      className="relative py-24 px-6 overflow-hidden"
+      style={{
+        background:
+          "linear-gradient(135deg, #eef2ff 0%, #faf5ff 40%, #fdf2f8 100%)",
+      }}
     >
-      <div className="absolute top-[-100px] left-[-100px] w-[300px] h-[300px] bg-blue-100 rounded-full blur-3xl opacity-60" />
 
-      <div className="absolute bottom-[-120px] right-[-100px] w-[350px] h-[350px] bg-purple-100 rounded-full blur-3xl opacity-50" />
+      <div className="absolute top-[-100px] left-[-100px] w-[350px] h-[350px] bg-indigo-200/40 rounded-full blur-3xl" />
+
+      <div className="absolute bottom-[-120px] right-[-100px] w-[400px] h-[400px] bg-pink-200/40 rounded-full blur-3xl" />
+
+      <div className="absolute top-1/3 right-1/4 w-[250px] h-[250px] bg-purple-200/30 rounded-full blur-3xl" />
 
       <div className="relative z-10 max-w-6xl mx-auto">
 
@@ -40,7 +47,7 @@ export default function Contact() {
 
           <a
             href="tel:+998930351117"
-            className="group bg-white rounded-3xl p-7 border border-gray-100 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-500"
+            className="group bg-white/80 backdrop-blur-sm rounded-3xl p-7 border border-white/60 shadow-xl hover:shadow-2xl hover:-translate-y-2 transition-all duration-500"
           >
 
             <div className="w-14 h-14 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 mb-5">
@@ -66,7 +73,7 @@ export default function Contact() {
             href="https://t.me/Gaffarov_11"
             target="_blank"
             rel="noopener noreferrer"
-            className="group bg-white rounded-3xl p-7 border border-gray-100 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-500"
+            className="group bg-white/80 backdrop-blur-sm rounded-3xl p-7 border border-white/60 shadow-xl hover:shadow-2xl hover:-translate-y-2 transition-all duration-500"
           >
 
             <div className="w-14 h-14 rounded-2xl bg-sky-500 text-white flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 mb-5">
