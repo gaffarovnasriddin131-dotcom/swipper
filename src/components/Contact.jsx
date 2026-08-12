@@ -41,28 +41,30 @@ export default function Contact() {
 
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto">
 
           <a
             href="tel:+998930351117"
-            className="group bg-white/80 backdrop-blur-sm rounded-3xl p-7 border border-white/60 shadow-xl hover:shadow-2xl hover:-translate-y-2 transition-all duration-500"
+            className="group relative bg-white rounded-[2rem] p-9 shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:shadow-[0_20px_50px_rgb(37,99,235,0.15)] hover:-translate-y-3 transition-all duration-500 overflow-hidden"
           >
 
-            <div className="w-14 h-14 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 mb-5">
-              <FaPhoneAlt className="text-xl" />
+            <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-400 via-blue-600 to-blue-400 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
+
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 text-white flex items-center justify-center shadow-lg shadow-blue-500/40 group-hover:scale-110 group-hover:-rotate-6 transition-all duration-500 mb-6">
+              <FaPhoneAlt className="text-2xl" />
             </div>
 
-            <p className="text-sm text-gray-400 mb-1">
+            <p className="text-xs uppercase tracking-widest text-gray-400 font-semibold mb-2">
               {t("phone")}
             </p>
 
-            <h3 className="text-lg font-black text-gray-900 group-hover:text-blue-600 transition mb-4">
+            <h3 className="text-2xl font-black text-gray-900 group-hover:text-blue-600 transition mb-5">
               +998 93 035 11 17
             </h3>
 
-            <div className="flex items-center gap-2 text-blue-600 font-bold">
+            <div className="inline-flex items-center gap-2 text-blue-600 font-bold bg-blue-50 px-4 py-2 rounded-full group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
               <span>{t("callUs")}</span>
-              <FaArrowRight className="group-hover:translate-x-2 transition" />
+              <FaArrowRight className="group-hover:translate-x-1 transition text-sm" />
             </div>
 
           </a>
@@ -71,24 +73,26 @@ export default function Contact() {
             href="https://t.me/Gaffarov_11"
             target="_blank"
             rel="noopener noreferrer"
-            className="group bg-white/80 backdrop-blur-sm rounded-3xl p-7 border border-white/60 shadow-xl hover:shadow-2xl hover:-translate-y-2 transition-all duration-500"
+            className="group relative bg-white rounded-[2rem] p-9 shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:shadow-[0_20px_50px_rgb(37,99,235,0.15)] hover:-translate-y-3 transition-all duration-500 overflow-hidden"
           >
 
-            <div className="w-14 h-14 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 mb-5">
+            <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-400 via-blue-600 to-blue-400 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
+
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 text-white flex items-center justify-center shadow-lg shadow-blue-500/40 group-hover:scale-110 group-hover:-rotate-6 transition-all duration-500 mb-6">
               <FaTelegramPlane className="text-2xl" />
             </div>
 
-            <p className="text-sm text-gray-400 mb-1">
+            <p className="text-xs uppercase tracking-widest text-gray-400 font-semibold mb-2">
               {t("telegram")}
             </p>
 
-            <h3 className="text-lg font-black text-gray-900 group-hover:text-blue-600 transition mb-4">
+            <h3 className="text-2xl font-black text-gray-900 group-hover:text-blue-600 transition mb-5">
               @Gaffarov_11
             </h3>
 
-            <div className="flex items-center gap-2 text-blue-600 font-bold">
+            <div className="inline-flex items-center gap-2 text-blue-600 font-bold bg-blue-50 px-4 py-2 rounded-full group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
               <span>{t("writeTelegram")}</span>
-              <FaArrowRight className="group-hover:translate-x-2 transition" />
+              <FaArrowRight className="group-hover:translate-x-1 transition text-sm" />
             </div>
 
           </a>
