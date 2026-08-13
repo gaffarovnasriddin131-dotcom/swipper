@@ -13,16 +13,13 @@ export default function AdminPanel() {
 
   return (
     <div className="min-h-screen flex bg-gray-100">
-     
       <aside className="w-64 bg-gray-900 text-white p-6">
-
         <h1 className="text-2xl font-bold mb-10">
           {t("adminPanel")}
         </h1>
 
         <nav>
           <ul className="space-y-3">
-
             <li>
               <NavLink
                 to="/admin"
@@ -35,7 +32,7 @@ export default function AdminPanel() {
                   }`
                 }
               >
-                📊 {t("dashboard")}
+                {t("dashboard")}
               </NavLink>
             </li>
 
@@ -50,7 +47,7 @@ export default function AdminPanel() {
                   }`
                 }
               >
-                📦 {t("productsLabel")}
+                {t("productsLabel")}
               </NavLink>
             </li>
 
@@ -65,7 +62,7 @@ export default function AdminPanel() {
                   }`
                 }
               >
-                🛒 {t("orders")}
+                {t("orders")}
               </NavLink>
             </li>
 
@@ -80,19 +77,14 @@ export default function AdminPanel() {
                   }`
                 }
               >
-                ⚙️ {t("settings")}
+                {t("settings")}
               </NavLink>
             </li>
-
           </ul>
         </nav>
-
       </aside>
 
-   
       <main className="flex-1">
-
-       
         <header className="bg-white shadow px-8 py-5 flex justify-between items-center">
           <h2 className="text-3xl font-bold">
             {t("adminDashboard")}
@@ -107,7 +99,7 @@ export default function AdminPanel() {
               onClick={handleLogout}
               className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition"
             >
-              🚪 {t("logout")}
+              {t("logout")}
             </button>
           </div>
         </header>
@@ -115,7 +107,6 @@ export default function AdminPanel() {
         <div className="p-8">
           <Outlet />
         </div>
-
       </main>
     </div>
   );

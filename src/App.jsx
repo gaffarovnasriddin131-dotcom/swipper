@@ -21,6 +21,26 @@ export default function App() {
   const [password, setPassword] = useState("");
   const [success, setSuccess] = useState(false);
 
+  // DARK / LIGHT REJIM
+
+  const [darkMode, setDarkMode] = useState(() => {
+    return localStorage.getItem("theme") === "dark";
+  });
+
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [darkMode]);
+
+  function toggleTheme() {
+    setDarkMode((prev) => !prev);
+  }
+
   
   const [cart, setCart] = useState(() => {
     const savedCart = localStorage.getItem("cart");
@@ -228,6 +248,8 @@ export default function App() {
         <Navbar
           setModal={setModal}
           cart={cart}
+          darkMode={darkMode}
+          toggleTheme={toggleTheme}
         />
       )}
 
@@ -442,7 +464,7 @@ export default function App() {
             />
 
 
-            {/* PAROL */}
+         
 
             <input
               type="password"
