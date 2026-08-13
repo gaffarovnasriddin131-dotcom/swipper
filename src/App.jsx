@@ -19,9 +19,7 @@ export default function App() {
   const [modal, setModal] = useState(false);
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
-  const [success, setSuccess] = useState(false);
 
-  
   const [cart, setCart] = useState(() => {
     const savedCart = localStorage.getItem("cart");
 
@@ -29,8 +27,6 @@ export default function App() {
       ? JSON.parse(savedCart)
       : [];
   });
-
-  // SAVATNI LOCALSTORAGEGA SAQLASH
 
   useEffect(() => {
     localStorage.setItem(
@@ -44,8 +40,6 @@ export default function App() {
 
   const isAdminPage = location.pathname.startsWith("/admin");
 
-  // TASHRIF HISOBLAGICHI
-
   useEffect(() => {
     fetch("https://swipper-server.onrender.com/api/visit", {
       method: "POST",
@@ -53,9 +47,6 @@ export default function App() {
       console.error("VISIT XATOSI:", error)
     );
   }, []);
-
-
-  
 
   async function handleLogin() {
     try {
@@ -66,7 +57,10 @@ export default function App() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ login, password }),
+          body: JSON.stringify({
+            login,
+            password,
+          }),
         }
       );
 
@@ -76,17 +70,10 @@ export default function App() {
         localStorage.setItem("isAdmin", "true");
 
         setModal(false);
-
-        setSuccess(true);
-
         setLogin("");
         setPassword("");
 
         navigate("/admin");
-
-        setTimeout(() => {
-          setSuccess(false);
-        }, 3000);
       } else {
         alert("Login yoki parol xato!");
       }
@@ -95,11 +82,6 @@ export default function App() {
       alert("Serverga ulanishda xatolik yuz berdi");
     }
   }
-
-
-  // =========================
-  // SAVATGA QO'SHISH
-  // =========================
 
   function addToCart(product) {
     setCart((oldCart) => {
@@ -131,11 +113,6 @@ export default function App() {
     });
   }
 
-
-  // =========================
-  // SAVATDAN O'CHIRISH
-  // =========================
-
   function removeFromCart(id) {
     setCart((oldCart) =>
       oldCart.filter(
@@ -143,11 +120,6 @@ export default function App() {
       )
     );
   }
-
-
-  // =========================
-  // MIQDORNI OSHIRISH
-  // =========================
 
   function increaseQuantity(id) {
     setCart((oldCart) =>
@@ -161,11 +133,6 @@ export default function App() {
       )
     );
   }
-
-
-  // =========================
-  // MIQDORNI KAMAYTIRISH
-  // =========================
 
   function decreaseQuantity(id) {
     setCart((oldCart) =>
@@ -184,46 +151,8 @@ export default function App() {
     );
   }
 
-
   return (
     <div className="min-h-screen">
-
-
-      {/* ========================= */}
-      {/* LOGIN MUVAFFAQIYATLI */}
-      {/* ========================= */}
-
-      {success && (
-        <div className="
-          fixed
-          top-5
-          right-5
-          z-[100]
-          animate-bounce
-        ">
-
-          <div className="
-            bg-green-500
-            text-white
-            px-6
-            py-3
-            rounded-xl
-            shadow-lg
-            font-semibold
-          ">
-
-            ✓ Kirish muvaffaqiyatli!
-
-          </div>
-
-        </div>
-      )}
-
-
-      {/* ========================= */}
-      {/* NAVBAR */}
-      {/* ========================= */}
-
       {!isAdminPage && (
         <Navbar
           setModal={setModal}
@@ -231,19 +160,7 @@ export default function App() {
         />
       )}
 
-
-      {/* ========================= */}
-      {/* SAHIFALAR */}
-      {/* ========================= */}
-
       <Routes>
-
-
-        {/* ========================= */}
-        {/* HOME */}
-        {/* FAQAT HERO */}
-        {/* ========================= */}
-
         <Route
           path="/"
           element={
@@ -252,11 +169,6 @@ export default function App() {
             />
           }
         />
-
-
-        {/* ========================= */}
-        {/* KATALOG */}
-        {/* ========================= */}
 
         <Route
           path="/katalog"
@@ -268,23 +180,12 @@ export default function App() {
           }
         />
 
-
-        {/* ========================= */}
-        {/* ALOQA */}
-        {/* ALOHIDA SAHIFA */}
-        {/* ========================= */}
-
         <Route
           path="/aloqa"
           element={
             <Contact />
           }
         />
-
-
-        {/* ========================= */}
-        {/* MAHSULOT */}
-        {/* ========================= */}
 
         <Route
           path="/product/:id"
@@ -295,33 +196,17 @@ export default function App() {
           }
         />
 
-
-        {/* ========================= */}
-        {/* SAVAT */}
-        {/* ========================= */}
-
         <Route
           path="/cart"
           element={
             <Cart
               cart={cart}
-              removeFromCart={
-                removeFromCart
-              }
-              increaseQuantity={
-                increaseQuantity
-              }
-              decreaseQuantity={
-                decreaseQuantity
-              }
+              removeFromCart={removeFromCart}
+              increaseQuantity={increaseQuantity}
+              decreaseQuantity={decreaseQuantity}
             />
           }
         />
-
-
-        {/* ========================= */}
-        {/* ADMIN PANEL */}
-        {/* ========================= */}
 
         <Route
           path="/admin"
@@ -331,17 +216,12 @@ export default function App() {
             </ProtectedRoute>
           }
         >
-
-          {/* DASHBOARD */}
-
           <Route
             index
             element={
               <Dashboard />
             }
           />
-
-          {/* PRODUCTS */}
 
           <Route
             path="products"
@@ -350,8 +230,6 @@ export default function App() {
             }
           />
 
-          {/* ORDERS */}
-
           <Route
             path="orders"
             element={
@@ -359,26 +237,16 @@ export default function App() {
             }
           />
 
-          {/* SETTINGS */}
-
           <Route
             path="settings"
             element={
               <Settings />
             }
           />
-
         </Route>
-
       </Routes>
 
-
-      {/* ========================= */}
-      {/* LOGIN MODAL */}
-      {/* ========================= */}
-
       {modal && (
-
         <div className="
           fixed
           inset-0
@@ -390,8 +258,6 @@ export default function App() {
           z-[200]
           p-5
         ">
-
-
           <div className="
             bg-white
             w-full
@@ -400,10 +266,6 @@ export default function App() {
             rounded-3xl
             shadow-2xl
           ">
-
-
-            {/* TITLE */}
-
             <h2 className="
               text-2xl
               font-black
@@ -411,13 +273,8 @@ export default function App() {
               text-gray-900
               text-center
             ">
-
               Tizimga kirish
-
             </h2>
-
-
-            {/* LOGIN */}
 
             <input
               type="text"
@@ -441,9 +298,6 @@ export default function App() {
               }
             />
 
-
-            {/* PAROL */}
-
             <input
               type="password"
               placeholder="Parol"
@@ -466,9 +320,6 @@ export default function App() {
               }
             />
 
-
-            {/* KIRISH */}
-
             <button
               onClick={handleLogin}
               className="
@@ -486,13 +337,8 @@ export default function App() {
                 duration-300
               "
             >
-
               Kirish
-
             </button>
-
-
-            {/* YOPISH */}
 
             <button
               onClick={() =>
@@ -511,18 +357,11 @@ export default function App() {
                 transition
               "
             >
-
               Yopish
-
             </button>
-
-
           </div>
-
         </div>
-
       )}
-
     </div>
   );
 }
