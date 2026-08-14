@@ -5,7 +5,6 @@ import {
   FaTrash,
   FaPlus,
   FaMinus,
-  FaStar,
 } from "react-icons/fa";
 
 const BACKEND_URL = "https://swipper-server.onrender.com";
@@ -152,7 +151,7 @@ export default function Cart({
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-100 via-white to-blue-100 py-12 px-6">
+    <div className="min-h-screen bg-gradient-to-br from-gray-100 via-white to-blue-100 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 py-12 px-6 transition-colors duration-300">
       <div className="max-w-6xl mx-auto">
 
         <div className="text-center mb-10">
@@ -162,36 +161,36 @@ export default function Cart({
             </div>
           </div>
 
-          <h1 className="text-4xl font-extrabold text-gray-900">
+          <h1 className="text-4xl font-extrabold text-gray-900 dark:text-white">
             {t("cart")}
           </h1>
 
-          <p className="text-gray-500 mt-3">
+          <p className="text-gray-500 dark:text-gray-400 mt-3">
             {cart.length} {t("products")}
           </p>
         </div>
 
         {cart.length === 0 ? (
-          <div className="bg-white rounded-3xl shadow-xl p-12 text-center">
+          <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-12 text-center">
             <FaShoppingCart
               size={70}
               className="mx-auto text-gray-300 mb-6"
             />
 
-            <h2 className="text-2xl font-bold text-gray-700">
+            <h2 className="text-2xl font-bold text-gray-700 dark:text-gray-300">
               {t("emptyCart")}
             </h2>
           </div>
         ) : (
-          <div className="bg-white rounded-3xl shadow-2xl p-6 md:p-8">
+          <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-6 md:p-8">
 
             <div className="space-y-5">
               {cart.map((item) => (
                 <div
                   key={`${item.id}-${item.storage || "default"}`}
-                  className="bg-gray-50 rounded-2xl p-5 flex flex-col lg:flex-row items-center gap-6"
+                  className="bg-gray-50 dark:bg-gray-700 rounded-2xl p-5 flex flex-col lg:flex-row items-center gap-6"
                 >
-                  <div className="w-28 h-28 bg-white rounded-2xl flex items-center justify-center p-4 shadow-sm">
+                  <div className="w-28 h-28 bg-white dark:bg-gray-800 rounded-2xl flex items-center justify-center p-4 shadow-sm">
                     <img
                       src={item.rasm}
                       alt={item.nomi}
@@ -200,34 +199,14 @@ export default function Cart({
                   </div>
 
                   <div className="flex-1 text-center lg:text-left">
-                    <h2 className="text-xl font-bold text-gray-900">
+                    <h2 className="text-xl font-bold text-gray-900 dark:text-white">
                       {item.nomi}
                     </h2>
 
                     {item.storage && (
-                      <p className="text-gray-500 mt-2">
+                      <p className="text-gray-500 dark:text-gray-400 mt-2">
                         {item.storage}
                       </p>
-                    )}
-
-                    {item.rating > 0 && (
-                      <div className="flex items-center justify-center lg:justify-start gap-1 mt-2">
-                        {[1, 2, 3, 4, 5].map((star) => (
-                          <FaStar
-                            key={star}
-                            size={16}
-                            className={
-                              star <= item.rating
-                                ? "text-yellow-400"
-                                : "text-gray-300"
-                            }
-                          />
-                        ))}
-
-                        <span className="text-sm text-gray-500 ml-2">
-                          {item.rating}/5
-                        </span>
-                      </div>
                     )}
 
                     <p className="text-blue-600 font-bold text-lg mt-3">
@@ -241,12 +220,12 @@ export default function Cart({
                       onClick={() =>
                         decreaseQuantity(item.id)
                       }
-                      className="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center hover:bg-gray-300 transition"
+                      className="w-10 h-10 bg-gray-200 dark:bg-gray-600 text-gray-900 dark:text-white rounded-lg flex items-center justify-center hover:bg-gray-300 dark:hover:bg-gray-500 transition"
                     >
                       <FaMinus />
                     </button>
 
-                    <span className="font-bold text-xl w-8 text-center">
+                    <span className="font-bold text-xl w-8 text-center text-gray-900 dark:text-white">
                       {item.quantity}
                     </span>
 
@@ -262,7 +241,7 @@ export default function Cart({
                   </div>
 
                   <div className="text-center min-w-[150px]">
-                    <p className="text-gray-500">
+                    <p className="text-gray-500 dark:text-gray-400">
                       {t("total")}
                     </p>
 
@@ -287,10 +266,10 @@ export default function Cart({
               ))}
             </div>
 
-            <div className="border-t mt-8 pt-8 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div className="border-t border-gray-200 dark:border-gray-700 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center gap-6">
 
               <div className="text-center md:text-left">
-                <p className="text-gray-500">
+                <p className="text-gray-500 dark:text-gray-400">
                   {t("total")}
                 </p>
 
@@ -316,9 +295,9 @@ export default function Cart({
 
       {showOrder && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white w-full max-w-md rounded-3xl shadow-2xl p-7">
+          <div className="bg-white dark:bg-gray-800 w-full max-w-md rounded-3xl shadow-2xl p-7">
 
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
               {t("orderTitle")}
             </h2>
 
@@ -337,11 +316,11 @@ export default function Cart({
                 onChange={(e) =>
                   setName(e.target.value)
                 }
-                className="w-full border border-gray-300 rounded-xl p-3 outline-none focus:border-blue-500"
+                className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl p-3 outline-none focus:border-blue-500"
               />
 
               <div className="flex items-stretch border border-gray-300 rounded-xl overflow-hidden focus-within:border-blue-500">
-                <span className="flex items-center px-3 bg-gray-100 text-gray-700 font-semibold border-r border-gray-300">
+                <span className="flex items-center px-3 bg-gray-100 dark:bg-gray-600 text-gray-700 dark:text-white font-semibold border-r border-gray-300 dark:border-gray-600">
                   +998
                 </span>
 
@@ -363,7 +342,7 @@ export default function Cart({
                 onChange={(e) =>
                   setEmail(e.target.value)
                 }
-                className="w-full border border-gray-300 rounded-xl p-3 outline-none focus:border-blue-500"
+                className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl p-3 outline-none focus:border-blue-500"
               />
 
               <input
@@ -373,7 +352,7 @@ export default function Cart({
                 onChange={(e) =>
                   setAddress(e.target.value)
                 }
-                className="w-full border border-gray-300 rounded-xl p-3 outline-none focus:border-blue-500"
+                className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl p-3 outline-none focus:border-blue-500"
               />
 
               <textarea
@@ -383,7 +362,7 @@ export default function Cart({
                   setComment(e.target.value)
                 }
                 rows={3}
-                className="w-full border border-gray-300 rounded-xl p-3 outline-none focus:border-blue-500 resize-none"
+                className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl p-3 outline-none focus:border-blue-500 resize-none"
               />
 
               {message && (
@@ -408,7 +387,7 @@ export default function Cart({
                   setShowOrder(false);
                   setMessage("");
                 }}
-                className="w-full border border-gray-300 py-3 rounded-xl font-semibold hover:bg-gray-100 transition"
+                className="w-full border border-gray-300 dark:border-gray-600 dark:text-white py-3 rounded-xl font-semibold hover:bg-gray-100 dark:hover:bg-gray-700 transition"
               >
                 {t("cancel")}
               </button>

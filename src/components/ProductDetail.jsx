@@ -217,21 +217,21 @@ export default function ProductDetail({ addToCart }) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-100 via-white to-blue-100 py-12 px-6">
+    <div className="min-h-screen bg-gradient-to-br from-gray-100 via-white to-blue-100 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 py-12 px-6 transition-colors duration-300">
 
       <div className="max-w-6xl mx-auto">
 
         <button
           onClick={() => navigate("/katalog")}
-          className="flex items-center gap-2 mb-8 text-gray-600 hover:text-blue-600 font-semibold"
+          className="flex items-center gap-2 mb-8 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-semibold"
         >
           <FaArrowLeft />
           {t("productBack")}
         </button>
 
-        <div className="bg-white rounded-3xl shadow-2xl overflow-hidden grid md:grid-cols-2">
+        <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl overflow-hidden grid md:grid-cols-2">
 
-          <div className="min-h-[550px] bg-gradient-to-br from-gray-50 to-blue-50 flex items-center justify-center p-10">
+          <div className="min-h-[550px] bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-700 dark:to-gray-800 flex items-center justify-center p-10">
 
             <img
               src={product.rasm}
@@ -247,18 +247,18 @@ export default function ProductDetail({ addToCart }) {
               APPLE STORE
             </span>
 
-            <h1 className="text-4xl font-extrabold text-gray-900 mt-4">
+            <h1 className="text-4xl font-extrabold text-gray-900 dark:text-white mt-4">
               {product.nomi}
             </h1>
 
-            <p className="text-gray-500 text-lg mt-5 leading-8">
+            <p className="text-gray-500 dark:text-gray-400 text-lg mt-5 leading-8">
               {getDescription()}
             </p>
 
             {product.xotiralar && (
               <div className="mt-8">
 
-                <h3 className="text-lg font-bold text-gray-900 mb-4">
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">
                   {t("selectStorage")}
                 </h3>
 
@@ -271,7 +271,7 @@ export default function ProductDetail({ addToCart }) {
                       className={`px-5 py-3 rounded-xl border-2 font-semibold transition ${
                         storage === item.nomi
                           ? "border-blue-600 bg-blue-600 text-white"
-                          : "border-gray-300 text-gray-700 hover:border-blue-500"
+                          : "border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-blue-500"
                       }`}
                     >
                       {item.nomi}
@@ -285,7 +285,7 @@ export default function ProductDetail({ addToCart }) {
 
             <div className="mt-8">
 
-              <h3 className="text-lg font-bold text-gray-900 mb-3">
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-3">
                 {t("rateProduct")}
               </h3>
 
@@ -303,20 +303,20 @@ export default function ProductDetail({ addToCart }) {
                   />
                 ))}
 
-                <span className="text-gray-500 text-sm ml-1">
+                <span className="text-gray-500 dark:text-gray-400 text-sm ml-1">
                   {averageRating.toFixed(1)} ({ratingCount})
                 </span>
 
               </div>
 
               {hasRated ? (
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-500 dark:text-gray-400">
                   {t("yourRating")}: {myRating}/5
                 </p>
               ) : (
                 <div className="flex items-center gap-2">
 
-                  <span className="text-sm text-gray-500">
+                  <span className="text-sm text-gray-500 dark:text-gray-400">
                     {t("selectRating")}:
                   </span>
 
@@ -345,7 +345,7 @@ export default function ProductDetail({ addToCart }) {
               </p>
 
               {storage && (
-                <p className="text-gray-500 mt-2">
+                <p className="text-gray-500 dark:text-gray-400 mt-2">
                   {t("selectedStorage")}: {storage}
                 </p>
               )}

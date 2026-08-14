@@ -128,7 +128,7 @@ export default function Katalog({ addToCart }) {
         );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-100 via-white to-blue-100 py-12 px-6">
+    <div className="min-h-screen bg-gradient-to-br from-gray-100 via-white to-blue-100 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 py-12 px-6 transition-colors duration-300">
 
       <div className="max-w-7xl mx-auto">
 
@@ -138,11 +138,11 @@ export default function Katalog({ addToCart }) {
             APPLE STORE
           </span>
 
-          <h1 className="text-4xl md:text-6xl font-black text-gray-900 mt-4">
+          <h1 className="text-4xl md:text-6xl font-black text-gray-900 dark:text-white mt-4">
             {t("katalog")}
           </h1>
 
-          <p className="text-gray-500 text-lg mt-4">
+          <p className="text-gray-500 dark:text-gray-400 text-lg mt-4">
             {t("catalogText")}
           </p>
 
@@ -175,7 +175,7 @@ export default function Katalog({ addToCart }) {
                   ${
                     activeCategory === category.nomi
                       ? "bg-blue-600 text-white"
-                      : "bg-white text-gray-600 hover:text-blue-600"
+                      : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
                   }
                 `}
               >
@@ -205,7 +205,7 @@ export default function Katalog({ addToCart }) {
 
             <div
               key={item.id}
-              className="bg-white rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl hover:-translate-y-3 transition-all duration-500"
+              className="bg-white dark:bg-gray-800 rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl hover:-translate-y-3 transition-all duration-500"
               style={{
                 animationDelay: `${index * 80}ms`,
               }}
@@ -216,7 +216,7 @@ export default function Katalog({ addToCart }) {
                 state={item}
               >
 
-                <div className="h-64 bg-gradient-to-br from-gray-50 to-blue-50 flex items-center justify-center p-6 cursor-pointer overflow-hidden">
+                <div className="h-64 bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-700 dark:to-gray-800 flex items-center justify-center p-6 cursor-pointer overflow-hidden">
 
                   <img
                     src={item.rasm}
@@ -230,11 +230,11 @@ export default function Katalog({ addToCart }) {
 
               <div className="p-6">
 
-                <h2 className="text-xl font-bold text-gray-900">
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white">
                   {item.nomi}
                 </h2>
 
-                <p className="text-gray-500 text-sm mt-3 min-h-[48px]">
+                <p className="text-gray-500 dark:text-gray-400 text-sm mt-3 min-h-[48px]">
                   {getDescription(item)}
                 </p>
 
