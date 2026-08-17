@@ -164,6 +164,10 @@ export default function App() {
     );
   }
 
+  function clearCart() {
+    setCart([]);
+  }
+
 
   // =========================
   // MIQDORNI OSHIRISH
@@ -336,6 +340,7 @@ export default function App() {
               decreaseQuantity={
                 decreaseQuantity
               }
+              clearCart={clearCart}
             />
           }
         />

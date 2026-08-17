@@ -14,6 +14,7 @@ export default function Cart({
   removeFromCart,
   increaseQuantity,
   decreaseQuantity,
+  clearCart,
 }) {
   const { t, i18n } = useTranslation();
 
@@ -103,8 +104,6 @@ export default function Cart({
       total: narx(jami),
     };
 
-    console.log("Yuborilayotgan buyurtma:", orderData);
-
     try {
       const response = await fetch(
         `${BACKEND_URL}/api/order`,
@@ -119,8 +118,6 @@ export default function Cart({
 
       const data = await response.json();
 
-      console.log("Server javobi:", data);
-
       if (!response.ok) {
         throw new Error(
           data.message || "Buyurtma yuborishda xatolik"
@@ -134,6 +131,8 @@ export default function Cart({
       setEmail("");
       setAddress("");
       setComment("");
+
+      clearCart();
 
       setTimeout(() => {
         setShowOrder(false);
@@ -174,7 +173,7 @@ export default function Cart({
           <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-12 text-center">
             <FaShoppingCart
               size={70}
-              className="mx-auto text-gray-300 mb-6"
+              className="mx-auto text-gray-300 dark:text-gray-600 mb-6"
             />
 
             <h2 className="text-2xl font-bold text-gray-700 dark:text-gray-300">
@@ -258,7 +257,7 @@ export default function Cart({
                     onClick={() =>
                       removeFromCart(item.id)
                     }
-                    className="w-11 h-11 rounded-xl bg-red-100 text-red-500 flex items-center justify-center hover:bg-red-500 hover:text-white transition"
+                    className="w-11 h-11 rounded-xl bg-red-100 dark:bg-red-950 text-red-500 flex items-center justify-center hover:bg-red-500 hover:text-white transition"
                   >
                     <FaTrash />
                   </button>
@@ -301,7 +300,7 @@ export default function Cart({
               {t("orderTitle")}
             </h2>
 
-            <p className="text-gray-500 mb-6">
+            <p className="text-gray-500 dark:text-gray-400 mb-6">
               {t("orderDescription")}
             </p>
 
@@ -319,7 +318,7 @@ export default function Cart({
                 className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl p-3 outline-none focus:border-blue-500"
               />
 
-              <div className="flex items-stretch border border-gray-300 rounded-xl overflow-hidden focus-within:border-blue-500">
+              <div className="flex items-stretch border border-gray-300 dark:border-gray-600 rounded-xl overflow-hidden focus-within:border-blue-500">
                 <span className="flex items-center px-3 bg-gray-100 dark:bg-gray-600 text-gray-700 dark:text-white font-semibold border-r border-gray-300 dark:border-gray-600">
                   +998
                 </span>
@@ -331,7 +330,7 @@ export default function Cart({
                   value={phone}
                   onChange={handlePhoneChange}
                   maxLength={9}
-                  className="flex-1 p-3 outline-none"
+                  className="flex-1 p-3 outline-none dark:bg-gray-700 dark:text-white"
                 />
               </div>
 
@@ -366,7 +365,7 @@ export default function Cart({
               />
 
               {message && (
-                <div className="bg-gray-100 rounded-xl p-3 text-center font-semibold">
+                <div className="bg-gray-100 dark:bg-gray-700 dark:text-white rounded-xl p-3 text-center font-semibold">
                   {message}
                 </div>
               )}
