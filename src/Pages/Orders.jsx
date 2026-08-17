@@ -30,10 +30,14 @@ export default function Orders() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-6">{t("orders")}</h1>
+      <h1 className="text-3xl font-bold mb-6">
+        {t("orders")}
+      </h1>
 
       {loading ? (
-        <p className="text-gray-500">{t("sending")}</p>
+        <p className="text-gray-500">
+          {t("sending")}
+        </p>
       ) : orders.length === 0 ? (
         <div className="bg-white rounded-xl shadow p-10 text-center text-gray-500">
           {t("emptyCart")}
@@ -43,18 +47,31 @@ export default function Orders() {
           <table className="w-full">
             <thead className="bg-gray-100">
               <tr>
-                <th className="p-4 text-left">{t("customer")}</th>
-                <th className="p-4 text-left">{t("product")}</th>
-                <th className="p-4 text-left">{t("price")}</th>
-                <th className="p-4 text-left">{t("status")}</th>
+                <th className="p-4 text-left">
+                  {t("customer")}
+                </th>
+
+                <th className="p-4 text-left">
+                  {t("product")}
+                </th>
+
+                <th className="p-4 text-left">
+                  {t("price")}
+                </th>
               </tr>
             </thead>
 
             <tbody>
               {orders.map((item) => (
-                <tr key={item._id} className="border-t">
+                <tr
+                  key={item._id}
+                  className="border-t"
+                >
                   <td className="p-4">
-                    <div className="font-semibold">{item.name}</div>
+                    <div className="font-semibold">
+                      {item.name}
+                    </div>
+
                     <div className="text-sm text-gray-400">
                       {item.phone}
                     </div>
@@ -66,20 +83,8 @@ export default function Orders() {
                       .join(", ")}
                   </td>
 
-                  <td className="p-4">{item.total}</td>
-
                   <td className="p-4">
-                    <span
-                      className={`px-3 py-1 rounded-full text-white ${
-                        item.status === "delivered"
-                          ? "bg-green-500"
-                          : item.status === "pending"
-                          ? "bg-yellow-500"
-                          : "bg-red-500"
-                      }`}
-                    >
-                      {t(item.status)}
-                    </span>
+                    {item.total}
                   </td>
                 </tr>
               ))}
