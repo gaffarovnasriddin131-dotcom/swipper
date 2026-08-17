@@ -138,10 +138,6 @@ export default function Dashboard() {
                 <th className="text-left p-3">
                   {t("price")}
                 </th>
-
-                <th className="text-left p-3">
-                  {t("status")}
-                </th>
               </tr>
             </thead>
 
@@ -163,18 +159,6 @@ export default function Dashboard() {
 
                   <td className="p-3">
                     {order.total}
-                  </td>
-
-                  <td
-                    className={`p-3 font-bold ${
-                      order.status === "delivered"
-                        ? "text-green-600"
-                        : order.status === "pending"
-                        ? "text-yellow-500"
-                        : "text-red-500"
-                    }`}
-                  >
-                    {t(order.status)}
                   </td>
                 </tr>
               ))}
