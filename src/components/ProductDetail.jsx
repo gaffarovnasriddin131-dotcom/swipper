@@ -165,7 +165,7 @@ export default function ProductDetail({ addToCart }) {
       <div className="min-h-screen flex items-center justify-center">
         <button
           onClick={() => navigate("/katalog")}
-          className="bg-blue-600 text-white px-6 py-3 rounded-xl"
+          className="bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-6 py-3 rounded-xl"
         >
           {t("productBack")}
         </button>
@@ -217,13 +217,13 @@ export default function ProductDetail({ addToCart }) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-100 via-white to-blue-100 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 py-12 px-6 transition-colors duration-300">
+    <div className="min-h-screen bg-gradient-to-br from-gray-100 via-white to-gray-200 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 py-12 px-6 transition-colors duration-300">
 
       <div className="max-w-6xl mx-auto">
 
         <button
           onClick={() => navigate("/katalog")}
-          className="flex items-center gap-2 mb-8 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-semibold"
+          className="flex items-center gap-2 mb-8 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-semibold"
         >
           <FaArrowLeft />
           {t("productBack")}
@@ -231,7 +231,7 @@ export default function ProductDetail({ addToCart }) {
 
         <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl overflow-hidden grid md:grid-cols-2">
 
-          <div className="min-h-[550px] bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-700 dark:to-gray-800 flex items-center justify-center p-10">
+          <div className="min-h-[550px] bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 flex items-center justify-center p-10">
 
             <img
               src={product.rasm}
@@ -243,7 +243,7 @@ export default function ProductDetail({ addToCart }) {
 
           <div className="p-8 md:p-12">
 
-            <span className="text-blue-600 font-bold tracking-[4px]">
+            <span className="text-gray-500 dark:text-gray-400 font-bold tracking-[4px]">
               APPLE STORE
             </span>
 
@@ -270,8 +270,8 @@ export default function ProductDetail({ addToCart }) {
                       onClick={() => setStorage(item.nomi)}
                       className={`px-5 py-3 rounded-xl border-2 font-semibold transition ${
                         storage === item.nomi
-                          ? "border-blue-600 bg-blue-600 text-white"
-                          : "border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-blue-500"
+                          ? "border-gray-900 dark:border-white bg-gray-900 dark:bg-white text-white dark:text-gray-900"
+                          : "border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-gray-500 dark:hover:border-gray-400"
                       }`}
                     >
                       {item.nomi}
@@ -340,7 +340,7 @@ export default function ProductDetail({ addToCart }) {
 
             <div className="mt-8">
 
-              <p className="text-4xl font-extrabold text-blue-600">
+              <p className="text-4xl font-extrabold text-gray-900 dark:text-white">
                 {formatPrice(getCurrentPrice())}
               </p>
 
@@ -354,7 +354,7 @@ export default function ProductDetail({ addToCart }) {
 
             <button
               onClick={handleAddToCart}
-              className="w-full mt-8 bg-blue-600 text-white py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-3 hover:bg-blue-700 hover:scale-105 transition"
+              className="w-full mt-8 bg-gray-900 dark:bg-white text-white dark:text-gray-900 py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-3 hover:bg-black dark:hover:bg-gray-100 hover:scale-105 transition"
             >
               <FaShoppingCart />
               {t("addToCart")}

@@ -128,13 +128,13 @@ export default function Katalog({ addToCart }) {
         );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-100 via-white to-blue-100 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 py-12 px-6 transition-colors duration-300">
+    <div className="min-h-screen bg-gradient-to-br from-gray-100 via-white to-gray-200 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 py-12 px-6 transition-colors duration-300">
 
       <div className="max-w-7xl mx-auto">
 
         <div className="text-center mb-14">
 
-          <span className="inline-block text-blue-600 font-bold tracking-[5px] text-sm animate-pulse">
+          <span className="inline-block text-gray-500 dark:text-gray-400 font-bold tracking-[5px] text-sm animate-pulse">
             APPLE STORE
           </span>
 
@@ -174,8 +174,8 @@ export default function Katalog({ addToCart }) {
 
                   ${
                     activeCategory === category.nomi
-                      ? "bg-blue-600 text-white"
-                      : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
+                      ? "bg-gray-900 dark:bg-white text-white dark:text-gray-900"
+                      : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
                   }
                 `}
               >
@@ -216,7 +216,7 @@ export default function Katalog({ addToCart }) {
                 state={item}
               >
 
-                <div className="h-64 bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-700 dark:to-gray-800 flex items-center justify-center p-6 cursor-pointer overflow-hidden">
+                <div className="h-64 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 flex items-center justify-center p-6 cursor-pointer overflow-hidden">
 
                   <img
                     src={item.rasm}
@@ -240,7 +240,7 @@ export default function Katalog({ addToCart }) {
 
                 <div className="mt-6">
 
-                  <span className="text-2xl font-extrabold text-blue-600">
+                  <span className="text-2xl font-extrabold text-gray-900 dark:text-white">
                     {formatPrice(
                       getProductPrice(item)
                     )}
@@ -252,7 +252,7 @@ export default function Katalog({ addToCart }) {
                   onClick={() =>
                     handleAddToCart(item)
                   }
-                  className="w-full mt-5 flex items-center justify-center gap-3 bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700 hover:scale-105 active:scale-95 transition-all duration-300 shadow-lg"
+                  className="w-full mt-5 flex items-center justify-center gap-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 py-3 rounded-xl font-bold hover:bg-black dark:hover:bg-gray-100 hover:scale-105 active:scale-95 transition-all duration-300 shadow-lg"
                 >
 
                   <FaShoppingCart />

@@ -150,12 +150,12 @@ export default function Cart({
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-100 via-white to-blue-100 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 py-12 px-6 transition-colors duration-300">
+    <div className="min-h-screen bg-gradient-to-br from-gray-100 via-white to-gray-200 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 py-12 px-6 transition-colors duration-300">
       <div className="max-w-6xl mx-auto">
 
         <div className="text-center mb-10">
           <div className="flex justify-center mb-4">
-            <div className="w-16 h-16 bg-blue-600 text-white rounded-2xl flex items-center justify-center shadow-lg">
+            <div className="w-16 h-16 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-2xl flex items-center justify-center shadow-lg">
               <FaShoppingCart size={30} />
             </div>
           </div>
@@ -208,7 +208,7 @@ export default function Cart({
                       </p>
                     )}
 
-                    <p className="text-blue-600 font-bold text-lg mt-3">
+                    <p className="text-gray-900 dark:text-white font-bold text-lg mt-3">
                       {narx(item.narx)}
                     </p>
                   </div>
@@ -233,7 +233,7 @@ export default function Cart({
                       onClick={() =>
                         increaseQuantity(item.id)
                       }
-                      className="w-10 h-10 bg-blue-600 text-white rounded-lg flex items-center justify-center hover:bg-blue-700 transition"
+                      className="w-10 h-10 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg flex items-center justify-center hover:bg-black dark:hover:bg-gray-100 transition"
                     >
                       <FaPlus />
                     </button>
@@ -244,7 +244,7 @@ export default function Cart({
                       {t("total")}
                     </p>
 
-                    <p className="text-xl font-bold text-blue-600 mt-1">
+                    <p className="text-xl font-bold text-gray-900 dark:text-white mt-1">
                       {narx(
                         Number(item.narx || 0) *
                         Number(item.quantity || 0)
@@ -272,7 +272,7 @@ export default function Cart({
                   {t("total")}
                 </p>
 
-                <h2 className="text-4xl font-extrabold text-blue-600 mt-2">
+                <h2 className="text-4xl font-extrabold text-gray-900 dark:text-white mt-2">
                   {narx(jami)}
                 </h2>
               </div>
@@ -283,7 +283,7 @@ export default function Cart({
                   setShowOrder(true);
                   setMessage("");
                 }}
-                className="bg-green-600 text-white px-8 py-4 rounded-xl font-bold hover:bg-green-700 hover:scale-105 transition"
+                className="bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-8 py-4 rounded-xl font-bold hover:bg-black dark:hover:bg-gray-100 hover:scale-105 transition"
               >
                 {t("checkout")}
               </button>
@@ -315,10 +315,10 @@ export default function Cart({
                 onChange={(e) =>
                   setName(e.target.value)
                 }
-                className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl p-3 outline-none focus:border-blue-500"
+                className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl p-3 outline-none focus:border-gray-900 dark:focus:border-white"
               />
 
-              <div className="flex items-stretch border border-gray-300 dark:border-gray-600 rounded-xl overflow-hidden focus-within:border-blue-500">
+              <div className="flex items-stretch border border-gray-300 dark:border-gray-600 rounded-xl overflow-hidden focus-within:border-gray-900 dark:focus-within:border-white">
                 <span className="flex items-center px-3 bg-gray-100 dark:bg-gray-600 text-gray-700 dark:text-white font-semibold border-r border-gray-300 dark:border-gray-600">
                   +998
                 </span>
@@ -341,7 +341,7 @@ export default function Cart({
                 onChange={(e) =>
                   setEmail(e.target.value)
                 }
-                className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl p-3 outline-none focus:border-blue-500"
+                className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl p-3 outline-none focus:border-gray-900 dark:focus:border-white"
               />
 
               <input
@@ -351,7 +351,7 @@ export default function Cart({
                 onChange={(e) =>
                   setAddress(e.target.value)
                 }
-                className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl p-3 outline-none focus:border-blue-500"
+                className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl p-3 outline-none focus:border-gray-900 dark:focus:border-white"
               />
 
               <textarea
@@ -361,7 +361,7 @@ export default function Cart({
                   setComment(e.target.value)
                 }
                 rows={3}
-                className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl p-3 outline-none focus:border-blue-500 resize-none"
+                className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl p-3 outline-none focus:border-gray-900 dark:focus:border-white resize-none"
               />
 
               {message && (
@@ -373,7 +373,7 @@ export default function Cart({
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-green-600 text-white py-3 rounded-xl font-bold hover:bg-green-700 transition disabled:opacity-50"
+                className="w-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 py-3 rounded-xl font-bold hover:bg-black dark:hover:bg-gray-100 transition disabled:opacity-50"
               >
                 {loading
                   ? t("sending")
