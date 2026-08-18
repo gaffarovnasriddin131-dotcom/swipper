@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
@@ -20,23 +19,14 @@ export default function App() {
   const [modal, setModal] = useState(false);
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  // DARK / LIGHT REJIM
 
   const [darkMode, setDarkMode] = useState(() => {
     return localStorage.getItem("theme") === "dark";
   });
-
-  const [cart, setCart] = useState(() => {
-    const savedCart = localStorage.getItem("cart");
-
-    return savedCart ? JSON.parse(savedCart) : [];
-  });
-
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  const isAdminPage = location.pathname.startsWith("/admin");
 
   useEffect(() => {
     if (darkMode) {
@@ -48,30 +38,47 @@ export default function App() {
     }
   }, [darkMode]);
 
-  useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cart));
-  }, [cart]);
-
-  useEffect(() => {
-    fetch("https://swipper-server.onrender.com/api/visit", {
-      method: "POST",
-    }).catch((error) => {
-      console.error("VISIT XATOSI:", error);
-    });
-  }, []);
-
   function toggleTheme() {
     setDarkMode((prev) => !prev);
   }
 
-  async function handleLogin(e) {
-    e.preventDefault();
+  
+  const [cart, setCart] = useState(() => {
+    const savedCart = localStorage.getItem("cart");
 
-    if (!login.trim() || !password.trim()) {
-      alert("Login va parolni kiriting!");
-      return;
-    }
+    return savedCart
+      ? JSON.parse(savedCart)
+      : [];
+  });
 
+  // SAVATNI LOCALSTORAGEGA SAQLASH
+
+  useEffect(() => {
+    localStorage.setItem(
+      "cart",
+      JSON.stringify(cart)
+    );
+  }, [cart]);
+
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const isAdminPage = location.pathname.startsWith("/admin");
+
+  // TASHRIF HISOBLAGICHI
+
+  useEffect(() => {
+    fetch("https://swipper-server.onrender.com/api/visit", {
+      method: "POST",
+    }).catch((error) =>
+      console.error("VISIT XATOSI:", error)
+    );
+  }, []);
+
+
+  
+
+  async function handleLogin() {
     try {
       const response = await fetch(
         "https://swipper-server.onrender.com/api/admin/login",
@@ -80,10 +87,7 @@ export default function App() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            login: login.trim(),
-            password: password.trim(),
-          }),
+          body: JSON.stringify({ login, password }),
         }
       );
 
@@ -93,11 +97,11 @@ export default function App() {
         localStorage.setItem("isAdmin", "true");
 
         setModal(false);
+
         setSuccess(true);
 
         setLogin("");
         setPassword("");
-        setShowPassword(false);
 
         navigate("/admin");
 
@@ -112,6 +116,11 @@ export default function App() {
       alert("Serverga ulanishda xatolik yuz berdi");
     }
   }
+
+
+  // =========================
+  // SAVATGA QO'SHISH
+  // =========================
 
   function addToCart(product) {
     setCart((oldCart) => {
@@ -143,15 +152,27 @@ export default function App() {
     });
   }
 
+
+  // =========================
+  // SAVATDAN O'CHIRISH
+  // =========================
+
   function removeFromCart(id) {
     setCart((oldCart) =>
-      oldCart.filter((item) => item.id !== id)
+      oldCart.filter(
+        (item) => item.id !== id
+      )
     );
   }
 
   function clearCart() {
     setCart([]);
   }
+
+
+  // =========================
+  // MIQDORNI OSHIRISH
+  // =========================
 
   function increaseQuantity(id) {
     setCart((oldCart) =>
@@ -166,6 +187,11 @@ export default function App() {
     );
   }
 
+
+  // =========================
+  // MIQDORNI KAMAYTIRISH
+  // =========================
+
   function decreaseQuantity(id) {
     setCart((oldCart) =>
       oldCart
@@ -177,19 +203,51 @@ export default function App() {
               }
             : item
         )
-        .filter((item) => item.quantity > 0)
+        .filter(
+          (item) => item.quantity > 0
+        )
     );
   }
 
+
   return (
     <div className="min-h-screen">
+
+
+      {/* ========================= */}
+      {/* LOGIN MUVAFFAQIYATLI */}
+      {/* ========================= */}
+
       {success && (
-        <div className="fixed top-5 right-5 z-[100]">
-          <div className="bg-green-500 text-white px-6 py-3 rounded-xl shadow-lg font-semibold">
-            Kirish muvaffaqiyatli!
+        <div className="
+          fixed
+          top-5
+          right-5
+          z-[100]
+          animate-bounce
+        ">
+
+          <div className="
+            bg-green-500
+            text-white
+            px-6
+            py-3
+            rounded-xl
+            shadow-lg
+            font-semibold
+          ">
+
+            ✓ Kirish muvaffaqiyatli!
+
           </div>
+
         </div>
       )}
+
+
+      {/* ========================= */}
+      {/* NAVBAR */}
+      {/* ========================= */}
 
       {!isAdminPage && (
         <Navbar
@@ -200,7 +258,19 @@ export default function App() {
         />
       )}
 
+
+      {/* ========================= */}
+      {/* SAHIFALAR */}
+      {/* ========================= */}
+
       <Routes>
+
+
+        {/* ========================= */}
+        {/* HOME */}
+        {/* FAQAT HERO */}
+        {/* ========================= */}
+
         <Route
           path="/"
           element={
@@ -209,6 +279,11 @@ export default function App() {
             />
           }
         />
+
+
+        {/* ========================= */}
+        {/* KATALOG */}
+        {/* ========================= */}
 
         <Route
           path="/katalog"
@@ -220,10 +295,23 @@ export default function App() {
           }
         />
 
+
+        {/* ========================= */}
+        {/* ALOQA */}
+        {/* ALOHIDA SAHIFA */}
+        {/* ========================= */}
+
         <Route
           path="/aloqa"
-          element={<Contact />}
+          element={
+            <Contact />
+          }
         />
+
+
+        {/* ========================= */}
+        {/* MAHSULOT */}
+        {/* ========================= */}
 
         <Route
           path="/product/:id"
@@ -234,18 +322,34 @@ export default function App() {
           }
         />
 
+
+        {/* ========================= */}
+        {/* SAVAT */}
+        {/* ========================= */}
+
         <Route
           path="/cart"
           element={
             <Cart
               cart={cart}
-              removeFromCart={removeFromCart}
-              increaseQuantity={increaseQuantity}
-              decreaseQuantity={decreaseQuantity}
+              removeFromCart={
+                removeFromCart
+              }
+              increaseQuantity={
+                increaseQuantity
+              }
+              decreaseQuantity={
+                decreaseQuantity
+              }
               clearCart={clearCart}
             />
           }
         />
+
+
+        {/* ========================= */}
+        {/* ADMIN PANEL */}
+        {/* ========================= */}
 
         <Route
           path="/admin"
@@ -255,61 +359,188 @@ export default function App() {
             </ProtectedRoute>
           }
         >
+
+          {/* DASHBOARD */}
+
           <Route
             index
-            element={<Dashboard />}
+            element={
+              <Dashboard />
+            }
           />
+
+          {/* PRODUCTS */}
 
           <Route
             path="products"
-            element={<Products />}
+            element={
+              <Products />
+            }
           />
+
+          {/* ORDERS */}
 
           <Route
             path="orders"
-            element={<Orders />}
+            element={
+              <Orders />
+            }
           />
+
+          {/* SETTINGS */}
 
           <Route
             path="settings"
-            element={<Settings />}
+            element={
+              <Settings />
+            }
           />
+
         </Route>
+
       </Routes>
 
+
+      {/* ========================= */}
+      {/* LOGIN MODAL */}
+      {/* ========================= */}
+
       {modal && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/60 backdrop-blur-md p-5">
-          <div className="w-full max-w-md rounded-3xl bg-white dark:bg-gray-800 p-8 shadow-2xl">
-            <div className="text-center mb-8">
-              <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white text-2xl font-bold shadow-lg">
-                A
+
+        <div
+          className="
+          fixed
+          inset-0
+          bg-black/60
+          backdrop-blur-sm
+          flex
+          items-center
+          justify-center
+          z-[200]
+          p-5
+        "
+          style={{
+            animation: "fadeIn 0.3s ease-out",
+          }}
+        >
+
+
+          <div
+            className="
+            bg-white
+            dark:bg-gray-800
+            w-full
+            max-w-sm
+            p-8
+            rounded-3xl
+            shadow-2xl
+            relative
+            overflow-hidden
+          "
+            style={{
+              animation: "modalPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
+            }}
+          >
+
+            <div className="absolute top-[-60px] right-[-60px] w-[160px] h-[160px] bg-blue-500/10 dark:bg-blue-500/20 rounded-full blur-2xl" />
+
+            <div className="relative z-10">
+
+              {/* ICON */}
+
+              <div className="w-16 h-16 mx-auto mb-5 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center shadow-lg shadow-blue-500/30">
+                <svg
+                  className="w-8 h-8 text-white"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                  />
+                </svg>
               </div>
 
-              <h2 className="text-3xl font-black text-gray-900 dark:text-white">
-                Admin Panel
+              {/* TITLE */}
+
+              <h2 className="
+                text-2xl
+                font-black
+                mb-1
+                text-gray-900
+                dark:text-white
+                text-center
+              ">
+
+                Tizimga kirish
+
               </h2>
 
-              <p className="mt-2 text-gray-500 dark:text-gray-300">
-                Tizimga kirish
+              <p className="text-center text-gray-400 dark:text-gray-500 text-sm mb-6">
+                Admin panelga kirish uchun ma'lumotlaringizni kiriting
               </p>
-            </div>
 
-            <form onSubmit={handleLogin}>
+
+              {/* LOGIN */}
+
               <input
                 type="text"
                 placeholder="Login"
+                className="
+                  border
+                  border-gray-200
+                  dark:border-gray-600
+                  dark:bg-gray-700
+                  dark:text-white
+                  w-full
+                  p-3.5
+                  mb-3
+                  rounded-xl
+                  outline-none
+                  focus:border-blue-500
+                  focus:ring-4
+                  focus:ring-blue-500/10
+                  transition-all
+                  duration-300
+                "
                 value={login}
-                onChange={(e) => setLogin(e.target.value)}
-                className="mb-4 w-full rounded-xl border border-gray-300 bg-white p-3.5 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                onChange={(e) =>
+                  setLogin(e.target.value)
+                }
               />
 
-              <div className="relative mb-6">
+
+              {/* PAROL */}
+
+              <div className="relative mb-5">
+
                 <input
                   type={showPassword ? "text" : "password"}
                   placeholder="Parol"
+                  className="
+                    border
+                    border-gray-200
+                    dark:border-gray-600
+                    dark:bg-gray-700
+                    dark:text-white
+                    w-full
+                    p-3.5
+                    pr-12
+                    rounded-xl
+                    outline-none
+                    focus:border-blue-500
+                    focus:ring-4
+                    focus:ring-blue-500/10
+                    transition-all
+                    duration-300
+                  "
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full rounded-xl border border-gray-300 bg-white p-3.5 pr-12 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                  onChange={(e) =>
+                    setPassword(e.target.value)
+                  }
                 />
 
                 <button
@@ -317,39 +548,131 @@ export default function App() {
                   onClick={() =>
                     setShowPassword((prev) => !prev)
                   }
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 transition hover:text-blue-600"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition"
                 >
                   {showPassword ? (
-                    <FaEyeSlash size={18} />
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"
+                      />
+                    </svg>
                   ) : (
-                    <FaEye size={18} />
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                      />
+                    </svg>
                   )}
                 </button>
+
               </div>
 
-              <button
-                type="submit"
-                className="w-full rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 py-3.5 font-bold text-white shadow-lg transition hover:-translate-y-0.5 hover:from-blue-700 hover:to-indigo-700"
-              >
-                Kirish
-              </button>
+
+              {/* KIRISH */}
 
               <button
-                type="button"
-                onClick={() => {
-                  setModal(false);
-                  setLogin("");
-                  setPassword("");
-                  setShowPassword(false);
-                }}
-                className="mt-3 w-full rounded-xl border border-gray-300 py-3.5 font-semibold text-gray-700 transition hover:bg-gray-100 dark:border-gray-600 dark:text-white dark:hover:bg-gray-700"
+                onClick={handleLogin}
+                className="
+                  bg-gradient-to-r
+                  from-blue-600
+                  to-blue-700
+                  text-white
+                  w-full
+                  py-3.5
+                  rounded-xl
+                  font-bold
+                  hover:shadow-xl
+                  hover:shadow-blue-500/30
+                  hover:-translate-y-0.5
+                  active:translate-y-0
+                  shadow-lg
+                  shadow-blue-500/20
+                  transition-all
+                  duration-300
+                "
               >
-                Yopish
+
+                Kirish
+
               </button>
-            </form>
+
+
+              {/* YOPISH */}
+
+              <button
+                onClick={() =>
+                  setModal(false)
+                }
+                className="
+                  border
+                  border-gray-200
+                  dark:border-gray-600
+                  text-gray-600
+                  dark:text-gray-300
+                  w-full
+                  py-3.5
+                  mt-3
+                  rounded-xl
+                  font-semibold
+                  hover:bg-gray-50
+                  dark:hover:bg-gray-700
+                  transition-all
+                  duration-300
+                "
+              >
+
+                Yopish
+
+              </button>
+
+            </div>
+
           </div>
+
         </div>
+
       )}
+
+      <style>{`
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+
+        @keyframes modalPop {
+          from {
+            opacity: 0;
+            transform: scale(0.9) translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+          }
+        }
+      `}</style>
+
     </div>
   );
 }
