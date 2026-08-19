@@ -1,11 +1,12 @@
 import React from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 
 export default function ProtectedRoute({ children }) {
+  const location = useLocation();
   const isAdmin = localStorage.getItem("isAdmin") === "true";
 
   if (!isAdmin) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/" state={{ from: location }} replace />;
   }
 
   return children;
