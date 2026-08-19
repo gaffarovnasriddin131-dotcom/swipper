@@ -12,12 +12,7 @@ export default function Hero() {
 
   return (
     <section
-      className="relative min-h-[calc(100vh-80px)] flex items-center overflow-hidden bg-black"
-      style={{
-        backgroundImage: "url('/ubeyonroad-szNWSe97Mq0-unsplash.jpg')",
-        backgroundSize: "cover",
-        backgroundPosition: "75% 20%",
-      }}
+      className="hero-section relative min-h-[calc(100vh-80px)] flex items-center overflow-hidden bg-black"
     >
 
       {/* GRADIENT OVERLAY - chapda qorong'i (matn uchun), o'ngda ochroq (rasm ko'rinishi uchun) */}
@@ -116,6 +111,18 @@ export default function Hero() {
       </div>
 
       <style>{`
+
+        .hero-section {
+          background-image: url('/ubeyonroad-szNWSe97Mq0-unsplash.jpg');
+          background-size: cover;
+          background-position: center 20%;
+        }
+
+        @media (min-width: 768px) {
+          .hero-section {
+            background-position: 75% 20%;
+          }
+        }
 
         .hero-animation {
           animation: heroShow 0.8s ease-out both;
