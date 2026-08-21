@@ -11,7 +11,12 @@ import {
   FaTimes,
 } from "react-icons/fa";
 
-export default function Navbar({ setModal, cart, darkMode, toggleTheme }) {
+export default function Navbar({
+  setModal,
+  cart,
+  darkMode,
+  toggleTheme,
+}) {
   const { t, i18n } = useTranslation();
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -39,7 +44,10 @@ export default function Navbar({ setModal, cart, darkMode, toggleTheme }) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="h-20 flex items-center justify-between">
 
-          <Link to="/" className="flex items-center gap-2 sm:gap-3 group shrink-0">
+          <Link
+            to="/"
+            className="flex items-center gap-2 sm:gap-3 group shrink-0"
+          >
             <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-full text-black dark:text-white flex items-center justify-center group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
               <FaApple className="text-3xl sm:text-4xl" />
             </div>
@@ -55,9 +63,8 @@ export default function Navbar({ setModal, cart, darkMode, toggleTheme }) {
             </div>
           </Link>
 
-          {/* DESKTOP MENYU */}
-
           <div className="hidden lg:flex items-center gap-2">
+
             <NavLink to="/" className={linkClass}>
               {t("home")}
             </NavLink>
@@ -66,12 +73,15 @@ export default function Navbar({ setModal, cart, darkMode, toggleTheme }) {
               {t("katalog")}
             </NavLink>
 
+            <NavLink to="/about" className={linkClass}>
+              {t("about")}
+            </NavLink>
+
             <NavLink to="/aloqa" className={linkClass}>
               {t("contactTitle")}
             </NavLink>
-          </div>
 
-          {/* ONG TOMON */}
+          </div>
 
           <div className="flex items-center gap-1 sm:gap-2">
 
@@ -130,8 +140,6 @@ export default function Navbar({ setModal, cart, darkMode, toggleTheme }) {
               UZ
             </button>
 
-            {/* GAMBURGER - faqat mobil/tablet */}
-
             <button
               onClick={() => setMenuOpen((prev) => !prev)}
               className="lg:hidden w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 flex items-center justify-center hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black transition-all duration-300"
@@ -141,8 +149,6 @@ export default function Navbar({ setModal, cart, darkMode, toggleTheme }) {
 
           </div>
         </div>
-
-        {/* MOBIL OCHILADIGAN MENYU */}
 
         {menuOpen && (
           <div className="lg:hidden pb-6 pt-2 space-y-2 border-t border-gray-100 dark:border-gray-800">
@@ -161,6 +167,14 @@ export default function Navbar({ setModal, cart, darkMode, toggleTheme }) {
               onClick={() => setMenuOpen(false)}
             >
               {t("katalog")}
+            </NavLink>
+
+            <NavLink
+              to="/about"
+              className={mobileLinkClass}
+              onClick={() => setMenuOpen(false)}
+            >
+              {t("about")}
             </NavLink>
 
             <NavLink
@@ -219,10 +233,10 @@ export default function Navbar({ setModal, cart, darkMode, toggleTheme }) {
               </button>
 
             </div>
-
           </div>
         )}
       </div>
     </nav>
   );
 }
+

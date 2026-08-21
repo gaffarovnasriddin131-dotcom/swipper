@@ -1,3 +1,4 @@
+
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 
@@ -15,7 +16,11 @@ const resources = {
       premiumQuality: "Premium Quality",
       support: "Support",
 
+      home: "Home",
       katalog: "Catalog",
+      about: "About Us",
+      contactTitle: "Contact Us",
+
       catalogText:
         "Choose your favorite Apple products at the best prices.",
       addToCart: "Add to Cart",
@@ -29,6 +34,7 @@ const resources = {
       yourRating: "You rated",
 
       backToCatalog: "Back to Catalog",
+      productBack: "Back to Catalog",
 
       cart: "Cart",
       products: "products",
@@ -41,7 +47,8 @@ const resources = {
 
       checkout: "Checkout",
       orderTitle: "Place an Order",
-      orderDescription: "Enter your information to place your order.",
+      orderDescription:
+        "Enter your information to place your order.",
       fullName: "Full Name",
       phoneNumber: "Phone Number",
       email: "Email",
@@ -57,7 +64,6 @@ const resources = {
       placeOrder: "Place Order",
 
       contactUs: "CONTACT US",
-      contactTitle: "Contact Us",
       contactText:
         "If you have any questions or want to place an order, you can contact us.",
       phone: "Phone",
@@ -67,15 +73,31 @@ const resources = {
       telegramMessage: "Message us on Telegram",
       writeTelegram: "Message us on Telegram",
 
+      aboutTitle: "About Us",
+      aboutDescription:
+        "Apple Store brings modern Apple technology together in one place. We offer quality products, modern design and reliable service.",
+
+      aboutQualityTitle: "Quality",
+      aboutQualityText:
+        "We focus on providing quality Apple products and giving our customers a reliable shopping experience.",
+
+      aboutProductsTitle: "Apple Products",
+      aboutProductsText:
+        "Discover iPhone, Mac, iPad, AirPods, Apple Watch and other Apple products in our catalog.",
+
+      aboutServiceTitle: "Great Service",
+      aboutServiceText:
+        "Our goal is to make shopping simple, comfortable and convenient for every customer.",
+
+      aboutBottomTitle: "Technology for You",
+      aboutBottomText:
+        "Choose your favorite Apple product and enjoy modern technology with Apple Store.",
+
       login: "Login",
       password: "Password",
       close: "Close",
       loginSuccess: "Login successful!",
       loginError: "Incorrect login or password!",
-
-      home: "Home",
-      catalog: "Catalog",
-      contact: "Contact",
 
       all: "All",
       iphone: "iPhone",
@@ -88,10 +110,8 @@ const resources = {
       chooseStorage: "Choose storage",
       productRating: "Rate this product",
       back: "Back to Catalog",
-      productBack: "Back to Catalog",
       addCart: "Add to Cart",
 
-      // ADMIN PANEL
       adminPanel: "Admin Panel",
       adminDashboard: "Admin Dashboard",
       admin: "Admin",
@@ -138,7 +158,8 @@ const resources = {
       address: "Address",
       saveChanges: "Save Changes",
       settingsSaved: "Settings saved successfully.",
-      fillAllSettings: "Please fill in all fields completely.",
+      fillAllSettings:
+        "Please fill in all fields completely.",
     },
   },
 
@@ -155,7 +176,11 @@ const resources = {
       premiumQuality: "Premium sifat",
       support: "Qo'llab-quvvatlash",
 
+      home: "Bosh sahifa",
       katalog: "Katalog",
+      about: "Biz haqimizda",
+      contactTitle: "Biz bilan bog'laning",
+
       catalogText:
         "O'zingizga yoqqan Apple mahsulotlarini eng qulay narxlarda tanlang.",
       addToCart: "Savatga qo'shish",
@@ -169,6 +194,7 @@ const resources = {
       yourRating: "Sizning bahoyingiz",
 
       backToCatalog: "Katalogga qaytish",
+      productBack: "Katalogga qaytish",
 
       cart: "Savat",
       products: "ta mahsulot",
@@ -198,7 +224,6 @@ const resources = {
       placeOrder: "Buyurtma berish",
 
       contactUs: "BIZ BILAN BOG'LANING",
-      contactTitle: "Biz bilan bog'laning",
       contactText:
         "Savollaringiz yoki buyurtma bo'yicha biz bilan bog'lanishingiz mumkin.",
       phone: "Telefon",
@@ -208,15 +233,31 @@ const resources = {
       telegramMessage: "Telegram orqali yozish",
       writeTelegram: "Telegram orqali yozish",
 
+      aboutTitle: "Biz haqimizda",
+      aboutDescription:
+        "Apple Store zamonaviy Apple texnologiyalarini bir joyga jamlaydi. Biz sifatli mahsulotlar, zamonaviy dizayn va ishonchli xizmatni taklif qilamiz.",
+
+      aboutQualityTitle: "Sifat",
+      aboutQualityText:
+        "Biz sifatli Apple mahsulotlarini taqdim etishga va mijozlarimizga ishonchli xarid tajribasini yaratishga e'tibor beramiz.",
+
+      aboutProductsTitle: "Apple mahsulotlari",
+      aboutProductsText:
+        "Katalogimizdan iPhone, Mac, iPad, AirPods, Apple Watch va boshqa Apple mahsulotlarini topishingiz mumkin.",
+
+      aboutServiceTitle: "Yaxshi xizmat",
+      aboutServiceText:
+        "Bizning maqsadimiz har bir mijoz uchun xarid qilish jarayonini oddiy, qulay va yoqimli qilish.",
+
+      aboutBottomTitle: "Texnologiya siz uchun",
+      aboutBottomText:
+        "O'zingizga yoqqan Apple mahsulotini tanlang va Apple Store bilan zamonaviy texnologiyalardan bahramand bo'ling.",
+
       login: "Kirish",
       password: "Parol",
       close: "Yopish",
       loginSuccess: "Kirish muvaffaqiyatli!",
       loginError: "Login yoki parol xato!",
-
-      home: "Bosh sahifa",
-      catalog: "Katalog",
-      contact: "Aloqa",
 
       all: "Barchasi",
       iphone: "iPhone",
@@ -229,10 +270,8 @@ const resources = {
       chooseStorage: "Xotirani tanlang",
       productRating: "Mahsulotga baho bering",
       back: "Katalogga qaytish",
-      productBack: "Katalogga qaytish",
       addCart: "Savatga qo'shish",
 
-      // ADMIN PANEL
       adminPanel: "Admin Panel",
       adminDashboard: "Admin Boshqaruv Paneli",
       admin: "Admin",
@@ -279,7 +318,8 @@ const resources = {
       address: "Manzil",
       saveChanges: "O'zgarishlarni saqlash",
       settingsSaved: "Sozlamalar muvaffaqiyatli saqlandi.",
-      fillAllSettings: "Iltimos, barcha maydonlarni to'liq to'ldiring.",
+      fillAllSettings:
+        "Iltimos, barcha maydonlarni to'liq to'ldiring.",
     },
   },
 };
@@ -294,3 +334,4 @@ i18n.use(initReactI18next).init({
 });
 
 export default i18n;
+
