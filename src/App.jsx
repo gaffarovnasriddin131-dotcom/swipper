@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
+import { FaApple, FaEye, FaEyeSlash, FaLock, FaUser } from "react-icons/fa";
 
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
@@ -42,7 +43,6 @@ export default function App() {
 
   const [cart, setCart] = useState(() => {
     const savedCart = localStorage.getItem("cart");
-
     return savedCart ? JSON.parse(savedCart) : [];
   });
 
@@ -85,6 +85,7 @@ export default function App() {
         setSuccess(true);
         setLogin("");
         setPassword("");
+        setShowPassword(false);
 
         navigate("/admin");
 
@@ -237,7 +238,6 @@ export default function App() {
             </ProtectedRoute>
           }
         >
-
           <Route
             index
             element={<Dashboard />}
@@ -252,71 +252,151 @@ export default function App() {
             path="orders"
             element={<Orders />}
           />
-
         </Route>
 
       </Routes>
 
       {success && (
-        <div className="fixed top-5 right-5 z-[100]">
-          <div className="bg-green-500 text-white px-6 py-3 rounded-xl shadow-lg font-semibold">
-            ✓ Kirish muvaffaqiyatli!
+        <div className="fixed top-5 right-5 z-[300] animate-[slideIn_0.4s_ease-out]">
+          <div className="flex items-center gap-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white px-6 py-4 rounded-2xl shadow-2xl">
+            <div className="w-9 h-9 rounded-full bg-green-500 text-white flex items-center justify-center font-bold">
+              ✓
+            </div>
+
+            <div>
+              <p className="font-bold">
+                Kirish muvaffaqiyatli!
+              </p>
+
+              <p className="text-xs text-gray-400">
+                Admin panelga xush kelibsiz
+              </p>
+            </div>
           </div>
         </div>
       )}
 
       {modal && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[200] p-5">
-          <div className="bg-white dark:bg-gray-800 w-full max-w-sm p-8 rounded-3xl shadow-2xl">
+        <div
+          className="fixed inset-0 z-[200] flex items-center justify-center p-5 bg-black/70 backdrop-blur-md"
+          onClick={() => setModal(false)}
+        >
+          <div
+            className="relative w-full max-w-md overflow-hidden rounded-[32px] bg-white dark:bg-gray-900 shadow-[0_30px_100px_rgba(0,0,0,0.45)] border border-white/20 dark:border-gray-700"
+            onClick={(e) => e.stopPropagation()}
+          >
 
-            <h2 className="text-2xl font-black mb-1 text-gray-900 dark:text-white text-center">
-              Tizimga kirish
-            </h2>
+            <div className="h-2 bg-black dark:bg-white" />
 
-            <p className="text-center text-gray-400 dark:text-gray-500 text-sm mb-6">
-              Admin panelga kirish uchun ma'lumotlaringizni kiriting
-            </p>
+            <div className="p-8 sm:p-10">
 
-            <input
-              type="text"
-              placeholder="Login"
-              className="border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white w-full p-3.5 rounded-xl outline-none mb-3"
-              value={login}
-              onChange={(e) => setLogin(e.target.value)}
-            />
+              <div className="flex justify-center mb-6">
+                <div className="w-16 h-16 rounded-2xl bg-black dark:bg-white text-white dark:text-black flex items-center justify-center shadow-xl">
+                  <FaApple className="text-4xl" />
+                </div>
+              </div>
 
-            <input
-              type={showPassword ? "text" : "password"}
-              placeholder="Parol"
-              className="border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white w-full p-3.5 rounded-xl outline-none mb-5"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+              <div className="text-center mb-8">
+                <h2 className="text-3xl font-black text-gray-900 dark:text-white">
+                  Admin Panel
+                </h2>
 
-            <button
-              onClick={() => setShowPassword((prev) => !prev)}
-              className="text-sm text-gray-500 mb-4"
-            >
-              {showPassword ? "Parolni yashirish" : "Parolni ko‘rsatish"}
-            </button>
+                <p className="mt-2 text-sm text-gray-400 dark:text-gray-500">
+                  Tizimga kirish uchun ma'lumotlaringizni kiriting
+                </p>
+              </div>
 
-            <button
-              onClick={handleLogin}
-              className="bg-black text-white w-full py-3.5 rounded-xl font-bold"
-            >
-              Kirish
-            </button>
+              <div className="mb-4">
+                <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
+                  Login
+                </label>
 
-            <button
-              onClick={() => setModal(false)}
-              className="border border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-300 w-full py-3.5 mt-3 rounded-xl font-semibold"
-            >
-              Yopish
-            </button>
+                <div className="relative">
+                  <FaUser className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
 
+                  <input
+                    type="text"
+                    placeholder="Loginni kiriting"
+                    value={login}
+                    onChange={(e) => setLogin(e.target.value)}
+                    className="w-full pl-11 pr-4 py-4 rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white outline-none focus:border-black dark:focus:border-white focus:ring-2 focus:ring-black/10 dark:focus:ring-white/10 transition"
+                  />
+                </div>
+              </div>
+
+              <div className="mb-6">
+                <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
+                  Parol
+                </label>
+
+                <div className="relative">
+                  <FaLock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Parolni kiriting"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full pl-11 pr-12 py-4 rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white outline-none focus:border-black dark:focus:border-white focus:ring-2 focus:ring-black/10 dark:focus:ring-white/10 transition"
+                  />
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setShowPassword((prev) => !prev)
+                    }
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-black dark:hover:text-white transition"
+                  >
+                    {showPassword ? (
+                      <FaEyeSlash />
+                    ) : (
+                      <FaEye />
+                    )}
+                  </button>
+                </div>
+              </div>
+
+              <button
+                onClick={handleLogin}
+                className="w-full py-4 rounded-2xl bg-black dark:bg-white text-white dark:text-black font-bold text-lg hover:scale-[1.02] active:scale-[0.98] shadow-xl transition-all duration-300"
+              >
+                Kirish
+              </button>
+
+              <button
+                onClick={() => {
+                  setModal(false);
+                  setLogin("");
+                  setPassword("");
+                  setShowPassword(false);
+                }}
+                className="w-full mt-3 py-4 rounded-2xl border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 font-semibold hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+              >
+                Yopish
+              </button>
+
+              <p className="text-center text-xs text-gray-400 mt-6">
+                Apple Store Admin System
+              </p>
+
+            </div>
           </div>
         </div>
       )}
+
+      <style>{`
+        @keyframes slideIn {
+          from {
+            opacity: 0;
+            transform: translateX(30px);
+          }
+
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+      `}</style>
 
     </div>
   );
