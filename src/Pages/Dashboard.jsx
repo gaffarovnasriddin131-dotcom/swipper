@@ -6,6 +6,7 @@ import {
   FaShoppingCart,
   FaEye,
   FaDollarSign,
+  FaPlus,
 } from "react-icons/fa";
 
 const BACKEND_URL = "https://swipper-server.onrender.com";
@@ -19,6 +20,7 @@ export default function Dashboard() {
   const [visitsCount, setVisitsCount] = useState(0);
   const [revenue, setRevenue] = useState(0);
   const [recentOrders, setRecentOrders] = useState([]);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -59,136 +61,171 @@ export default function Dashboard() {
       }
     } catch (error) {
       console.error("DASHBOARD MALUMOT XATOSI:", error);
+    } finally {
+      setLoaded(true);
     }
   }
 
+  const stats = [
+    {
+      icon: <FaBox />,
+      label: t("productsLabel"),
+      value: productsCount,
+      accent: "from-gray-700 to-gray-900 dark:from-gray-200 dark:to-white",
+    },
+    {
+      icon: <FaShoppingCart />,
+      label: t("orders"),
+      value: ordersCount,
+      accent: "from-gray-700 to-gray-900 dark:from-gray-200 dark:to-white",
+    },
+    {
+      icon: <FaEye />,
+      label: t("visits"),
+      value: visitsCount,
+      accent: "from-gray-700 to-gray-900 dark:from-gray-200 dark:to-white",
+    },
+    {
+      icon: <FaDollarSign />,
+      label: t("revenue"),
+      value: revenue.toLocaleString("uz-UZ"),
+      accent: "from-gray-700 to-gray-900 dark:from-gray-200 dark:to-white",
+    },
+  ];
+
   return (
     <div>
-      <div className="grid grid-cols-4 gap-6 mb-8">
-        <div className="bg-white rounded-2xl shadow-lg p-6 hover:scale-105 transition">
-          <FaBox className="text-blue-600 text-4xl mb-3" />
 
-          <h2 className="text-gray-500">
-            {t("productsLabel")}
-          </h2>
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
 
-          <p className="text-3xl font-bold">
-            {productsCount}
-          </p>
-        </div>
+        {stats.map((stat, index) => (
+          <div
+            key={stat.label}
+            className="stat-card bg-white dark:bg-gray-800 rounded-2xl shadow-sm hover:shadow-xl p-5 sm:p-6 transition-all duration-300 hover:-translate-y-1"
+            style={{
+              animationDelay: `${index * 80}ms`,
+            }}
+          >
+            <div
+              className={`w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br ${stat.accent} text-white dark:text-gray-900 flex items-center justify-center text-lg sm:text-xl mb-4 shadow-md`}
+            >
+              {stat.icon}
+            </div>
 
-        <div className="bg-white rounded-2xl shadow-lg p-6 hover:scale-105 transition">
-          <FaShoppingCart className="text-green-600 text-4xl mb-3" />
+            <h2 className="text-gray-400 dark:text-gray-500 text-sm">
+              {stat.label}
+            </h2>
 
-          <h2 className="text-gray-500">
-            {t("orders")}
-          </h2>
+            <p className="text-2xl sm:text-3xl font-black text-gray-900 dark:text-white mt-1">
+              {loaded ? stat.value : "..."}
+            </p>
+          </div>
+        ))}
 
-          <p className="text-3xl font-bold">
-            {ordersCount}
-          </p>
-        </div>
-
-        <div className="bg-white rounded-2xl shadow-lg p-6 hover:scale-105 transition">
-          <FaEye className="text-yellow-500 text-4xl mb-3" />
-
-          <h2 className="text-gray-500">
-            {t("visits")}
-          </h2>
-
-          <p className="text-3xl font-bold">
-            {visitsCount}
-          </p>
-        </div>
-
-        <div className="bg-white rounded-2xl shadow-lg p-6 hover:scale-105 transition">
-          <FaDollarSign className="text-purple-600 text-4xl mb-3" />
-
-          <h2 className="text-gray-500">
-            {t("revenue")}
-          </h2>
-
-          <p className="text-2xl font-bold">
-            {revenue.toLocaleString("uz-UZ")}
-          </p>
-        </div>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
-        <h2 className="text-2xl font-bold mb-5">
-          {t("recentOrders")}
+      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-5 sm:p-6 mb-8 stat-card" style={{ animationDelay: "320ms" }}>
+
+        <h2 className="text-lg sm:text-2xl font-bold text-gray-900 dark:text-white mb-5 flex items-center gap-2">
+          📋 {t("recentOrders")}
         </h2>
 
         {recentOrders.length === 0 ? (
-          <p className="text-gray-500">
-            {t("emptyCart")}
-          </p>
+          <p className="text-gray-400 dark:text-gray-500">{t("emptyCart")}</p>
         ) : (
-          <table className="w-full">
-            <thead className="bg-gray-100">
-              <tr>
-                <th className="text-left p-3">
-                  {t("customer")}
-                </th>
+          <div className="overflow-x-auto">
+            <table className="w-full">
 
-                <th className="text-left p-3">
-                  {t("product")}
-                </th>
+              <thead>
 
-                <th className="text-left p-3">
-                  {t("price")}
-                </th>
-              </tr>
-            </thead>
+                <tr className="border-b border-gray-100 dark:border-gray-700">
 
-            <tbody>
-              {recentOrders.map((order) => (
-                <tr
-                  key={order._id}
-                  className="border-b"
-                >
-                  <td className="p-3">
-                    {order.name}
-                  </td>
+                  <th className="text-left p-3 text-xs uppercase tracking-wide text-gray-400 dark:text-gray-500">{t("customer")}</th>
+                  <th className="text-left p-3 text-xs uppercase tracking-wide text-gray-400 dark:text-gray-500">{t("product")}</th>
+                  <th className="text-left p-3 text-xs uppercase tracking-wide text-gray-400 dark:text-gray-500">{t("price")}</th>
+                  <th className="text-left p-3 text-xs uppercase tracking-wide text-gray-400 dark:text-gray-500">{t("status")}</th>
 
-                  <td className="p-3">
-                    {order.products
-                      ?.map((p) => p.name)
-                      .join(", ")}
-                  </td>
-
-                  <td className="p-3">
-                    {order.total}
-                  </td>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+
+              </thead>
+
+              <tbody>
+
+                {recentOrders.map((order) => (
+                  <tr
+                    key={order._id}
+                    className="border-b border-gray-50 dark:border-gray-700/50 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors"
+                  >
+                    <td className="p-3 font-medium text-gray-900 dark:text-white">{order.name}</td>
+                    <td className="p-3 text-gray-500 dark:text-gray-400">
+                      {order.products
+                        ?.map((p) => p.name)
+                        .join(", ")}
+                    </td>
+                    <td className="p-3 font-semibold text-gray-900 dark:text-white">{order.total}</td>
+                    <td className="p-3">
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-bold ${
+                          order.status === "delivered"
+                            ? "bg-green-50 dark:bg-green-950 text-green-600 dark:text-green-400"
+                            : order.status === "pending"
+                            ? "bg-yellow-50 dark:bg-yellow-950 text-yellow-600 dark:text-yellow-400"
+                            : "bg-red-50 dark:bg-red-950 text-red-500 dark:text-red-400"
+                        }`}
+                      >
+                        {t(order.status)}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+
+              </tbody>
+
+            </table>
+          </div>
         )}
+
       </div>
 
-      <div className="grid grid-cols-3 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 stat-card" style={{ animationDelay: "400ms" }}>
+
         <button
           onClick={() => navigate("/admin/products")}
-          className="bg-blue-600 text-white py-4 rounded-xl hover:bg-blue-700 transition"
+          className="group flex items-center justify-center gap-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 py-4 rounded-xl font-semibold hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
         >
+          <FaPlus className="group-hover:rotate-90 transition-transform duration-300" />
           {t("addProduct")}
         </button>
 
         <button
           onClick={() => navigate("/admin/orders")}
-          className="bg-green-600 text-white py-4 rounded-xl hover:bg-green-700 transition"
+          className="group flex items-center justify-center gap-3 bg-white dark:bg-gray-800 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 py-4 rounded-xl font-semibold hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
         >
+          <FaShoppingCart className="group-hover:scale-110 transition-transform duration-300" />
           {t("viewOrders")}
         </button>
 
-        <button
-          onClick={() => navigate("/admin/settings")}
-          className="bg-gray-800 text-white py-4 rounded-xl hover:bg-black transition"
-        >
-          {t("settings")}
-        </button>
       </div>
+
+      <style>{`
+
+        .stat-card {
+          animation: cardIn 0.5s ease-out both;
+        }
+
+        @keyframes cardIn {
+          from {
+            opacity: 0;
+            transform: translateY(15px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+      `}</style>
+
     </div>
   );
 }
