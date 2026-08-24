@@ -5,6 +5,8 @@ import {
   FaTrash,
   FaPlus,
   FaMinus,
+  FaCheck,
+  FaTimes,
 } from "react-icons/fa";
 
 const BACKEND_URL = "https://swipper-server.onrender.com";
@@ -22,6 +24,8 @@ export default function Cart({
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
+  const [successNotification, setSuccessNotification] = useState(false);
+
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
@@ -31,8 +35,7 @@ export default function Cart({
   const jami = cart.reduce(
     (sum, item) =>
       sum +
-      Number(item.narx || 0) *
-        Number(item.quantity || 0),
+      Number(item.narx || 0) * Number(item.quantity || 0),
     0
   );
 
@@ -40,9 +43,7 @@ export default function Cart({
     const numberPrice = Number(price) || 0;
 
     if (i18n.language === "uz") {
-      return `${(numberPrice * 12000).toLocaleString(
-        "uz-UZ"
-      )} UZS`;
+      return `${(numberPrice * 12000).toLocaleString("uz-UZ")} UZS`;
     }
 
     return `$${numberPrice.toLocaleString("en-US")}`;
@@ -70,20 +71,15 @@ export default function Cart({
       return;
     }
 
-    const emailRegex =
-      /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
     if (!emailRegex.test(email.trim())) {
-      setMessage(
-        "❌ Email manzilini to'g'ri kiriting"
-      );
+      setMessage("❌ Email manzilini to'g'ri kiriting");
       return;
     }
 
     if (phone.trim().length !== 9) {
-      setMessage(
-        "❌ Telefon raqamini to'liq kiriting"
-      );
+      setMessage("❌ Telefon raqamini to'liq kiriting");
       return;
     }
 
@@ -93,7 +89,7 @@ export default function Cart({
     }
 
     setLoading(true);
-    setMessage("⏳ Buyurtma yuborilmoqda...");
+    setMessage("");
 
     const products = cart.map((item) => ({
       name: item.nomi || "Noma'lum mahsulot",
@@ -128,27 +124,25 @@ export default function Cart({
 
       if (!response.ok) {
         throw new Error(
-          data.message ||
-            "Buyurtma yuborishda xatolik"
+          data.message || "Buyurtma yuborishda xatolik"
         );
       }
-
-      setMessage(
-        "✅ Buyurtma muvaffaqiyatli yuborildi!"
-      );
 
       setName("");
       setPhone("");
       setEmail("");
       setAddress("");
       setComment("");
+      setMessage("");
 
       clearCart();
+      setShowOrder(false);
+
+      setSuccessNotification(true);
 
       setTimeout(() => {
-        setShowOrder(false);
-        setMessage("");
-      }, 3000);
+        setSuccessNotification(false);
+      }, 4000);
     } catch (error) {
       console.error("ORDER XATOSI:", error);
 
@@ -246,9 +240,7 @@ export default function Cart({
 
                     <button
                       type="button"
-                      onClick={() =>
-                        decreaseQuantity(item.id)
-                      }
+                      onClick={() => decreaseQuantity(item.id)}
                       className="w-9 h-9 sm:w-10 sm:h-10 bg-gray-200 dark:bg-gray-600 text-gray-900 dark:text-white rounded-lg flex items-center justify-center hover:bg-gray-300 dark:hover:bg-gray-500 transition"
                     >
                       <FaMinus />
@@ -260,9 +252,7 @@ export default function Cart({
 
                     <button
                       type="button"
-                      onClick={() =>
-                        increaseQuantity(item.id)
-                      }
+                      onClick={() => increaseQuantity(item.id)}
                       className="w-9 h-9 sm:w-10 sm:h-10 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg flex items-center justify-center hover:bg-black dark:hover:bg-gray-100 transition"
                     >
                       <FaPlus />
@@ -279,7 +269,7 @@ export default function Cart({
                     <p className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mt-1">
                       {narx(
                         Number(item.narx || 0) *
-                          Number(item.quantity || 0)
+                        Number(item.quantity || 0)
                       )}
                     </p>
 
@@ -287,9 +277,7 @@ export default function Cart({
 
                   <button
                     type="button"
-                    onClick={() =>
-                      removeFromCart(item.id)
-                    }
+                    onClick={() => removeFromCart(item.id)}
                     className="w-11 h-11 rounded-xl bg-red-100 dark:bg-red-950 text-red-500 flex items-center justify-center hover:bg-red-500 hover:text-white transition"
                   >
                     <FaTrash />
@@ -357,9 +345,7 @@ export default function Cart({
                 type="text"
                 placeholder={t("fullName")}
                 value={name}
-                onChange={(e) =>
-                  setName(e.target.value)
-                }
+                onChange={(e) => setName(e.target.value)}
                 className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl p-3 outline-none focus:border-gray-900 dark:focus:border-white"
               />
 
@@ -385,9 +371,7 @@ export default function Cart({
                 type="email"
                 placeholder={t("email")}
                 value={email}
-                onChange={(e) =>
-                  setEmail(e.target.value)
-                }
+                onChange={(e) => setEmail(e.target.value)}
                 className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl p-3 outline-none focus:border-gray-900 dark:focus:border-white"
               />
 
@@ -395,28 +379,22 @@ export default function Cart({
                 type="text"
                 placeholder={t("deliveryAddress")}
                 value={address}
-                onChange={(e) =>
-                  setAddress(e.target.value)
-                }
+                onChange={(e) => setAddress(e.target.value)}
                 className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl p-3 outline-none focus:border-gray-900 dark:focus:border-white"
               />
 
               <textarea
                 placeholder={t("orderComment")}
                 value={comment}
-                onChange={(e) =>
-                  setComment(e.target.value)
-                }
+                onChange={(e) => setComment(e.target.value)}
                 rows={3}
                 className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl p-3 outline-none focus:border-gray-900 dark:focus:border-white resize-none"
               />
 
               {message && (
-
                 <div className="bg-gray-100 dark:bg-gray-700 dark:text-white rounded-xl p-3 text-center font-semibold text-sm">
                   {message}
                 </div>
-
               )}
 
               <button
@@ -447,6 +425,55 @@ export default function Cart({
         </div>
 
       )}
+
+      {successNotification && (
+
+        <div className="fixed top-6 right-6 z-[200] w-[calc(100%-32px)] sm:w-[400px] animate-[slideIn_0.4s_ease-out]">
+
+          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-2xl p-5 flex items-start gap-4">
+
+            <div className="w-11 h-11 rounded-full bg-green-100 dark:bg-green-900/40 text-green-600 dark:text-green-400 flex items-center justify-center flex-shrink-0">
+              <FaCheck />
+            </div>
+
+            <div className="flex-1">
+
+              <h3 className="font-black text-gray-900 dark:text-white text-lg">
+                Buyurtmangiz qabul qilindi
+              </h3>
+
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                Tez orada siz bilan bog‘lanamiz.
+              </p>
+
+            </div>
+
+            <button
+              onClick={() => setSuccessNotification(false)}
+              className="text-gray-400 hover:text-gray-900 dark:hover:text-white transition"
+            >
+              <FaTimes />
+            </button>
+
+          </div>
+
+        </div>
+
+      )}
+
+      <style>{`
+        @keyframes slideIn {
+          from {
+            opacity: 0;
+            transform: translateX(40px);
+          }
+
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+      `}</style>
 
     </div>
   );
