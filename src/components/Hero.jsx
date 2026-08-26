@@ -12,12 +12,18 @@ export default function Hero() {
 
   return (
     <section
-      className="hero-section relative min-h-[calc(100vh-80px)] flex items-center overflow-hidden bg-black"
+      className="hero-section relative min-h-[calc(100vh-80px)] flex items-center overflow-hidden bg-white dark:bg-black transition-colors duration-500"
     >
-
-      {/* GRADIENT OVERLAY - chapda qorong'i (matn uchun), o'ngda ochroq (rasm ko'rinishi uchun) */}
       <div
-        className="absolute inset-0"
+        className="absolute inset-0 dark:hidden"
+        style={{
+          background:
+            "linear-gradient(90deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.78) 35%, rgba(255,255,255,0.35) 65%, rgba(255,255,255,0.08) 100%)",
+        }}
+      />
+
+      <div
+        className="absolute inset-0 hidden dark:block"
         style={{
           background:
             "linear-gradient(90deg, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.75) 35%, rgba(0,0,0,0.35) 65%, rgba(0,0,0,0.1) 100%)",
@@ -25,93 +31,78 @@ export default function Hero() {
       />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-20 w-full">
-
         <div className="max-w-2xl">
 
-          <p className="text-white/70 font-black tracking-[4px] text-sm mb-6 hero-animation">
+          <p className="text-gray-700 dark:text-white/70 font-black tracking-[4px] text-sm mb-6 hero-animation transition-colors duration-500">
             {t("premiumTechnology")}
           </p>
 
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black leading-[1.05] text-white hero-animation">
-
+          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black leading-[1.05] text-gray-900 dark:text-white hero-animation transition-colors duration-500">
             {t("welcomeFirst")}
 
             <br />
 
             <span className="title-animation inline-block relative">
               {t("welcomeSecond")}
-              <span className="absolute left-0 -bottom-2 w-full h-1 bg-white/40" />
-            </span>
 
+              <span className="absolute left-0 -bottom-2 w-full h-1 bg-gray-900/30 dark:bg-white/40 transition-colors duration-500" />
+            </span>
           </h1>
 
-          <p className="mt-7 text-lg text-white/80 leading-8 max-w-xl hero-animation">
+          <p className="mt-7 text-lg text-gray-700 dark:text-white/80 leading-8 max-w-xl hero-animation transition-colors duration-500">
             {t("heroDescription")}
           </p>
 
           <div className="mt-9 hero-animation">
-
             <button
               onClick={() => navigate("/katalog")}
-              className="flex items-center gap-3 bg-white text-gray-900 px-8 py-4 rounded-2xl font-bold shadow-xl hover:bg-gray-100 hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 group"
+              className="flex items-center gap-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-8 py-4 rounded-2xl font-bold shadow-xl hover:bg-black dark:hover:bg-gray-100 hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 group"
             >
-
               <FaShoppingBag className="group-hover:scale-110 transition" />
 
               {t("viewCatalog")}
 
               <FaArrowRight className="group-hover:translate-x-2 transition" />
-
             </button>
-
           </div>
 
           <div className="flex flex-wrap gap-12 mt-14 hero-animation">
 
             <div className="group">
-
-              <p className="text-3xl font-black text-white group-hover:text-white/70 transition">
+              <p className="text-3xl font-black text-gray-900 dark:text-white group-hover:text-gray-600 dark:group-hover:text-white/70 transition-colors duration-300">
                 20+
               </p>
 
-              <p className="text-sm text-white/60 mt-1">
+              <p className="text-sm text-gray-600 dark:text-white/60 mt-1 transition-colors duration-500">
                 {t("productsCount")}
               </p>
-
             </div>
 
             <div className="group">
-
-              <p className="text-3xl font-black text-white group-hover:text-white/70 transition">
+              <p className="text-3xl font-black text-gray-900 dark:text-white group-hover:text-gray-600 dark:group-hover:text-white/70 transition-colors duration-300">
                 Apple
               </p>
 
-              <p className="text-sm text-white/60 mt-1">
+              <p className="text-sm text-gray-600 dark:text-white/60 mt-1 transition-colors duration-500">
                 {t("premiumQuality")}
               </p>
-
             </div>
 
             <div className="group">
-
-              <p className="text-3xl font-black text-white group-hover:text-white/70 transition">
+              <p className="text-3xl font-black text-gray-900 dark:text-white group-hover:text-gray-600 dark:group-hover:text-white/70 transition-colors duration-300">
                 24/7
               </p>
 
-              <p className="text-sm text-white/60 mt-1">
+              <p className="text-sm text-gray-600 dark:text-white/60 mt-1 transition-colors duration-500">
                 {t("support")}
               </p>
-
             </div>
 
           </div>
-
         </div>
-
       </div>
 
       <style>{`
-
         .hero-section {
           background-image: url('/ubeyonroad-szNWSe97Mq0-unsplash.jpg');
           background-size: cover;
@@ -154,9 +145,7 @@ export default function Hero() {
             transform: translateY(-5px);
           }
         }
-
       `}</style>
-
     </section>
   );
 }
