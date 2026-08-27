@@ -31,7 +31,10 @@ export default function Katalog({ addToCart }) {
             kategoriya: item.category,
             rasm: item.image,
             nomi: item.name,
-            malumot: item.description || "",
+            malumot: {
+              uz: item.descriptionUz || item.descriptionEn ||"",
+              en: item.descriptionEn || item.descriptionUz || "",
+            },
             narx: Number(String(item.price).replace(/\D/g, "")) || 0,
           }));
 

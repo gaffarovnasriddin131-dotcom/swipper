@@ -29,7 +29,8 @@ export default function Products() {
   const [category, setCategory] = useState(KATEGORIYALAR[0]);
   const [price, setPrice] = useState("");
   const [image, setImage] = useState("");
-  const [description, setDescription] = useState("");
+  const [descriptionUz, setDescriptionUz] = useState("");
+  const [descriptionEn, setDescriptionEn] = useState("");
 
   const [showError, setShowError] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -76,7 +77,8 @@ export default function Products() {
           category,
           price,
           image,
-          description,
+          descriptionUz,
+          descriptionEn,
         }),
       });
 
@@ -88,7 +90,8 @@ export default function Products() {
         setName("");
         setPrice("");
         setImage("");
-        setDescription("");
+        setDescriptionUz("");
+        setDescriptionEn("");
 
         setShowSuccess(true);
 
@@ -217,13 +220,25 @@ export default function Products() {
 
         </div>
 
-        <textarea
-          placeholder="Tavsif (ixtiyoriy)"
-          className="border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white p-3 rounded-xl w-full mb-4 outline-none focus:border-gray-900 dark:focus:border-white focus:ring-4 focus:ring-gray-900/5 dark:focus:ring-white/10 transition-all duration-300 resize-none"
-          rows={2}
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
+        <div className="grid sm:grid-cols-2 gap-4 mb-4">
+
+          <textarea
+            placeholder="Tavsif (o'zbekcha)"
+            className="border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white p-3 rounded-xl w-full outline-none focus:border-gray-900 dark:focus:border-white focus:ring-4 focus:ring-gray-900/5 dark:focus:ring-white/10 transition-all duration-300 resize-none"
+            rows={2}
+            value={descriptionUz}
+            onChange={(e) => setDescriptionUz(e.target.value)}
+          />
+
+          <textarea
+            placeholder="Description (English)"
+            className="border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white p-3 rounded-xl w-full outline-none focus:border-gray-900 dark:focus:border-white focus:ring-4 focus:ring-gray-900/5 dark:focus:ring-white/10 transition-all duration-300 resize-none"
+            rows={2}
+            value={descriptionEn}
+            onChange={(e) => setDescriptionEn(e.target.value)}
+          />
+
+        </div>
 
         <button
           onClick={handleAddProduct}
