@@ -68,6 +68,7 @@ export default function ProductDetail({ addToCart }) {
           );
 
           if (found) {
+            // ✅ TUZATILDI: narx o'rniga xotiralar massivi olinadi
             const formatted = {
               id: found._id,
               kategoriya: found.category,
@@ -77,13 +78,14 @@ export default function ProductDetail({ addToCart }) {
                 uz: found.descriptionUz || "",
                 en: found.descriptionEn || found.descriptionUz || "",
               },
-              narx:
-                Number(
-                  String(found.price).replace(/\D/g, "")
-                ) || 0,
+              xotiralar: found.xotiralar || [],
             };
 
             setProduct(formatted);
+
+            setStorage(
+              formatted.xotiralar?.[0]?.nomi || ""
+            );
           } else {
             setNotFound(true);
           }
@@ -193,7 +195,7 @@ export default function ProductDetail({ addToCart }) {
   }
 
   function getCurrentPrice() {
-    if (product.xotiralar) {
+    if (product.xotiralar && product.xotiralar.length > 0) {
       const selectedStorage = product.xotiralar.find(
         (item) => item.nomi === storage
       );
@@ -258,7 +260,7 @@ export default function ProductDetail({ addToCart }) {
               {getDescription()}
             </p>
 
-            {product.xotiralar && (
+            {product.xotiralar && product.xotiralar.length > 0 && (
               <div className="mt-8">
 
                 <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">

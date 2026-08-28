@@ -26,16 +26,17 @@ export default function Katalog({ addToCart }) {
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {
+          // ✅ TUZATILDI: narx o'rniga xotiralar massivi olinadi
           const formatted = data.products.map((item) => ({
             id: item._id,
             kategoriya: item.category,
             rasm: item.image,
             nomi: item.name,
             malumot: {
-              uz: item.descriptionUz || item.descriptionEn ||"",
+              uz: item.descriptionUz || "",
               en: item.descriptionEn || item.descriptionUz || "",
             },
-            narx: Number(String(item.price).replace(/\D/g, "")) || 0,
+            xotiralar: item.xotiralar || [],
           }));
 
           setAdminProducts(formatted);
@@ -93,7 +94,7 @@ export default function Katalog({ addToCart }) {
   }
 
   function getProductPrice(item) {
-    if (item.xotiralar) {
+    if (item.xotiralar && item.xotiralar.length > 0) {
       return item.xotiralar[0].narx;
     }
 
@@ -115,9 +116,10 @@ export default function Katalog({ addToCart }) {
       ...item,
       narx: narx,
       malumot: getDescription(item),
-      storage: item.xotiralar
-        ? item.xotiralar[0].nomi
-        : "",
+      storage:
+        item.xotiralar && item.xotiralar.length > 0
+          ? item.xotiralar[0].nomi
+          : "",
     });
   }
 

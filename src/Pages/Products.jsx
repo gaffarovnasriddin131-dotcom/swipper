@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 import {
   FaPlus,
   FaTrash,
   FaBoxOpen,
-  FaCheckCircle,
-  FaExclamationCircle,
+  FaSpinner,
 } from "react-icons/fa";
 
 const BACKEND_URL = "https://swipper-server.onrender.com";
@@ -20,51 +18,93 @@ const KATEGORIYALAR = [
 ];
 
 export default function Products() {
-  const { t } = useTranslation();
-
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loadingList, setLoadingList] = useState(true);
 
   const [name, setName] = useState("");
   const [category, setCategory] = useState(KATEGORIYALAR[0]);
-  const [price, setPrice] = useState("");
   const [image, setImage] = useState("");
   const [descriptionUz, setDescriptionUz] = useState("");
   const [descriptionEn, setDescriptionEn] = useState("");
 
-  const [showError, setShowError] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
-  const [showDelete, setShowDelete] = useState(false);
+  // Xotira variantlari: [{ nomi: "128 GB", narx: "999" }, ...]
+  const [xotiralar, setXotiralar] = useState([
+    { nomi: "", narx: "" },
+  ]);
+
+  const [submitting, setSubmitting] = useState(false);
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     fetchProducts();
   }, []);
 
-  async function fetchProducts() {
-    try {
-      const response = await fetch(`${BACKEND_URL}/api/products`);
-      const data = await response.json();
+  function fetchProducts() {
+    setLoadingList(true);
 
-      if (data.success) {
-        setProducts(data.products);
-      }
-    } catch (error) {
-      console.error("MAHSULOTLARNI OLISHDA XATOLIK:", error);
-    } finally {
-      setLoading(false);
-    }
+    fetch(`${BACKEND_URL}/api/products`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          setProducts(data.products);
+        }
+      })
+      .catch((error) =>
+        console.error("MAHSULOTLARNI OLISHDA XATOLIK:", error)
+      )
+      .finally(() => setLoadingList(false));
   }
 
-  async function handleAddProduct() {
-    if (!name || !category || !price || !image) {
-      setShowError(true);
+  function addXotiraRow() {
+    setXotiralar((prev) => [...prev, { nomi: "", narx: "" }]);
+  }
 
-      setTimeout(() => {
-        setShowError(false);
-      }, 2500);
+  function removeXotiraRow(index) {
+    setXotiralar((prev) => prev.filter((_, i) => i !== index));
+  }
 
+  function updateXotiraRow(index, field, value) {
+    setXotiralar((prev) =>
+      prev.map((row, i) =>
+        i === index ? { ...row, [field]: value } : row
+      )
+    );
+  }
+
+  function resetForm() {
+    setName("");
+    setCategory(KATEGORIYALAR[0]);
+    setImage("");
+    setDescriptionUz("");
+    setDescriptionEn("");
+    setXotiralar([{ nomi: "", narx: "" }]);
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+
+    if (submitting) return;
+
+    setMessage("");
+
+    const cleanedXotiralar = xotiralar
+      .filter((row) => row.nomi.trim() && row.narx !== "")
+      .map((row) => ({
+        nomi: row.nomi.trim(),
+        narx: Number(row.narx),
+      }));
+
+    if (!name.trim() || !category) {
+      setMessage("❌ Nomi va kategoriyani to'ldiring");
       return;
     }
+
+    if (cleanedXotiralar.length === 0) {
+      setMessage("❌ Kamida bitta xotira/narx qo'shing");
+      return;
+    }
+
+    setSubmitting(true);
 
     try {
       const response = await fetch(`${BACKEND_URL}/api/products`, {
@@ -73,302 +113,257 @@ export default function Products() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name,
+          name: name.trim(),
           category,
-          price,
-          image,
-          descriptionUz,
-          descriptionEn,
+          image: image.trim(),
+          descriptionUz: descriptionUz.trim(),
+          descriptionEn: descriptionEn.trim(),
+          xotiralar: cleanedXotiralar,
         }),
       });
 
       const data = await response.json();
 
-      if (data.success) {
-        setProducts([data.product, ...products]);
-
-        setName("");
-        setPrice("");
-        setImage("");
-        setDescriptionUz("");
-        setDescriptionEn("");
-
-        setShowSuccess(true);
-
-        setTimeout(() => {
-          setShowSuccess(false);
-        }, 2500);
+      if (!data.success) {
+        throw new Error(data.message || "Xatolik yuz berdi");
       }
+
+      setMessage("✅ Mahsulot qo'shildi");
+      resetForm();
+      fetchProducts();
+
+      setTimeout(() => setMessage(""), 3000);
     } catch (error) {
-      console.error("MAHSULOT QOSHISHDA XATOLIK:", error);
+      console.error("PRODUCT CREATE XATOSI:", error);
+      setMessage(`❌ ${error.message || "Mahsulot qo'shilmadi"}`);
+    } finally {
+      setSubmitting(false);
     }
   }
 
   async function handleDelete(id) {
+    if (!window.confirm("Mahsulotni o'chirmoqchimisiz?")) return;
+
     try {
       const response = await fetch(
         `${BACKEND_URL}/api/products/${id}`,
-        {
-          method: "DELETE",
-        }
+        { method: "DELETE" }
       );
 
       const data = await response.json();
 
       if (data.success) {
-        setProducts(
-          products.filter((item) => item._id !== id)
-        );
-
-        setShowDelete(true);
-
-        setTimeout(() => {
-          setShowDelete(false);
-        }, 2500);
+        setProducts((prev) => prev.filter((p) => p._id !== id));
       }
     } catch (error) {
-      console.error("MAHSULOT OCHIRISHDA XATOLIK:", error);
+      console.error("PRODUCT DELETE XATOSI:", error);
     }
   }
 
   return (
-    <div>
-
-      {showError && (
-        <div className="fixed top-6 right-6 z-50 toast-in">
-          <div className="flex items-start gap-3 bg-white dark:bg-gray-800 border-l-4 border-red-500 text-gray-900 dark:text-white px-5 py-4 rounded-xl shadow-2xl">
-            <FaExclamationCircle className="text-red-500 text-xl mt-0.5 shrink-0" />
-            <div>
-              <h2 className="font-bold">{t("errorTitle")}</h2>
-              <p className="text-sm text-gray-500 dark:text-gray-400">{t("fillAllCodes")}</p>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {showSuccess && (
-        <div className="fixed top-6 right-6 z-50 toast-in">
-          <div className="flex items-start gap-3 bg-white dark:bg-gray-800 border-l-4 border-green-500 text-gray-900 dark:text-white px-5 py-4 rounded-xl shadow-2xl">
-            <FaCheckCircle className="text-green-500 text-xl mt-0.5 shrink-0" />
-            <div>
-              <h2 className="font-bold">{t("successTitle")}</h2>
-              <p className="text-sm text-gray-500 dark:text-gray-400">{t("productAdded")}</p>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {showDelete && (
-        <div className="fixed top-6 right-6 z-50 toast-in">
-          <div className="flex items-start gap-3 bg-white dark:bg-gray-800 border-l-4 border-gray-900 dark:border-white text-gray-900 dark:text-white px-5 py-4 rounded-xl shadow-2xl">
-            <FaTrash className="text-gray-500 dark:text-gray-400 text-lg mt-0.5 shrink-0" />
-            <div>
-              <h2 className="font-bold">{t("deletedTitle")}</h2>
-              <p className="text-sm text-gray-500 dark:text-gray-400">{t("productDeleted")}</p>
-            </div>
-          </div>
-        </div>
-      )}
-
-      <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-6 fade-up">
-        {t("productsLabel")}
+    <div className="p-4 sm:p-8 max-w-6xl mx-auto">
+      <h1 className="text-2xl sm:text-3xl font-black text-gray-900 dark:text-white mb-8 flex items-center gap-3">
+        <FaBoxOpen /> Mahsulotlar
       </h1>
 
-      <p className="text-sm text-gray-500 dark:text-gray-400 mb-4 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-3 fade-up" style={{ animationDelay: "60ms" }}>
-        ℹ️ Bu yerda qo'shilgan mahsulot saytning "Katalog" sahifasida ham ko'rinadi. Rasm uchun internet havolasini kiriting (masalan unsplash.com'dan).
-      </p>
+      {/* ================= FORMA ================= */}
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-6 sm:p-8 mb-10 space-y-5"
+      >
+        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+          Yangi mahsulot qo'shish
+        </h2>
 
-      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-6 mb-8 fade-up" style={{ animationDelay: "120ms" }}>
-
-        <div className="grid sm:grid-cols-2 gap-4 mb-4">
-
+        <div className="grid sm:grid-cols-2 gap-4">
           <input
             type="text"
-            placeholder={t("productName")}
-            className="border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white p-3 rounded-xl outline-none focus:border-gray-900 dark:focus:border-white focus:ring-4 focus:ring-gray-900/5 dark:focus:ring-white/10 transition-all duration-300"
+            placeholder="Mahsulot nomi (masalan: iPhone 17 Pro)"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            className="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl p-3 outline-none focus:border-gray-900 dark:focus:border-white"
           />
 
           <select
-            className="border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white p-3 rounded-xl outline-none focus:border-gray-900 dark:focus:border-white transition-all duration-300"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
+            className="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl p-3 outline-none focus:border-gray-900 dark:focus:border-white"
           >
-            {KATEGORIYALAR.map((kat) => (
-              <option key={kat} value={kat}>
-                {kat}
+            {KATEGORIYALAR.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat}
               </option>
             ))}
           </select>
-
-          <input
-            type="text"
-            placeholder={t("price")}
-            className="border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white p-3 rounded-xl outline-none focus:border-gray-900 dark:focus:border-white focus:ring-4 focus:ring-gray-900/5 dark:focus:ring-white/10 transition-all duration-300"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-          />
-
-          <input
-            type="text"
-            placeholder="Rasm havolasi (URL)"
-            className="border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white p-3 rounded-xl outline-none focus:border-gray-900 dark:focus:border-white focus:ring-4 focus:ring-gray-900/5 dark:focus:ring-white/10 transition-all duration-300"
-            value={image}
-            onChange={(e) => setImage(e.target.value)}
-          />
-
         </div>
 
-        <div className="grid sm:grid-cols-2 gap-4 mb-4">
+        <input
+          type="text"
+          placeholder="Rasm URL manzili (masalan: /iphone.webp yoki https://...)"
+          value={image}
+          onChange={(e) => setImage(e.target.value)}
+          className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl p-3 outline-none focus:border-gray-900 dark:focus:border-white"
+        />
 
+        <div className="grid sm:grid-cols-2 gap-4">
           <textarea
             placeholder="Tavsif (o'zbekcha)"
-            className="border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white p-3 rounded-xl w-full outline-none focus:border-gray-900 dark:focus:border-white focus:ring-4 focus:ring-gray-900/5 dark:focus:ring-white/10 transition-all duration-300 resize-none"
-            rows={2}
             value={descriptionUz}
             onChange={(e) => setDescriptionUz(e.target.value)}
+            rows={3}
+            className="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl p-3 outline-none focus:border-gray-900 dark:focus:border-white resize-none"
           />
 
           <textarea
             placeholder="Description (English)"
-            className="border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white p-3 rounded-xl w-full outline-none focus:border-gray-900 dark:focus:border-white focus:ring-4 focus:ring-gray-900/5 dark:focus:ring-white/10 transition-all duration-300 resize-none"
-            rows={2}
             value={descriptionEn}
             onChange={(e) => setDescriptionEn(e.target.value)}
+            rows={3}
+            className="border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl p-3 outline-none focus:border-gray-900 dark:focus:border-white resize-none"
           />
-
         </div>
 
-        <button
-          onClick={handleAddProduct}
-          className="group flex items-center gap-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-6 py-3 rounded-xl font-semibold hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
-        >
-          <FaPlus className="group-hover:rotate-90 transition-transform duration-300" />
-          {t("addProduct")}
-        </button>
+        {/* ===== XOTIRA / NARX QATORLARI ===== */}
+        <div>
+          <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-3">
+            Xotira va narx variantlari
+          </label>
 
-      </div>
+          <div className="space-y-3">
+            {xotiralar.map((row, index) => (
+              <div
+                key={index}
+                className="flex flex-col sm:flex-row gap-3 items-stretch"
+              >
+                <input
+                  type="text"
+                  placeholder="Xotira (masalan: 128 GB)"
+                  value={row.nomi}
+                  onChange={(e) =>
+                    updateXotiraRow(index, "nomi", e.target.value)
+                  }
+                  className="flex-1 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl p-3 outline-none focus:border-gray-900 dark:focus:border-white"
+                />
 
-      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm overflow-hidden fade-up" style={{ animationDelay: "180ms" }}>
+                <input
+                  type="number"
+                  placeholder="Narx (masalan: 999)"
+                  value={row.narx}
+                  onChange={(e) =>
+                    updateXotiraRow(index, "narx", e.target.value)
+                  }
+                  className="flex-1 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl p-3 outline-none focus:border-gray-900 dark:focus:border-white"
+                />
 
-        {loading ? (
-          <div className="p-10 flex flex-col items-center text-gray-400 dark:text-gray-500">
-            <div className="w-8 h-8 border-2 border-gray-300 dark:border-gray-600 border-t-gray-900 dark:border-t-white rounded-full animate-spin mb-3" />
-            {t("sending")}
+                <button
+                  type="button"
+                  onClick={() => removeXotiraRow(index)}
+                  disabled={xotiralar.length === 1}
+                  className="w-11 h-11 self-center sm:self-auto rounded-xl bg-red-100 dark:bg-red-950 text-red-500 flex items-center justify-center hover:bg-red-500 hover:text-white transition disabled:opacity-30 disabled:cursor-not-allowed flex-shrink-0"
+                >
+                  <FaTrash />
+                </button>
+              </div>
+            ))}
           </div>
-        ) : products.length === 0 ? (
-          <div className="p-14 flex flex-col items-center text-gray-400 dark:text-gray-500">
-            <FaBoxOpen className="text-4xl mb-3" />
-            {t("emptyCart")}
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full">
 
-              <thead>
+          <button
+            type="button"
+            onClick={addXotiraRow}
+            className="mt-4 flex items-center gap-2 text-sm font-bold text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition"
+          >
+            <FaPlus /> Yana xotira qo'shish
+          </button>
 
-                <tr className="border-b border-gray-100 dark:border-gray-700">
+          <p className="text-xs text-gray-400 mt-2">
+            Eslatma: agar mahsulotda xotira varianti bo'lmasa (masalan AirPods,
+            Apple Watch), shunchaki bitta qator qoldiring — "Xotira" maydonini
+            bo'sh qoldirib, faqat narxni kiriting yoki "Standart" deb yozing.
+          </p>
+        </div>
 
-                  <th className="p-4 text-left text-xs uppercase tracking-wide text-gray-400 dark:text-gray-500">Rasm</th>
-                  <th className="p-4 text-left text-xs uppercase tracking-wide text-gray-400 dark:text-gray-500">{t("productName")}</th>
-                  <th className="p-4 text-left text-xs uppercase tracking-wide text-gray-400 dark:text-gray-500">{t("category")}</th>
-                  <th className="p-4 text-left text-xs uppercase tracking-wide text-gray-400 dark:text-gray-500">{t("price")}</th>
-                  <th className="p-4 text-center text-xs uppercase tracking-wide text-gray-400 dark:text-gray-500">{t("action")}</th>
-
-                </tr>
-
-              </thead>
-
-              <tbody>
-
-                {products.map((item) => (
-
-                  <tr
-                    key={item._id}
-                    className="border-b border-gray-50 dark:border-gray-700/50 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors"
-                  >
-
-                    <td className="p-4">
-                      {item.image && (
-                        <img
-                          src={item.image}
-                          alt={item.name}
-                          className="w-12 h-12 object-contain rounded-lg bg-gray-50 dark:bg-gray-700 p-1"
-                        />
-                      )}
-                    </td>
-
-                    <td className="p-4 font-medium text-gray-900 dark:text-white">
-                      {item.name}
-                    </td>
-
-                    <td className="p-4 text-gray-500 dark:text-gray-400">
-                      {item.category}
-                    </td>
-
-                    <td className="p-4 font-semibold text-gray-900 dark:text-white">
-                      {item.price}
-                    </td>
-
-                    <td className="p-4 text-center">
-
-                      <button
-                        onClick={() => handleDelete(item._id)}
-                        className="inline-flex items-center gap-2 bg-red-50 dark:bg-red-950 hover:bg-red-500 text-red-500 hover:text-white px-4 py-2 rounded-lg transition-all duration-300"
-                      >
-                        <FaTrash size={12} />
-                        {t("delete")}
-                      </button>
-
-                    </td>
-
-                  </tr>
-
-                ))}
-
-              </tbody>
-
-            </table>
+        {message && (
+          <div className="bg-gray-100 dark:bg-gray-700 dark:text-white rounded-xl p-3 text-center font-semibold text-sm">
+            {message}
           </div>
         )}
 
+        <button
+          type="submit"
+          disabled={submitting}
+          className="w-full sm:w-auto bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-8 py-4 rounded-xl font-bold hover:bg-black dark:hover:bg-gray-100 transition disabled:opacity-50 flex items-center justify-center gap-3"
+        >
+          {submitting ? (
+            <>
+              <FaSpinner className="animate-spin" /> Saqlanmoqda...
+            </>
+          ) : (
+            <>
+              <FaPlus /> Mahsulot qo'shish
+            </>
+          )}
+        </button>
+      </form>
+
+      {/* ================= RO'YXAT ================= */}
+      <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-6 sm:p-8">
+        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
+          Mavjud mahsulotlar ({products.length})
+        </h2>
+
+        {loadingList ? (
+          <p className="text-gray-400 text-center py-10">Yuklanmoqda...</p>
+        ) : products.length === 0 ? (
+          <p className="text-gray-400 text-center py-10">
+            Hozircha mahsulot yo'q
+          </p>
+        ) : (
+          <div className="space-y-4">
+            {products.map((item) => (
+              <div
+                key={item._id}
+                className="flex flex-col sm:flex-row items-start sm:items-center gap-4 border border-gray-100 dark:border-gray-700 rounded-2xl p-4"
+              >
+                <div className="w-16 h-16 rounded-xl bg-gray-50 dark:bg-gray-700 flex items-center justify-center flex-shrink-0 overflow-hidden">
+                  {item.image && (
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      className="max-w-full max-h-full object-contain"
+                    />
+                  )}
+                </div>
+
+                <div className="flex-1 min-w-0">
+                  <p className="font-bold text-gray-900 dark:text-white">
+                    {item.name}
+                  </p>
+
+                  <p className="text-sm text-gray-400">{item.category}</p>
+
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {(item.xotiralar || []).map((v, i) => (
+                      <span
+                        key={i}
+                        className="text-xs font-semibold bg-gray-100 dark:bg-gray-700 dark:text-white px-3 py-1 rounded-full"
+                      >
+                        {v.nomi}: ${v.narx}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => handleDelete(item._id)}
+                  className="w-11 h-11 rounded-xl bg-red-100 dark:bg-red-950 text-red-500 flex items-center justify-center hover:bg-red-500 hover:text-white transition flex-shrink-0"
+                >
+                  <FaTrash />
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
-
-      <style>{`
-
-        .fade-up {
-          animation: fadeUp 0.5s ease-out both;
-        }
-
-        @keyframes fadeUp {
-          from {
-            opacity: 0;
-            transform: translateY(15px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        .toast-in {
-          animation: toastIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        @keyframes toastIn {
-          from {
-            opacity: 0;
-            transform: translateX(40px) scale(0.9);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0) scale(1);
-          }
-        }
-
-      `}</style>
-
     </div>
   );
 }

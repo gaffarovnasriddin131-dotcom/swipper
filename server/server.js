@@ -53,13 +53,19 @@ const orderSchema = new mongoose.Schema({
   },
 });
 
+// ✅ TUZATILDI: price o'rniga xotiralar massivi qo'shildi
 const productSchema = new mongoose.Schema({
   name: String,
   category: String,
-  price: String,
   image: String,
   descriptionUz: String,
   descriptionEn: String,
+  xotiralar: [
+    {
+      nomi: String, // masalan "128 GB"
+      narx: Number, // masalan 999
+    },
+  ],
   createdAt: {
     type: Date,
     default: Date.now,
@@ -414,18 +420,19 @@ app.get("/api/products", async (req, res) => {
   }
 });
 
+// ✅ TUZATILDI: endi price o'rniga xotiralar massivini qabul qiladi va saqlaydi
 app.post("/api/products", async (req, res) => {
   try {
     const {
       name,
       category,
-      price,
       image,
       descriptionUz,
       descriptionEn,
+      xotiralar,
     } = req.body;
 
-    if (!name || !category || !price) {
+    if (!name || !category || !xotiralar || xotiralar.length === 0) {
       return res.status(400).json({
         success: false,
         message: "Barcha maydonlarni to'ldiring",
@@ -435,10 +442,10 @@ app.post("/api/products", async (req, res) => {
     const product = await Product.create({
       name,
       category,
-      price,
       image,
       descriptionUz,
       descriptionEn,
+      xotiralar,
     });
 
     res.status(201).json({

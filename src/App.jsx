@@ -182,6 +182,15 @@ export default function App() {
       )}
 
       <Routes>
+        
+        <Route
+  path="/product/:id"
+  element={
+    <ProductDetail
+      addToCart={addToCart}
+    />
+  }
+/>
 
         <Route
           path="/"
