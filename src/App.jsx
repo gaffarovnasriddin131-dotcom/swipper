@@ -79,7 +79,8 @@ export default function App() {
       const data = await response.json();
 
       if (data.success) {
-        localStorage.setItem("isAdmin", "true");
+        // ✅ TUZATILDI: endi haqiqiy token saqlanadi (oddiy "true" emas)
+        localStorage.setItem("adminToken", data.token);
 
         setModal(false);
         setSuccess(true);
@@ -182,15 +183,6 @@ export default function App() {
       )}
 
       <Routes>
-        
-        <Route
-  path="/product/:id"
-  element={
-    <ProductDetail
-      addToCart={addToCart}
-    />
-  }
-/>
 
         <Route
           path="/"
@@ -217,6 +209,7 @@ export default function App() {
           element={<Contact />}
         />
 
+        {/* ✅ TUZATILDI: takrorlangan route olib tashlandi, faqat bitta qoldi */}
         <Route
           path="/product/:id"
           element={

@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
+const jwt = require("jsonwebtoken");
 
 dotenv.config();
 
@@ -9,14 +10,17 @@ const app = express();
 
 const PORT = process.env.PORT || 5001;
 
+// ✅ MUHIM: .env fayliga JWT_SECRET qo'shing (masalan uzun tasodifiy matn)
+const JWT_SECRET = process.env.JWT_SECRET || "swipper-fallback-secret-oynating";
+
 app.use(
   cors({
     origin: [
       "http://localhost:5173",
       "https://swipper-1.onrender.com",
     ],
-    methods: ["GET", "POST", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
@@ -53,7 +57,6 @@ const orderSchema = new mongoose.Schema({
   },
 });
 
-// ✅ TUZATILDI: price o'rniga xotiralar massivi qo'shildi
 const productSchema = new mongoose.Schema({
   name: String,
   category: String,
@@ -103,6 +106,41 @@ const Product = mongoose.model("Product", productSchema);
 const Visit = mongoose.model("Visit", visitSchema);
 
 // ==========================================
+// ✅ YANGI: ADMIN TOKENINI TEKSHIRUVCHI MIDDLEWARE
+// ==========================================
+
+function verifyAdmin(req, res, next) {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({
+      success: false,
+      message: "Ruxsat yo'q. Iltimos tizimga kiring.",
+    });
+  }
+
+  const token = authHeader.split(" ")[1];
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+
+    if (!decoded.isAdmin) {
+      return res.status(403).json({
+        success: false,
+        message: "Ruxsat yo'q",
+      });
+    }
+
+    next();
+  } catch (error) {
+    return res.status(401).json({
+      success: false,
+      message: "Token yaroqsiz yoki muddati tugagan",
+    });
+  }
+}
+
+// ==========================================
 // ASOSIY YO'L
 // ==========================================
 
@@ -114,7 +152,7 @@ app.get("/", (req, res) => {
 });
 
 // ==========================================
-// ADMIN LOGIN
+// ADMIN LOGIN — ✅ ENDI HAQIQIY TOKEN QAYTARADI
 // ==========================================
 
 app.post("/api/admin/login", (req, res) => {
@@ -125,9 +163,16 @@ app.post("/api/admin/login", (req, res) => {
       login === process.env.ADMIN_LOGIN &&
       password === process.env.ADMIN_PASSWORD
     ) {
+      const token = jwt.sign(
+        { isAdmin: true, login },
+        JWT_SECRET,
+        { expiresIn: "7d" }
+      );
+
       return res.status(200).json({
         success: true,
         message: "Kirish muvaffaqiyatli",
+        token,
       });
     }
 
@@ -196,7 +241,8 @@ app.get("/api/visits", async (req, res) => {
 // BUYURTMALAR (ORDERS)
 // ==========================================
 
-app.get("/api/orders", async (req, res) => {
+// ✅ HIMOYALANDI: faqat admin ko'ra oladi
+app.get("/api/orders", verifyAdmin, async (req, res) => {
   try {
     const orders = await Order.find().sort({ createdAt: -1 });
 
@@ -210,6 +256,45 @@ app.get("/api/orders", async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Buyurtmalarni olishda xatolik",
+    });
+  }
+});
+
+// ✅ YANGI: buyurtma holatini o'zgartirish (faqat admin)
+app.put("/api/orders/:id/status", verifyAdmin, async (req, res) => {
+  try {
+    const { status } = req.body;
+
+    const allowedStatuses = [
+      "pending",
+      "completed",
+      "cancelled",
+      "delivered",
+    ];
+
+    if (!allowedStatuses.includes(status)) {
+      return res.status(400).json({
+        success: false,
+        message: "Noto'g'ri holat",
+      });
+    }
+
+    const order = await Order.findByIdAndUpdate(
+      req.params.id,
+      { status },
+      { new: true }
+    );
+
+    res.status(200).json({
+      success: true,
+      order,
+    });
+  } catch (error) {
+    console.error("ORDER STATUS XATOSI:", error);
+
+    res.status(500).json({
+      success: false,
+      message: "Holatni yangilashda xatolik",
     });
   }
 });
@@ -399,9 +484,10 @@ app.post("/api/ratings", async (req, res) => {
 });
 
 // ==========================================
-// MAHSULOTLAR (ADMIN UCHUN)
+// MAHSULOTLAR
 // ==========================================
 
+// Ochiq — hamma ko'ra oladi (katalog uchun kerak)
 app.get("/api/products", async (req, res) => {
   try {
     const products = await Product.find().sort({ createdAt: -1 });
@@ -420,8 +506,8 @@ app.get("/api/products", async (req, res) => {
   }
 });
 
-// ✅ TUZATILDI: endi price o'rniga xotiralar massivini qabul qiladi va saqlaydi
-app.post("/api/products", async (req, res) => {
+// ✅ HIMOYALANDI: faqat admin qo'sha oladi
+app.post("/api/products", verifyAdmin, async (req, res) => {
   try {
     const {
       name,
@@ -462,7 +548,61 @@ app.post("/api/products", async (req, res) => {
   }
 });
 
-app.delete("/api/products/:id", async (req, res) => {
+// ✅ YANGI + HIMOYALANDI: mahsulotni tahrirlash
+app.put("/api/products/:id", verifyAdmin, async (req, res) => {
+  try {
+    const {
+      name,
+      category,
+      image,
+      descriptionUz,
+      descriptionEn,
+      xotiralar,
+    } = req.body;
+
+    if (!name || !category || !xotiralar || xotiralar.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Barcha maydonlarni to'ldiring",
+      });
+    }
+
+    const product = await Product.findByIdAndUpdate(
+      req.params.id,
+      {
+        name,
+        category,
+        image,
+        descriptionUz,
+        descriptionEn,
+        xotiralar,
+      },
+      { new: true }
+    );
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: "Mahsulot topilmadi",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      product,
+    });
+  } catch (error) {
+    console.error("PRODUCT UPDATE XATOSI:", error);
+
+    res.status(500).json({
+      success: false,
+      message: "Mahsulotni tahrirlashda xatolik",
+    });
+  }
+});
+
+// ✅ HIMOYALANDI: faqat admin o'chira oladi
+app.delete("/api/products/:id", verifyAdmin, async (req, res) => {
   try {
     await Product.findByIdAndDelete(req.params.id);
 
