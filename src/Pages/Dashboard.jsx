@@ -28,9 +28,16 @@ export default function Dashboard() {
 
   async function fetchData() {
     try {
+      // ✅ TUZATILDI: orders so'roviga token qo'shildi
+      const token = localStorage.getItem("adminToken");
+
       const [productsRes, ordersRes, visitsRes] = await Promise.all([
         fetch(`${BACKEND_URL}/api/products`).then((r) => r.json()),
-        fetch(`${BACKEND_URL}/api/orders`).then((r) => r.json()),
+        fetch(`${BACKEND_URL}/api/orders`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }).then((r) => r.json()),
         fetch(`${BACKEND_URL}/api/visits`).then((r) => r.json()),
       ]);
 
@@ -54,6 +61,8 @@ export default function Dashboard() {
         );
 
         setRevenue(totalRevenue);
+      } else {
+        console.error("ORDERS XATOSI:", ordersRes.message);
       }
 
       if (visitsRes.success) {
