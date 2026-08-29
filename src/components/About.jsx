@@ -97,19 +97,29 @@ export default function About() {
   };
 
   return (
-    <section className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-white transition-colors duration-300">
-      <div className="max-w-6xl mx-auto px-6 py-20">
+    <section className="relative min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-white transition-colors duration-300 overflow-hidden">
 
-        <div className="text-center max-w-3xl mx-auto mb-20">
+      {/* ===== HARAKATLANUVCHI FON ELEMENTLARI ===== */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="floating-blob absolute -top-32 -left-32 w-[400px] h-[400px] rounded-full bg-gray-200/40 dark:bg-gray-800/40 blur-3xl" />
+        <div className="floating-blob-delayed absolute top-1/3 -right-40 w-[500px] h-[500px] rounded-full bg-gray-100/50 dark:bg-gray-900/50 blur-3xl" />
+        <div className="floating-blob absolute bottom-0 left-1/4 w-[350px] h-[350px] rounded-full bg-gray-200/30 dark:bg-gray-800/30 blur-3xl" />
+      </div>
+
+      <div className="relative max-w-6xl mx-auto px-6 py-20">
+
+        <div className="text-center max-w-3xl mx-auto mb-20 fade-up">
           <div className="flex justify-center mb-6">
-            <FaApple className="text-5xl text-black dark:text-white" />
+            <div className="apple-spin w-20 h-20 rounded-3xl bg-black dark:bg-white text-white dark:text-black flex items-center justify-center shadow-2xl">
+              <FaApple className="text-4xl" />
+            </div>
           </div>
 
           <p className="text-sm font-bold tracking-[4px] text-gray-400 uppercase mb-4">
             Apple Store
           </p>
 
-          <h1 className="text-5xl md:text-7xl font-black tracking-tight mb-7">
+          <h1 className="text-5xl md:text-7xl font-black tracking-tight mb-7 gradient-text">
             {text.title}
           </h1>
 
@@ -120,33 +130,37 @@ export default function About() {
 
         <div className="grid md:grid-cols-2 gap-8 mb-16">
 
-          <div className="p-8 md:p-10 rounded-[32px] bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 hover:-translate-y-2 transition-all duration-300">
+          <div className="fade-up-delay-1 group relative p-8 md:p-10 rounded-[32px] bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 hover:-translate-y-3 hover:shadow-2xl transition-all duration-500 overflow-hidden">
 
-            <div className="w-14 h-14 rounded-2xl bg-black dark:bg-white text-white dark:text-black flex items-center justify-center mb-6">
+            <div className="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-black/5 dark:bg-white/5 group-hover:scale-150 transition-transform duration-700" />
+
+            <div className="relative w-14 h-14 rounded-2xl bg-black dark:bg-white text-white dark:text-black flex items-center justify-center mb-6 group-hover:rotate-12 group-hover:scale-110 transition-all duration-500 shadow-lg">
               <FaApple className="text-2xl" />
             </div>
 
-            <h2 className="text-3xl font-black mb-5">
+            <h2 className="relative text-3xl font-black mb-5">
               {text.storeTitle}
             </h2>
 
-            <p className="text-gray-500 dark:text-gray-400 text-lg leading-8">
+            <p className="relative text-gray-500 dark:text-gray-400 text-lg leading-8">
               {text.storeText}
             </p>
 
           </div>
 
-          <div className="p-8 md:p-10 rounded-[32px] bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 hover:-translate-y-2 transition-all duration-300">
+          <div className="fade-up-delay-2 group relative p-8 md:p-10 rounded-[32px] bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 hover:-translate-y-3 hover:shadow-2xl transition-all duration-500 overflow-hidden">
 
-            <div className="w-14 h-14 rounded-2xl bg-black dark:bg-white text-white dark:text-black flex items-center justify-center mb-6">
+            <div className="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-black/5 dark:bg-white/5 group-hover:scale-150 transition-transform duration-700" />
+
+            <div className="relative w-14 h-14 rounded-2xl bg-black dark:bg-white text-white dark:text-black flex items-center justify-center mb-6 group-hover:rotate-12 group-hover:scale-110 transition-all duration-500 shadow-lg">
               <FaShoppingBag className="text-xl" />
             </div>
 
-            <h2 className="text-3xl font-black mb-5">
+            <h2 className="relative text-3xl font-black mb-5">
               {text.whyTitle}
             </h2>
 
-            <p className="text-gray-500 dark:text-gray-400 text-lg leading-8">
+            <p className="relative text-gray-500 dark:text-gray-400 text-lg leading-8">
               {text.whyText}
             </p>
 
@@ -156,7 +170,7 @@ export default function About() {
 
         <div className="mb-16">
 
-          <div className="text-center max-w-2xl mx-auto mb-10">
+          <div className="text-center max-w-2xl mx-auto mb-10 fade-up">
 
             <p className="text-sm font-bold tracking-[3px] text-gray-400 uppercase mb-4">
               Apple Store
@@ -174,51 +188,39 @@ export default function About() {
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
 
-            <div className="p-7 rounded-3xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 hover:-translate-y-2 transition-all duration-300">
-              <FaCheckCircle className="text-green-500 text-2xl mb-5" />
+            {[
+              { title: text.viewTitle, desc: text.viewText, delay: "0ms" },
+              { title: text.chooseTitle, desc: text.chooseText, delay: "150ms" },
+              { title: text.orderTitle, desc: text.orderText, delay: "300ms" },
+            ].map((item, i) => (
+              <div
+                key={i}
+                className="fade-up group p-7 rounded-3xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 hover:-translate-y-2 hover:border-gray-900 dark:hover:border-white hover:shadow-xl transition-all duration-500"
+                style={{ animationDelay: item.delay }}
+              >
+                <FaCheckCircle className="text-2xl mb-5 text-gray-300 dark:text-gray-600 group-hover:text-black dark:group-hover:text-white group-hover:scale-125 transition-all duration-500" />
 
-              <h3 className="text-xl font-bold mb-3">
-                {text.viewTitle}
-              </h3>
+                <h3 className="text-xl font-bold mb-3">
+                  {item.title}
+                </h3>
 
-              <p className="text-gray-500 dark:text-gray-400 leading-7">
-                {text.viewText}
-              </p>
-            </div>
-
-            <div className="p-7 rounded-3xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 hover:-translate-y-2 transition-all duration-300">
-              <FaCheckCircle className="text-green-500 text-2xl mb-5" />
-
-              <h3 className="text-xl font-bold mb-3">
-                {text.chooseTitle}
-              </h3>
-
-              <p className="text-gray-500 dark:text-gray-400 leading-7">
-                {text.chooseText}
-              </p>
-            </div>
-
-            <div className="p-7 rounded-3xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 hover:-translate-y-2 transition-all duration-300">
-              <FaCheckCircle className="text-green-500 text-2xl mb-5" />
-
-              <h3 className="text-xl font-bold mb-3">
-                {text.orderTitle}
-              </h3>
-
-              <p className="text-gray-500 dark:text-gray-400 leading-7">
-                {text.orderText}
-              </p>
-            </div>
+                <p className="text-gray-500 dark:text-gray-400 leading-7">
+                  {item.desc}
+                </p>
+              </div>
+            ))}
 
           </div>
 
         </div>
 
-        <div className="rounded-[40px] bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 p-8 md:p-14">
+        <div className="fade-up relative rounded-[40px] bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 p-8 md:p-14 overflow-hidden">
 
-          <div className="max-w-3xl">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-black/5 dark:bg-white/5 rounded-full blur-3xl" />
 
-            <div className="w-14 h-14 rounded-2xl bg-black dark:bg-white text-white dark:text-black flex items-center justify-center mb-7">
+          <div className="relative max-w-3xl">
+
+            <div className="w-14 h-14 rounded-2xl bg-black dark:bg-white text-white dark:text-black flex items-center justify-center mb-7 shadow-lg pulse-ring">
               <FaPhoneAlt className="text-xl" />
             </div>
 
@@ -236,37 +238,23 @@ export default function About() {
 
             <div className="space-y-4">
 
-              <div className="flex items-start gap-4">
-                <span className="font-black text-lg">01</span>
+              {[text.step1, text.step2, text.step3, text.step4].map(
+                (step, i) => (
+                  <div
+                    key={i}
+                    className="step-slide flex items-start gap-4"
+                    style={{ animationDelay: `${i * 120}ms` }}
+                  >
+                    <span className="flex-shrink-0 w-9 h-9 rounded-full bg-black dark:bg-white text-white dark:text-black font-black text-sm flex items-center justify-center">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
 
-                <p className="text-gray-600 dark:text-gray-300">
-                  {text.step1}
-                </p>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <span className="font-black text-lg">02</span>
-
-                <p className="text-gray-600 dark:text-gray-300">
-                  {text.step2}
-                </p>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <span className="font-black text-lg">03</span>
-
-                <p className="text-gray-600 dark:text-gray-300">
-                  {text.step3}
-                </p>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <span className="font-black text-lg">04</span>
-
-                <p className="text-gray-600 dark:text-gray-300">
-                  {text.step4}
-                </p>
-              </div>
+                    <p className="text-gray-600 dark:text-gray-300 pt-1.5">
+                      {step}
+                    </p>
+                  </div>
+                )
+              )}
 
             </div>
 
@@ -275,6 +263,126 @@ export default function About() {
         </div>
 
       </div>
+
+      <style>{`
+        @keyframes fadeUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .fade-up {
+          animation: fadeUp 0.8s ease-out both;
+        }
+
+        .fade-up-delay-1 {
+          animation: fadeUp 0.8s ease-out 0.1s both;
+        }
+
+        .fade-up-delay-2 {
+          animation: fadeUp 0.8s ease-out 0.25s both;
+        }
+
+        @keyframes stepSlide {
+          from {
+            opacity: 0;
+            transform: translateX(-20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+
+        .step-slide {
+          animation: stepSlide 0.6s ease-out both;
+        }
+
+        @keyframes float {
+          0%, 100% {
+            transform: translate(0, 0) scale(1);
+          }
+          50% {
+            transform: translate(30px, -30px) scale(1.05);
+          }
+        }
+
+        .floating-blob {
+          animation: float 12s ease-in-out infinite;
+        }
+
+        .floating-blob-delayed {
+          animation: float 15s ease-in-out infinite;
+          animation-delay: -5s;
+        }
+
+        @keyframes appleSpin {
+          0% {
+            transform: rotate(0deg) scale(1);
+          }
+          50% {
+            transform: rotate(8deg) scale(1.05);
+          }
+          100% {
+            transform: rotate(0deg) scale(1);
+          }
+        }
+
+        .apple-spin {
+          animation: appleSpin 4s ease-in-out infinite;
+        }
+
+        @keyframes pulseRing {
+          0% {
+            box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.15);
+          }
+          70% {
+            box-shadow: 0 0 0 14px rgba(0, 0, 0, 0);
+          }
+          100% {
+            box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+          }
+        }
+
+        .dark .pulse-ring {
+          animation: pulseRingDark 2.5s ease-out infinite;
+        }
+
+        .pulse-ring {
+          animation: pulseRing 2.5s ease-out infinite;
+        }
+
+        @keyframes pulseRingDark {
+          0% {
+            box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.15);
+          }
+          70% {
+            box-shadow: 0 0 0 14px rgba(255, 255, 255, 0);
+          }
+          100% {
+            box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+          }
+        }
+
+        .gradient-text {
+          background: linear-gradient(90deg, currentColor, currentColor 40%, #888, currentColor 60%, currentColor);
+          background-size: 200% auto;
+          -webkit-background-clip: text;
+          background-clip: text;
+          animation: shine 6s linear infinite;
+        }
+
+        @keyframes shine {
+          to {
+            background-position: -200% center;
+          }
+        }
+      `}</style>
     </section>
   );
 }
