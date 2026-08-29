@@ -5,6 +5,7 @@ import {
   FaShoppingCart,
   FaArrowLeft,
   FaStar,
+  FaCheck,
 } from "react-icons/fa";
 
 import { mahsulotlar } from "../data/products";
@@ -29,6 +30,9 @@ export default function ProductDetail({ addToCart }) {
   const [ratingCount, setRatingCount] = useState(0);
   const [myRating, setMyRating] = useState(0);
   const [hasRated, setHasRated] = useState(false);
+  const [hoveredStar, setHoveredStar] = useState(0);
+  const [justAdded, setJustAdded] = useState(false);
+  const [priceKey, setPriceKey] = useState(0);
 
   useEffect(() => {
     if (location.state) {
@@ -68,7 +72,6 @@ export default function ProductDetail({ addToCart }) {
           );
 
           if (found) {
-            // ✅ TUZATILDI: narx o'rniga xotiralar massivi olinadi
             const formatted = {
               id: found._id,
               kategoriya: found.category,
@@ -159,8 +162,13 @@ export default function ProductDetail({ addToCart }) {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-gray-500">{t("sending")}</p>
+      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-950">
+        <div className="flex flex-col items-center gap-4">
+          <div className="loader-ring" />
+          <p className="text-gray-400 dark:text-gray-500 text-sm">
+            {t("sending")}
+          </p>
+        </div>
       </div>
     );
   }
@@ -170,7 +178,7 @@ export default function ProductDetail({ addToCart }) {
       <div className="min-h-screen flex items-center justify-center">
         <button
           onClick={() => navigate("/katalog")}
-          className="bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-6 py-3 rounded-xl"
+          className="bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-6 py-3 rounded-xl hover:scale-105 transition"
         >
           {t("productBack")}
         </button>
@@ -208,6 +216,11 @@ export default function ProductDetail({ addToCart }) {
     return product.narx;
   }
 
+  function handleStorageSelect(nomi) {
+    setStorage(nomi);
+    setPriceKey((prev) => prev + 1);
+  }
+
   function handleAddToCart() {
     const currentPrice = getCurrentPrice();
 
@@ -218,41 +231,51 @@ export default function ProductDetail({ addToCart }) {
       storage: storage,
     });
 
-    navigate("/cart");
+    setJustAdded(true);
+
+    setTimeout(() => {
+      navigate("/cart");
+    }, 500);
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-100 via-white to-gray-200 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 py-12 px-6 transition-colors duration-300">
+    <div className="relative min-h-screen bg-gradient-to-br from-gray-100 via-white to-gray-200 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 py-12 px-6 transition-colors duration-300 overflow-hidden">
 
-      <div className="max-w-6xl mx-auto">
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="floating-blob absolute top-0 right-0 w-[400px] h-[400px] rounded-full bg-gray-200/30 dark:bg-gray-800/20 blur-3xl" />
+      </div>
+
+      <div className="relative max-w-6xl mx-auto">
 
         <button
           onClick={() => navigate("/katalog")}
-          className="flex items-center gap-2 mb-8 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-semibold"
+          className="fade-up flex items-center gap-2 mb-8 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-semibold group transition"
         >
-          <FaArrowLeft />
+          <FaArrowLeft className="group-hover:-translate-x-1 transition-transform duration-300" />
           {t("productBack")}
         </button>
 
-        <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl overflow-hidden grid md:grid-cols-2">
+        <div className="fade-up-delay bg-white dark:bg-gray-800 rounded-3xl shadow-2xl overflow-hidden grid md:grid-cols-2">
 
-          <div className="min-h-[550px] bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 flex items-center justify-center p-10">
+          <div className="min-h-[400px] md:min-h-[550px] bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 flex items-center justify-center p-10 relative overflow-hidden">
+
+            <div className="image-glow absolute w-72 h-72 rounded-full bg-white/40 dark:bg-white/5 blur-3xl" />
 
             <img
               src={product.rasm}
               alt={product.nomi}
-              className="max-w-full max-h-[500px] object-contain hover:scale-105 transition duration-500"
+              className="relative max-w-full max-h-[500px] object-contain hover:scale-105 transition duration-500 product-image-in"
             />
 
           </div>
 
           <div className="p-8 md:p-12">
 
-            <span className="text-gray-500 dark:text-gray-400 font-bold tracking-[4px]">
+            <span className="text-gray-500 dark:text-gray-400 font-bold tracking-[4px] text-sm">
               APPLE STORE
             </span>
 
-            <h1 className="text-4xl font-extrabold text-gray-900 dark:text-white mt-4">
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white mt-4">
               {product.nomi}
             </h1>
 
@@ -272,11 +295,11 @@ export default function ProductDetail({ addToCart }) {
                   {product.xotiralar.map((item) => (
                     <button
                       key={item.nomi}
-                      onClick={() => setStorage(item.nomi)}
-                      className={`px-5 py-3 rounded-xl border-2 font-semibold transition ${
+                      onClick={() => handleStorageSelect(item.nomi)}
+                      className={`px-5 py-3 rounded-xl border-2 font-semibold transition-all duration-300 ${
                         storage === item.nomi
-                          ? "border-gray-900 dark:border-white bg-gray-900 dark:bg-white text-white dark:text-gray-900"
-                          : "border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-gray-500 dark:hover:border-gray-400"
+                          ? "border-gray-900 dark:border-white bg-gray-900 dark:bg-white text-white dark:text-gray-900 scale-105 shadow-lg"
+                          : "border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-gray-500 dark:hover:border-gray-400 hover:-translate-y-0.5"
                       }`}
                     >
                       {item.nomi}
@@ -300,11 +323,11 @@ export default function ProductDetail({ addToCart }) {
                   <FaStar
                     key={star}
                     size={22}
-                    className={
+                    className={`transition-all duration-200 ${
                       star <= Math.round(averageRating)
                         ? "text-yellow-400"
-                        : "text-gray-300"
-                    }
+                        : "text-gray-300 dark:text-gray-600"
+                    }`}
                   />
                 ))}
 
@@ -315,7 +338,8 @@ export default function ProductDetail({ addToCart }) {
               </div>
 
               {hasRated ? (
-                <p className="text-sm text-gray-500 dark:text-gray-400">
+                <p className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-2">
+                  <FaCheck className="text-green-500" />
                   {t("yourRating")}: {myRating}/5
                 </p>
               ) : (
@@ -329,11 +353,17 @@ export default function ProductDetail({ addToCart }) {
                     <button
                       key={star}
                       onClick={() => handleRate(star)}
-                      className="hover:scale-125 transition"
+                      onMouseEnter={() => setHoveredStar(star)}
+                      onMouseLeave={() => setHoveredStar(0)}
+                      className="hover:scale-125 transition-transform duration-200"
                     >
                       <FaStar
                         size={20}
-                        className="text-gray-300 hover:text-yellow-400"
+                        className={
+                          star <= hoveredStar
+                            ? "text-yellow-400"
+                            : "text-gray-300 dark:text-gray-600"
+                        }
                       />
                     </button>
                   ))}
@@ -345,7 +375,10 @@ export default function ProductDetail({ addToCart }) {
 
             <div className="mt-8">
 
-              <p className="text-4xl font-extrabold text-gray-900 dark:text-white">
+              <p
+                key={priceKey}
+                className="text-4xl font-extrabold text-gray-900 dark:text-white price-pop"
+              >
                 {formatPrice(getCurrentPrice())}
               </p>
 
@@ -359,10 +392,23 @@ export default function ProductDetail({ addToCart }) {
 
             <button
               onClick={handleAddToCart}
-              className="w-full mt-8 bg-gray-900 dark:bg-white text-white dark:text-gray-900 py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-3 hover:bg-black dark:hover:bg-gray-100 hover:scale-105 transition"
+              disabled={justAdded}
+              className={`w-full mt-8 py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-3 transition-all duration-300 shadow-lg ${
+                justAdded
+                  ? "bg-green-600 text-white scale-[1.02]"
+                  : "bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-black dark:hover:bg-gray-100 hover:scale-[1.02] active:scale-[0.98]"
+              }`}
             >
-              <FaShoppingCart />
-              {t("addToCart")}
+              {justAdded ? (
+                <>
+                  <FaCheck /> {t("addToCart")}
+                </>
+              ) : (
+                <>
+                  <FaShoppingCart />
+                  {t("addToCart")}
+                </>
+              )}
             </button>
 
           </div>
@@ -370,6 +416,89 @@ export default function ProductDetail({ addToCart }) {
         </div>
 
       </div>
+
+      <style>{`
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-up {
+          animation: fadeUp 0.6s ease-out both;
+        }
+
+        .fade-up-delay {
+          animation: fadeUp 0.7s ease-out 0.1s both;
+        }
+
+        @keyframes productImageIn {
+          from {
+            opacity: 0;
+            transform: scale(0.85) rotate(-3deg);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1) rotate(0deg);
+          }
+        }
+
+        .product-image-in {
+          animation: productImageIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        @keyframes imageGlowPulse {
+          0%, 100% { opacity: 0.5; transform: scale(1); }
+          50% { opacity: 0.8; transform: scale(1.1); }
+        }
+
+        .image-glow {
+          animation: imageGlowPulse 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+          0%, 100% { transform: translate(0, 0); }
+          50% { transform: translate(-20px, 20px); }
+        }
+
+        .floating-blob {
+          animation: float 13s ease-in-out infinite;
+        }
+
+        @keyframes pricePop {
+          from {
+            opacity: 0;
+            transform: scale(0.85) translateY(-6px);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+          }
+        }
+
+        .price-pop {
+          animation: pricePop 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        .loader-ring {
+          width: 40px;
+          height: 40px;
+          border: 3px solid rgba(0,0,0,0.1);
+          border-top-color: currentColor;
+          border-radius: 50%;
+          animation: spin 0.8s linear infinite;
+          color: #111;
+        }
+
+        .dark .loader-ring {
+          color: #fff;
+          border-color: rgba(255,255,255,0.1);
+          border-top-color: #fff;
+        }
+
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
 
     </div>
   );
