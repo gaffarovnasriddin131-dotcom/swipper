@@ -7,6 +7,11 @@ import {
   FaMinus,
   FaCheck,
   FaTimes,
+  FaUser,
+  FaPhone,
+  FaEnvelope,
+  FaMapMarkerAlt,
+  FaCommentDots,
 } from "react-icons/fa";
 
 const BACKEND_URL = "https://swipper-server.onrender.com";
@@ -322,103 +327,158 @@ export default function Cart({
 
       </div>
 
+      {/* ===== BUYURTMA FORMASI (MODAL) ===== */}
       {showOrder && (
 
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto">
+        <div
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 overflow-y-auto modal-fade-in"
+          onClick={() => {
+            setShowOrder(false);
+            setMessage("");
+          }}
+        >
 
-          <div className="bg-white dark:bg-gray-800 w-full max-w-md rounded-3xl shadow-2xl p-5 sm:p-7 my-4">
+          <div
+            className="bg-white dark:bg-gray-800 w-full max-w-md rounded-3xl shadow-2xl overflow-hidden my-4 modal-pop-in"
+            onClick={(e) => e.stopPropagation()}
+          >
 
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2">
-              {t("orderTitle")}
-            </h2>
+            <div className="h-1.5 bg-gradient-to-r from-gray-400 via-gray-900 to-gray-400 dark:from-gray-600 dark:via-white dark:to-gray-600" />
 
-            <p className="text-gray-500 dark:text-gray-400 mb-6">
-              {t("orderDescription")}
-            </p>
+            <div className="p-6 sm:p-8">
 
-            <form
-              onSubmit={handleOrder}
-              className="space-y-4"
-            >
+              <div className="flex items-start justify-between mb-2">
+                <div className="w-12 h-12 rounded-2xl bg-gray-900 dark:bg-white text-white dark:text-gray-900 flex items-center justify-center shadow-lg">
+                  <FaShoppingCart className="text-lg" />
+                </div>
 
-              <input
-                type="text"
-                placeholder={t("fullName")}
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl p-3 outline-none focus:border-gray-900 dark:focus:border-white"
-              />
-
-              <div className="flex items-stretch border border-gray-300 dark:border-gray-600 rounded-xl overflow-hidden focus-within:border-gray-900 dark:focus-within:border-white">
-
-                <span className="flex items-center px-3 bg-gray-100 dark:bg-gray-600 text-gray-700 dark:text-white font-semibold border-r border-gray-300 dark:border-gray-600">
-                  +998
-                </span>
-
-                <input
-                  type="tel"
-                  inputMode="numeric"
-                  placeholder="90 123 45 67"
-                  value={phone}
-                  onChange={handlePhoneChange}
-                  maxLength={9}
-                  className="flex-1 min-w-0 p-3 outline-none dark:bg-gray-700 dark:text-white"
-                />
-
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowOrder(false);
+                    setMessage("");
+                  }}
+                  className="w-9 h-9 rounded-full flex items-center justify-center text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+                >
+                  <FaTimes />
+                </button>
               </div>
 
-              <input
-                type="email"
-                placeholder={t("email")}
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl p-3 outline-none focus:border-gray-900 dark:focus:border-white"
-              />
+              <h2 className="text-2xl sm:text-3xl font-black text-gray-900 dark:text-white mb-2 mt-2">
+                {t("orderTitle")}
+              </h2>
 
-              <input
-                type="text"
-                placeholder={t("deliveryAddress")}
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl p-3 outline-none focus:border-gray-900 dark:focus:border-white"
-              />
+              <p className="text-gray-500 dark:text-gray-400 mb-6 text-sm">
+                {t("orderDescription")}
+              </p>
 
-              <textarea
-                placeholder={t("orderComment")}
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-                rows={3}
-                className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl p-3 outline-none focus:border-gray-900 dark:focus:border-white resize-none"
-              />
+              <form
+                onSubmit={handleOrder}
+                className="space-y-4"
+              >
 
-              {message && (
-                <div className="bg-gray-100 dark:bg-gray-700 dark:text-white rounded-xl p-3 text-center font-semibold text-sm">
-                  {message}
+                <div className="input-group relative">
+                  <FaUser className="input-icon absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+
+                  <input
+                    type="text"
+                    placeholder={t("fullName")}
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="w-full pl-11 pr-4 py-3.5 rounded-2xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 dark:text-white outline-none focus:border-gray-900 dark:focus:border-white focus:ring-4 focus:ring-gray-900/5 dark:focus:ring-white/10 transition-all duration-300"
+                  />
                 </div>
-              )}
 
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 py-3 rounded-xl font-bold hover:bg-black dark:hover:bg-gray-100 transition disabled:opacity-50"
-              >
-                {loading
-                  ? t("sending")
-                  : t("placeOrder")}
-              </button>
+                <div className="input-group flex items-stretch border border-gray-200 dark:border-gray-600 rounded-2xl overflow-hidden focus-within:border-gray-900 dark:focus-within:border-white focus-within:ring-4 focus-within:ring-gray-900/5 dark:focus-within:ring-white/10 transition-all duration-300 bg-gray-50 dark:bg-gray-700">
 
-              <button
-                type="button"
-                onClick={() => {
-                  setShowOrder(false);
-                  setMessage("");
-                }}
-                className="w-full border border-gray-300 dark:border-gray-600 dark:text-white py-3 rounded-xl font-semibold hover:bg-gray-100 dark:hover:bg-gray-700 transition"
-              >
-                {t("cancel")}
-              </button>
+                  <span className="flex items-center gap-2 px-4 bg-gray-100 dark:bg-gray-600 text-gray-700 dark:text-white font-semibold border-r border-gray-200 dark:border-gray-600">
+                    <FaPhone className="text-xs text-gray-400" />
+                    +998
+                  </span>
 
-            </form>
+                  <input
+                    type="tel"
+                    inputMode="numeric"
+                    placeholder="90 123 45 67"
+                    value={phone}
+                    onChange={handlePhoneChange}
+                    maxLength={9}
+                    className="flex-1 min-w-0 p-3.5 outline-none bg-transparent dark:text-white"
+                  />
+
+                </div>
+
+                <div className="input-group relative">
+                  <FaEnvelope className="input-icon absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+
+                  <input
+                    type="email"
+                    placeholder={t("email")}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full pl-11 pr-4 py-3.5 rounded-2xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 dark:text-white outline-none focus:border-gray-900 dark:focus:border-white focus:ring-4 focus:ring-gray-900/5 dark:focus:ring-white/10 transition-all duration-300"
+                  />
+                </div>
+
+                <div className="input-group relative">
+                  <FaMapMarkerAlt className="input-icon absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+
+                  <input
+                    type="text"
+                    placeholder={t("deliveryAddress")}
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                    className="w-full pl-11 pr-4 py-3.5 rounded-2xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 dark:text-white outline-none focus:border-gray-900 dark:focus:border-white focus:ring-4 focus:ring-gray-900/5 dark:focus:ring-white/10 transition-all duration-300"
+                  />
+                </div>
+
+                <div className="input-group relative">
+                  <FaCommentDots className="input-icon absolute left-4 top-4 text-gray-400" />
+
+                  <textarea
+                    placeholder={t("orderComment")}
+                    value={comment}
+                    onChange={(e) => setComment(e.target.value)}
+                    rows={3}
+                    className="w-full pl-11 pr-4 py-3.5 rounded-2xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 dark:text-white outline-none focus:border-gray-900 dark:focus:border-white focus:ring-4 focus:ring-gray-900/5 dark:focus:ring-white/10 transition-all duration-300 resize-none"
+                  />
+                </div>
+
+                {message && (
+                  <div className="bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 rounded-2xl p-3 text-center font-semibold text-sm shake">
+                    {message}
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 py-4 rounded-2xl font-bold hover:bg-black dark:hover:bg-gray-100 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:hover:scale-100 flex items-center justify-center gap-2 shadow-lg"
+                >
+                  {loading ? (
+                    <>
+                      <span className="spinner" />
+                      {t("sending")}
+                    </>
+                  ) : (
+                    t("placeOrder")
+                  )}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowOrder(false);
+                    setMessage("");
+                  }}
+                  className="w-full border border-gray-200 dark:border-gray-600 dark:text-white py-3.5 rounded-2xl font-semibold hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+                >
+                  {t("cancel")}
+                </button>
+
+              </form>
+
+            </div>
 
           </div>
 
@@ -472,6 +532,62 @@ export default function Cart({
             opacity: 1;
             transform: translateX(0);
           }
+        }
+
+        @keyframes modalFadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+
+        .modal-fade-in {
+          animation: modalFadeIn 0.25s ease-out both;
+        }
+
+        @keyframes modalPopIn {
+          from {
+            opacity: 0;
+            transform: scale(0.92) translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+          }
+        }
+
+        .modal-pop-in {
+          animation: modalPopIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        .input-group:focus-within .input-icon {
+          color: currentColor;
+          transform: translateY(-50%) scale(1.1);
+        }
+
+        .input-icon {
+          transition: all 0.3s ease;
+        }
+
+        @keyframes shake {
+          0%, 100% { transform: translateX(0); }
+          25% { transform: translateX(-4px); }
+          75% { transform: translateX(4px); }
+        }
+
+        .shake {
+          animation: shake 0.35s ease-in-out;
+        }
+
+        .spinner {
+          width: 16px;
+          height: 16px;
+          border: 2px solid currentColor;
+          border-top-color: transparent;
+          border-radius: 50%;
+          animation: spin 0.7s linear infinite;
+        }
+
+        @keyframes spin {
+          to { transform: rotate(360deg); }
         }
       `}</style>
 
