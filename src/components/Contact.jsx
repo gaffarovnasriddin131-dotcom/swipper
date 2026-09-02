@@ -10,7 +10,7 @@ export default function Contact() {
       id="aloqa"
       className="relative min-h-screen py-10 sm:py-24 px-4 sm:px-6 overflow-hidden flex items-center bg-white dark:bg-gray-950 transition-colors duration-300"
     >
-      {/* ===== HARAKATLANUVCHI FON ELEMENTLARI ===== */}
+      
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="floating-blob absolute -top-32 -left-32 w-[350px] sm:w-[450px] h-[350px] sm:h-[450px] rounded-full bg-gray-200/50 dark:bg-gray-800/40 blur-3xl" />
         <div className="floating-blob-delayed absolute bottom-[-120px] right-[-100px] w-[350px] sm:w-[450px] h-[350px] sm:h-[450px] rounded-full bg-gray-100/60 dark:bg-gray-900/50 blur-3xl" />

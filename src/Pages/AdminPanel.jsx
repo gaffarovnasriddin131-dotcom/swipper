@@ -29,7 +29,6 @@ export default function AdminPanel() {
   return (
     <div className="min-h-screen flex bg-gray-100 dark:bg-gray-950">
 
-      {/* DESKTOP SIDEBAR */}
 
       <aside className="hidden md:flex md:flex-col w-64 bg-gray-900 dark:bg-black text-white p-6 admin-fade-in">
 
@@ -75,7 +74,7 @@ export default function AdminPanel() {
 
       </aside>
 
-      {/* MOBIL SIDEBAR */}
+     
 
       {menuOpen && (
         <div className="md:hidden fixed inset-0 z-50 flex">

@@ -99,7 +99,7 @@ export default function About() {
   return (
     <section className="relative min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-white transition-colors duration-300 overflow-hidden">
 
-      {/* ===== HARAKATLANUVCHI FON ELEMENTLARI ===== */}
+      
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="floating-blob absolute -top-32 -left-32 w-[400px] h-[400px] rounded-full bg-gray-200/40 dark:bg-gray-800/40 blur-3xl" />
         <div className="floating-blob-delayed absolute top-1/3 -right-40 w-[500px] h-[500px] rounded-full bg-gray-100/50 dark:bg-gray-900/50 blur-3xl" />

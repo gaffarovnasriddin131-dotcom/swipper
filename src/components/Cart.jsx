@@ -327,7 +327,7 @@ export default function Cart({
 
       </div>
 
-      {/* ===== BUYURTMA FORMASI (MODAL) ===== */}
+   
       {showOrder && (
 
         <div

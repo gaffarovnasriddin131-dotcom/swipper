@@ -9,6 +9,7 @@ import Cart from "./components/Cart";
 import ProductDetail from "./components/ProductDetail";
 import Contact from "./components/Contact";
 import About from "./components/About";
+import TrackOrder from "./components/TrackOrder";
 
 import AdminPanel from "./Pages/AdminPanel";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -54,6 +55,13 @@ export default function App() {
   const location = useLocation();
 
   const isAdminPage = location.pathname.startsWith("/admin");
+
+  // ✅ YANGI: /login manzilига o'zingiz kirganingizda login oynasi avtomatik ochiladi
+  useEffect(() => {
+    if (location.pathname === "/login") {
+      setModal(true);
+    }
+  }, [location.pathname]);
 
   useEffect(() => {
     fetch("https://swipper-server.onrender.com/api/visit", {
@@ -209,6 +217,11 @@ export default function App() {
           element={<Contact />}
         />
 
+        <Route
+          path="/buyurtmani-kuzatish"
+          element={<TrackOrder />}
+        />
+
         {/* ✅ TUZATILDI: takrorlangan route olib tashlandi, faqat bitta qoldi */}
         <Route
           path="/product/:id"
@@ -281,7 +294,12 @@ export default function App() {
       {modal && (
         <div
           className="fixed inset-0 z-[200] flex items-center justify-center p-5 bg-black/70 backdrop-blur-md"
-          onClick={() => setModal(false)}
+          onClick={() => {
+            setModal(false);
+            if (location.pathname === "/login") {
+              navigate("/");
+            }
+          }}
         >
           <div
             className="relative w-full max-w-md overflow-hidden rounded-[32px] bg-white dark:bg-gray-900 shadow-[0_30px_100px_rgba(0,0,0,0.45)] border border-white/20 dark:border-gray-700"
@@ -371,6 +389,10 @@ export default function App() {
                   setLogin("");
                   setPassword("");
                   setShowPassword(false);
+
+                  if (location.pathname === "/login") {
+                    navigate("/");
+                  }
                 }}
                 className="w-full mt-3 py-4 rounded-2xl border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 font-semibold hover:bg-gray-100 dark:hover:bg-gray-800 transition"
               >

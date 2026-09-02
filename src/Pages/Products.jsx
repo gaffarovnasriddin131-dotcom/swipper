@@ -31,11 +31,9 @@ export default function Products() {
   const [products, setProducts] = useState([]);
   const [loadingList, setLoadingList] = useState(true);
 
-  const [editingId, setEditingId] = useState(null); // null = yangi qo'shish rejimi
-
   const [form, setForm] = useState(BOSH_FORMA);
 
-  // Xotira variantlari: [{ nomi: "128 GB", narx: "999" }, ...]
+ 
   const [xotiralar, setXotiralar] = useState([
     { nomi: "", narx: "" },
   ]);
@@ -111,7 +109,7 @@ export default function Products() {
 
     setMessage("");
 
-    // Forma tepasiga o'tish, tahrirlash qulay bo'lishi uchun
+   
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
@@ -236,7 +234,7 @@ export default function Products() {
         <FaBoxOpen /> Mahsulotlar
       </h1>
 
-      {/* ================= FORMA ================= */}
+   
       <form
         onSubmit={handleSubmit}
         className="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-6 sm:p-8 mb-10 space-y-5"
@@ -321,7 +319,7 @@ export default function Products() {
           />
         </div>
 
-        {/* ===== XOTIRA / NARX QATORLARI ===== */}
+       
         <div>
           <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-3">
             Xotira va narx variantlari
@@ -408,7 +406,7 @@ export default function Products() {
         </button>
       </form>
 
-      {/* ================= RO'YXAT ================= */}
+   
       <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-6 sm:p-8">
         <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
           Mavjud mahsulotlar ({products.length})

@@ -299,6 +299,30 @@ app.put("/api/orders/:id/status", verifyAdmin, async (req, res) => {
   }
 });
 
+// ✅ YANGI: mijoz o'z buyurtmasini telefon raqami orqali kuzatishi uchun (ochiq, login shart emas)
+app.get("/api/orders/track/:phone", async (req, res) => {
+  try {
+    const rawPhone = req.params.phone.replace(/\D/g, "");
+    const phone = `+998${rawPhone.slice(-9)}`;
+
+    const orders = await Order.find({ phone }).sort({
+      createdAt: -1,
+    });
+
+    res.status(200).json({
+      success: true,
+      orders,
+    });
+  } catch (error) {
+    console.error("ORDER TRACK XATOSI:", error);
+
+    res.status(500).json({
+      success: false,
+      message: "Buyurtmalarni qidirishda xatolik",
+    });
+  }
+});
+
 app.post("/api/order", async (req, res) => {
   try {
     const {

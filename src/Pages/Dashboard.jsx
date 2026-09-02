@@ -28,7 +28,7 @@ export default function Dashboard() {
 
   async function fetchData() {
     try {
-      // ✅ TUZATILDI: orders so'roviga token qo'shildi
+    
       const token = localStorage.getItem("adminToken");
 
       const [productsRes, ordersRes, visitsRes] = await Promise.all([

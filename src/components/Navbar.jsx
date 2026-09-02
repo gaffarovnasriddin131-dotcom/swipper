@@ -4,11 +4,11 @@ import { Link, NavLink } from "react-router-dom";
 import {
   FaApple,
   FaShoppingCart,
-  FaUserCircle,
   FaMoon,
   FaSun,
   FaBars,
   FaTimes,
+  FaBoxOpen,
 } from "react-icons/fa";
 
 export default function Navbar({
@@ -86,6 +86,14 @@ export default function Navbar({
           <div className="flex items-center gap-1 sm:gap-2">
 
             <Link
+              to="/buyurtmani-kuzatish"
+              title={t("trackOrder")}
+              className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 flex items-center justify-center hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black hover:scale-110 transition-all duration-300"
+            >
+              <FaBoxOpen />
+            </Link>
+
+            <Link
               to="/cart"
               className="relative w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 flex items-center justify-center hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black hover:scale-110 hover:-rotate-6 transition-all duration-300"
             >
@@ -100,13 +108,6 @@ export default function Navbar({
                 </span>
               )}
             </Link>
-
-            <button
-              onClick={() => setModal(true)}
-              className="hidden sm:flex w-11 h-11 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 items-center justify-center hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black hover:scale-110 transition-all duration-300"
-            >
-              <FaUserCircle className="text-2xl" />
-            </button>
 
             <button
               onClick={toggleTheme}
@@ -192,17 +193,15 @@ export default function Navbar({
               {t("contactTitle")}
             </NavLink>
 
-            <div className="flex items-center justify-center gap-3 pt-3">
+            <NavLink
+              to="/buyurtmani-kuzatish"
+              className={mobileLinkClass}
+              onClick={() => setMenuOpen(false)}
+            >
+              {t("trackOrder")}
+            </NavLink>
 
-              <button
-                onClick={() => {
-                  setModal(true);
-                  setMenuOpen(false);
-                }}
-                className="w-11 h-11 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 flex items-center justify-center hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black transition-all duration-300"
-              >
-                <FaUserCircle className="text-2xl" />
-              </button>
+            <div className="flex items-center justify-center gap-3 pt-3">
 
               <button
                 onClick={toggleTheme}
