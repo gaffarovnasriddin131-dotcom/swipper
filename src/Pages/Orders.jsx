@@ -11,7 +11,8 @@ const STATUS_OPTIONS = [
 ];
 
 export default function Orders() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const uz = i18n.language === "uz";
 
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -72,13 +73,20 @@ export default function Orders() {
       const data = await response.json();
 
       if (data.success) {
-        setOrders((prev) =>
-          prev.map((order) =>
-            order._id === orderId
-              ? { ...order, status: newStatus }
-              : order
-          )
-        );
+        // ✅ TUZATILDI: "Bekor qilindi" tanlansa, ro'yxatdan olib tashlanadi
+        if (newStatus === "cancelled") {
+          setOrders((prev) =>
+            prev.filter((order) => order._id !== orderId)
+          );
+        } else {
+          setOrders((prev) =>
+            prev.map((order) =>
+              order._id === orderId
+                ? { ...order, status: newStatus }
+                : order
+            )
+          );
+        }
       }
     } catch (error) {
       console.error("HOLATNI YANGILASHDA XATOLIK:", error);
@@ -98,6 +106,41 @@ export default function Orders() {
       default:
         return "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-300";
     }
+  }
+
+  // ✅ YANGI: sanani "Bugun / Kecha / to'liq sana" + soat:daqiqa shaklida ko'rsatish
+  function formatOrderDate(dateStr) {
+    const date = new Date(dateStr);
+    const now = new Date();
+
+    const isSameDay = (a, b) =>
+      a.getFullYear() === b.getFullYear() &&
+      a.getMonth() === b.getMonth() &&
+      a.getDate() === b.getDate();
+
+    const yesterday = new Date(now);
+    yesterday.setDate(now.getDate() - 1);
+
+    const time = date.toLocaleTimeString(uz ? "uz-UZ" : "en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    if (isSameDay(date, now)) {
+      return `${uz ? "Bugun" : "Today"}, ${time}`;
+    }
+
+    if (isSameDay(date, yesterday)) {
+      return `${uz ? "Kecha" : "Yesterday"}, ${time}`;
+    }
+
+    const fullDate = date.toLocaleDateString(uz ? "uz-UZ" : "en-US", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+
+    return `${fullDate}, ${time}`;
   }
 
   return (
@@ -133,6 +176,10 @@ export default function Orders() {
                   </th>
 
                   <th className="p-4 text-left text-gray-900 dark:text-white">
+                    {uz ? "Sana" : "Date"}
+                  </th>
+
+                  <th className="p-4 text-left text-gray-900 dark:text-white">
                     {t("status")}
                   </th>
                 </tr>
@@ -162,6 +209,10 @@ export default function Orders() {
 
                     <td className="p-4 font-semibold text-gray-900 dark:text-white">
                       {item.total}
+                    </td>
+
+                    <td className="p-4 text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
+                      {formatOrderDate(item.createdAt)}
                     </td>
 
                     <td className="p-4">
