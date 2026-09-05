@@ -1,10 +1,13 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   FaApple,
   FaCheckCircle,
   FaShoppingBag,
   FaPhoneAlt,
+  FaBoxOpen,
+  FaArrowRight,
 } from "react-icons/fa";
 
 export default function About() {
@@ -94,12 +97,24 @@ export default function About() {
     step4: uz
       ? "Yetkazib berish tafsilotlari aniqlashtiriladi."
       : "Delivery details are clarified.",
+
+    trackTitle: uz
+      ? "Buyurtmangiz qayerda ekanini bilmoqchimisiz?"
+      : "Want to know where your order is?",
+
+    trackText: uz
+      ? "Buyurtma berganda kiritgan telefon raqamingiz orqali, buyurtmangiz qaysi bosqichda ekanini (qabul qilindi, tayyorlanmoqda, yetkazildi) istalgan vaqtda tekshirishingiz mumkin — hech kimga qo‘ng‘iroq qilishning hojati yo‘q."
+      : "Using the phone number you entered when ordering, you can check your order status (received, being prepared, delivered) at any time — no need to call anyone.",
+
+    trackButton: uz
+      ? "Buyurtmamni kuzatish"
+      : "Track My Order",
   };
 
   return (
     <section className="relative min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-white transition-colors duration-300 overflow-hidden">
 
-      
+      {/* ===== HARAKATLANUVCHI FON ELEMENTLARI ===== */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="floating-blob absolute -top-32 -left-32 w-[400px] h-[400px] rounded-full bg-gray-200/40 dark:bg-gray-800/40 blur-3xl" />
         <div className="floating-blob-delayed absolute top-1/3 -right-40 w-[500px] h-[500px] rounded-full bg-gray-100/50 dark:bg-gray-900/50 blur-3xl" />
@@ -257,6 +272,41 @@ export default function About() {
               )}
 
             </div>
+
+          </div>
+
+        </div>
+
+        {/* ===== BUYURTMANI KUZATISH BLOKI ===== */}
+        <div className="fade-up group relative mt-8 rounded-[40px] bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 p-8 md:p-14 overflow-hidden" style={{ animationDelay: "150ms" }}>
+
+          <div className="absolute -top-16 -right-16 w-64 h-64 bg-black/5 dark:bg-white/5 rounded-full blur-3xl group-hover:scale-125 transition-transform duration-700" />
+
+          <div className="relative flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+
+            <div className="max-w-xl">
+
+              <div className="w-14 h-14 rounded-2xl bg-black dark:bg-white text-white dark:text-black flex items-center justify-center mb-6 shadow-lg pulse-ring">
+                <FaBoxOpen className="text-xl" />
+              </div>
+
+              <h2 className="text-3xl md:text-4xl font-black text-gray-900 dark:text-white mb-4">
+                {text.trackTitle}
+              </h2>
+
+              <p className="text-gray-500 dark:text-gray-400 text-lg leading-8">
+                {text.trackText}
+              </p>
+
+            </div>
+
+            <Link
+              to="/buyurtmani-kuzatish"
+              className="flex-shrink-0 flex items-center gap-3 bg-black dark:bg-white text-white dark:text-black px-7 py-4 rounded-2xl font-bold hover:scale-105 hover:shadow-2xl transition-all duration-300 group/btn"
+            >
+              {text.trackButton}
+              <FaArrowRight className="group-hover/btn:translate-x-1 transition-transform duration-300" />
+            </Link>
 
           </div>
 
