@@ -1,14 +1,13 @@
-
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 
 const resources = {
   en: {
     translation: {
-      appleStore: "Apple Store",
+      appleStore: "iStore",
       premiumTechnology: "Premium Technology",
       welcomeFirst: "Welcome to",
-      welcomeSecond: "Apple Store",
+      welcomeSecond: "iStore",
       heroDescription:
         "Find the latest Apple products in one place. Modern design, powerful technology and reliable service — all for you.",
       viewCatalog: "View Catalog",
@@ -75,7 +74,7 @@ const resources = {
 
       aboutTitle: "About Us",
       aboutDescription:
-        "Apple Store brings modern Apple technology together in one place. We offer quality products, modern design and reliable service.",
+        "iStore brings modern Apple technology together in one place. We offer quality products, modern design and reliable service.",
 
       aboutQualityTitle: "Quality",
       aboutQualityText:
@@ -91,7 +90,7 @@ const resources = {
 
       aboutBottomTitle: "Technology for You",
       aboutBottomText:
-        "Choose your favorite Apple product and enjoy modern technology with Apple Store.",
+        "Choose your favorite Apple product and enjoy modern technology with iStore.",
 
       login: "Login",
       password: "Password",
@@ -112,6 +111,8 @@ const resources = {
       back: "Back to Catalog",
       addCart: "Add to Cart",
 
+      trackOrder: "Track Order",
+
       adminPanel: "Admin Panel",
       adminDashboard: "Admin Dashboard",
       admin: "Admin",
@@ -124,7 +125,7 @@ const resources = {
       visits: "Visits",
 
       welcomeAdmin: "Welcome Back, Admin",
-      manageStore: "Manage your Apple Store quickly and easily.",
+      manageStore: "Manage your iStore quickly and easily.",
       revenue: "Revenue",
       recentOrders: "Recent Orders",
       customer: "Customer",
@@ -165,9 +166,9 @@ const resources = {
 
   uz: {
     translation: {
-      appleStore: "Apple Store",
+      appleStore: "iStore",
       premiumTechnology: "Premium Texnologiya",
-      welcomeFirst: "Apple Store'ga",
+      welcomeFirst: "iStore'ga",
       welcomeSecond: "xush kelibsiz",
       heroDescription:
         "Eng yangi Apple mahsulotlarini bir joydan toping. Zamonaviy dizayn, kuchli texnologiya va ishonchli xizmat — barchasi siz uchun.",
@@ -235,7 +236,7 @@ const resources = {
 
       aboutTitle: "Biz haqimizda",
       aboutDescription:
-        "Apple Store zamonaviy Apple texnologiyalarini bir joyga jamlaydi. Biz sifatli mahsulotlar, zamonaviy dizayn va ishonchli xizmatni taklif qilamiz.",
+        "iStore zamonaviy Apple texnologiyalarini bir joyga jamlaydi. Biz sifatli mahsulotlar, zamonaviy dizayn va ishonchli xizmatni taklif qilamiz.",
 
       aboutQualityTitle: "Sifat",
       aboutQualityText:
@@ -251,7 +252,7 @@ const resources = {
 
       aboutBottomTitle: "Texnologiya siz uchun",
       aboutBottomText:
-        "O'zingizga yoqqan Apple mahsulotini tanlang va Apple Store bilan zamonaviy texnologiyalardan bahramand bo'ling.",
+        "O'zingizga yoqqan Apple mahsulotini tanlang va iStore bilan zamonaviy texnologiyalardan bahramand bo'ling.",
 
       login: "Kirish",
       password: "Parol",
@@ -272,6 +273,8 @@ const resources = {
       back: "Katalogga qaytish",
       addCart: "Savatga qo'shish",
 
+      trackOrder: "Buyurtmani kuzatish",
+
       adminPanel: "Admin Panel",
       adminDashboard: "Admin Boshqaruv Paneli",
       admin: "Admin",
@@ -284,7 +287,7 @@ const resources = {
       visits: "Tashriflar",
 
       welcomeAdmin: "Xush kelibsiz, Admin",
-      manageStore: "Apple Store'ingizni tez va qulay boshqaring.",
+      manageStore: "iStore'ingizni tez va qulay boshqaring.",
       revenue: "Daromad",
       recentOrders: "So'nggi buyurtmalar",
       customer: "Mijoz",
@@ -334,4 +337,3 @@ i18n.use(initReactI18next).init({
 });
 
 export default i18n;
-

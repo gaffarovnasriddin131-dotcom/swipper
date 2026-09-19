@@ -37,13 +37,8 @@ export default function ProductDetail({ addToCart }) {
   useEffect(() => {
     if (location.state) {
       setProduct(location.state);
-
-      setStorage(
-        location.state.xotiralar?.[0]?.nomi || ""
-      );
-
+      setStorage(location.state.xotiralar?.[0]?.nomi || "");
       setLoading(false);
-
       return;
     }
 
@@ -53,13 +48,8 @@ export default function ProductDetail({ addToCart }) {
 
     if (staticProduct) {
       setProduct(staticProduct);
-
-      setStorage(
-        staticProduct.xotiralar?.[0]?.nomi || ""
-      );
-
+      setStorage(staticProduct.xotiralar?.[0]?.nomi || "");
       setLoading(false);
-
       return;
     }
 
@@ -67,9 +57,7 @@ export default function ProductDetail({ addToCart }) {
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {
-          const found = data.products.find(
-            (item) => item._id === id
-          );
+          const found = data.products.find((item) => item._id === id);
 
           if (found) {
             const formatted = {
@@ -85,10 +73,7 @@ export default function ProductDetail({ addToCart }) {
             };
 
             setProduct(formatted);
-
-            setStorage(
-              formatted.xotiralar?.[0]?.nomi || ""
-            );
+            setStorage(formatted.xotiralar?.[0]?.nomi || "");
           } else {
             setNotFound(true);
           }
@@ -101,9 +86,7 @@ export default function ProductDetail({ addToCart }) {
   }, [id, location.state]);
 
   useEffect(() => {
-    if (!product) {
-      return;
-    }
+    if (!product) return;
 
     fetch(`${BACKEND_URL}/api/ratings/${product.id}`)
       .then((res) => res.json())
@@ -129,20 +112,13 @@ export default function ProductDetail({ addToCart }) {
   }, [product]);
 
   async function handleRate(stars) {
-    if (hasRated || !product) {
-      return;
-    }
+    if (hasRated || !product) return;
 
     try {
       const response = await fetch(`${BACKEND_URL}/api/ratings`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          productId: product.id,
-          stars,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ productId: product.id, stars }),
       });
 
       const data = await response.json();
@@ -152,7 +128,6 @@ export default function ProductDetail({ addToCart }) {
         setRatingCount(data.count);
         setMyRating(stars);
         setHasRated(true);
-
         localStorage.setItem(`rated-${product.id}`, stars);
       }
     } catch (error) {
@@ -190,7 +165,6 @@ export default function ProductDetail({ addToCart }) {
     if (product.malumot && typeof product.malumot === "object") {
       return product.malumot[i18n.language] || product.malumot.uz;
     }
-
     return product.malumot;
   }
 
@@ -198,7 +172,6 @@ export default function ProductDetail({ addToCart }) {
     if (i18n.language === "uz") {
       return `${(price * 12000).toLocaleString("uz-UZ")} UZS`;
     }
-
     return `$${price.toLocaleString("en-US")}`;
   }
 
@@ -207,12 +180,8 @@ export default function ProductDetail({ addToCart }) {
       const selectedStorage = product.xotiralar.find(
         (item) => item.nomi === storage
       );
-
-      return selectedStorage
-        ? selectedStorage.narx
-        : product.xotiralar[0].narx;
+      return selectedStorage ? selectedStorage.narx : product.xotiralar[0].narx;
     }
-
     return product.narx;
   }
 
@@ -258,21 +227,18 @@ export default function ProductDetail({ addToCart }) {
         <div className="fade-up-delay bg-white dark:bg-gray-800 rounded-3xl shadow-2xl overflow-hidden grid md:grid-cols-2">
 
           <div className="min-h-[400px] md:min-h-[550px] bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 flex items-center justify-center p-10 relative overflow-hidden">
-
             <div className="image-glow absolute w-72 h-72 rounded-full bg-white/40 dark:bg-white/5 blur-3xl" />
-
             <img
               src={product.rasm}
               alt={product.nomi}
               className="relative max-w-full max-h-[500px] object-contain hover:scale-105 transition duration-500 product-image-in"
             />
-
           </div>
 
           <div className="p-8 md:p-12">
 
             <span className="text-gray-500 dark:text-gray-400 font-bold tracking-[4px] text-sm">
-              APPLE STORE
+              iSTORE
             </span>
 
             <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white mt-4">
@@ -285,13 +251,10 @@ export default function ProductDetail({ addToCart }) {
 
             {product.xotiralar && product.xotiralar.length > 0 && (
               <div className="mt-8">
-
                 <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">
                   {t("selectStorage")}
                 </h3>
-
                 <div className="flex flex-wrap gap-3">
-
                   {product.xotiralar.map((item) => (
                     <button
                       key={item.nomi}
@@ -305,20 +268,16 @@ export default function ProductDetail({ addToCart }) {
                       {item.nomi}
                     </button>
                   ))}
-
                 </div>
-
               </div>
             )}
 
             <div className="mt-8">
-
               <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-3">
                 {t("rateProduct")}
               </h3>
 
               <div className="flex items-center gap-2 mb-2">
-
                 {[1, 2, 3, 4, 5].map((star) => (
                   <FaStar
                     key={star}
@@ -330,11 +289,9 @@ export default function ProductDetail({ addToCart }) {
                     }`}
                   />
                 ))}
-
                 <span className="text-gray-500 dark:text-gray-400 text-sm ml-1">
                   {averageRating.toFixed(1)} ({ratingCount})
                 </span>
-
               </div>
 
               {hasRated ? (
@@ -344,11 +301,9 @@ export default function ProductDetail({ addToCart }) {
                 </p>
               ) : (
                 <div className="flex items-center gap-2">
-
                   <span className="text-sm text-gray-500 dark:text-gray-400">
                     {t("selectRating")}:
                   </span>
-
                   {[1, 2, 3, 4, 5].map((star) => (
                     <button
                       key={star}
@@ -367,18 +322,12 @@ export default function ProductDetail({ addToCart }) {
                       />
                     </button>
                   ))}
-
                 </div>
               )}
-
             </div>
 
             <div className="mt-8">
-
-              <p
-                key={priceKey}
-                className="text-4xl font-extrabold text-gray-900 dark:text-white price-pop"
-              >
+              <p key={priceKey} className="text-4xl font-extrabold text-gray-900 dark:text-white price-pop">
                 {formatPrice(getCurrentPrice())}
               </p>
 
@@ -387,7 +336,6 @@ export default function ProductDetail({ addToCart }) {
                   {t("selectedStorage")}: {storage}
                 </p>
               )}
-
             </div>
 
             <button
@@ -422,82 +370,47 @@ export default function ProductDetail({ addToCart }) {
           from { opacity: 0; transform: translateY(20px); }
           to { opacity: 1; transform: translateY(0); }
         }
-
-        .fade-up {
-          animation: fadeUp 0.6s ease-out both;
-        }
-
-        .fade-up-delay {
-          animation: fadeUp 0.7s ease-out 0.1s both;
-        }
+        .fade-up { animation: fadeUp 0.6s ease-out both; }
+        .fade-up-delay { animation: fadeUp 0.7s ease-out 0.1s both; }
 
         @keyframes productImageIn {
-          from {
-            opacity: 0;
-            transform: scale(0.85) rotate(-3deg);
-          }
-          to {
-            opacity: 1;
-            transform: scale(1) rotate(0deg);
-          }
+          from { opacity: 0; transform: scale(0.85) rotate(-3deg); }
+          to { opacity: 1; transform: scale(1) rotate(0deg); }
         }
-
-        .product-image-in {
-          animation: productImageIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
-        }
+        .product-image-in { animation: productImageIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
 
         @keyframes imageGlowPulse {
           0%, 100% { opacity: 0.5; transform: scale(1); }
           50% { opacity: 0.8; transform: scale(1.1); }
         }
-
-        .image-glow {
-          animation: imageGlowPulse 4s ease-in-out infinite;
-        }
+        .image-glow { animation: imageGlowPulse 4s ease-in-out infinite; }
 
         @keyframes float {
           0%, 100% { transform: translate(0, 0); }
           50% { transform: translate(-20px, 20px); }
         }
-
-        .floating-blob {
-          animation: float 13s ease-in-out infinite;
-        }
+        .floating-blob { animation: float 13s ease-in-out infinite; }
 
         @keyframes pricePop {
-          from {
-            opacity: 0;
-            transform: scale(0.85) translateY(-6px);
-          }
-          to {
-            opacity: 1;
-            transform: scale(1) translateY(0);
-          }
+          from { opacity: 0; transform: scale(0.85) translateY(-6px); }
+          to { opacity: 1; transform: scale(1) translateY(0); }
         }
-
-        .price-pop {
-          animation: pricePop 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
-        }
+        .price-pop { animation: pricePop 0.35s cubic-bezier(0.16, 1, 0.3, 1) both; }
 
         .loader-ring {
-          width: 40px;
-          height: 40px;
+          width: 40px; height: 40px;
           border: 3px solid rgba(0,0,0,0.1);
           border-top-color: currentColor;
           border-radius: 50%;
           animation: spin 0.8s linear infinite;
           color: #111;
         }
-
         .dark .loader-ring {
           color: #fff;
           border-color: rgba(255,255,255,0.1);
           border-top-color: #fff;
         }
-
-        @keyframes spin {
-          to { transform: rotate(360deg); }
-        }
+        @keyframes spin { to { transform: rotate(360deg); } }
       `}</style>
 
     </div>

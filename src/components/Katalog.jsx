@@ -50,48 +50,19 @@ export default function Katalog({ addToCart }) {
   }, []);
 
   const kategoriyalar = [
-    {
-      nomi: "all",
-      icon: <FaApple />,
-      label: "all",
-    },
-    {
-      nomi: "iPhone",
-      icon: <FaMobileAlt />,
-      label: "iphone",
-    },
-    {
-      nomi: "Mac",
-      icon: <FaLaptop />,
-      label: "mac",
-    },
-    {
-      nomi: "iPad",
-      icon: <FaTabletAlt />,
-      label: "ipad",
-    },
-    {
-      nomi: "AirPods",
-      icon: <FaHeadphones />,
-      label: "airpods",
-    },
-    {
-      nomi: "Apple Watch",
-      icon: <FaClock />,
-      label: "appleWatch",
-    },
-    {
-      nomi: "Aksessuarlar",
-      icon: <FaBox />,
-      label: "accessories",
-    },
+    { nomi: "all", icon: <FaApple />, label: "all" },
+    { nomi: "iPhone", icon: <FaMobileAlt />, label: "iphone" },
+    { nomi: "Mac", icon: <FaLaptop />, label: "mac" },
+    { nomi: "iPad", icon: <FaTabletAlt />, label: "ipad" },
+    { nomi: "AirPods", icon: <FaHeadphones />, label: "airpods" },
+    { nomi: "Apple Watch", icon: <FaClock />, label: "appleWatch" },
+    { nomi: "Aksessuarlar", icon: <FaBox />, label: "accessories" },
   ];
 
   function formatPrice(narx) {
     if (i18n.language === "uz") {
       return `${(narx * 12000).toLocaleString("uz-UZ")} UZS`;
     }
-
     return `$${narx.toLocaleString("en-US")}`;
   }
 
@@ -99,7 +70,6 @@ export default function Katalog({ addToCart }) {
     if (item.xotiralar && item.xotiralar.length > 0) {
       return item.xotiralar[0].narx;
     }
-
     return item.narx;
   }
 
@@ -107,7 +77,6 @@ export default function Katalog({ addToCart }) {
     if (item.malumot && typeof item.malumot === "object") {
       return item.malumot[i18n.language] || item.malumot.uz;
     }
-
     return item.malumot;
   }
 
@@ -140,7 +109,6 @@ export default function Katalog({ addToCart }) {
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-gray-100 via-white to-gray-200 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 py-12 px-6 transition-colors duration-300 overflow-hidden">
 
-      {/* ===== HARAKATLANUVCHI FON ===== */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="floating-blob absolute -top-20 -left-20 w-[400px] h-[400px] rounded-full bg-gray-200/30 dark:bg-gray-800/20 blur-3xl" />
         <div className="floating-blob-delayed absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full bg-gray-100/40 dark:bg-gray-900/30 blur-3xl" />
@@ -151,7 +119,7 @@ export default function Katalog({ addToCart }) {
         <div className="text-center mb-14 fade-up">
 
           <span className="inline-block text-gray-500 dark:text-gray-400 font-bold tracking-[5px] text-sm animate-pulse">
-            APPLE STORE
+            iSTORE
           </span>
 
           <h1 className="text-4xl md:text-6xl font-black text-gray-900 dark:text-white mt-4 gradient-text">
@@ -172,23 +140,9 @@ export default function Katalog({ addToCart }) {
 
               <button
                 key={category.nomi}
-                onClick={() =>
-                  setActiveCategory(category.nomi)
-                }
+                onClick={() => setActiveCategory(category.nomi)}
                 className={`
-                  group
-                  relative
-                  flex
-                  items-center
-                  gap-3
-                  px-5 sm:px-6
-                  py-3.5 sm:py-4
-                  rounded-2xl
-                  font-bold
-                  transition-all
-                  duration-300
-                  hover:-translate-y-0.5
-
+                  group relative flex items-center gap-3 px-5 sm:px-6 py-3.5 sm:py-4 rounded-2xl font-bold transition-all duration-300 hover:-translate-y-0.5
                   ${
                     activeCategory === category.nomi
                       ? "bg-gray-900 dark:bg-white text-white dark:text-gray-900 shadow-lg shadow-gray-900/20 dark:shadow-white/10 scale-105"
@@ -196,7 +150,6 @@ export default function Katalog({ addToCart }) {
                   }
                 `}
               >
-
                 <span
                   className={`text-xl transition-transform duration-300 ${
                     activeCategory === category.nomi
@@ -206,11 +159,7 @@ export default function Katalog({ addToCart }) {
                 >
                   {category.icon}
                 </span>
-
-                <span>
-                  {t(category.label)}
-                </span>
-
+                <span>{t(category.label)}</span>
               </button>
 
             ))}
@@ -249,28 +198,18 @@ export default function Katalog({ addToCart }) {
               <div
                 key={item.id}
                 className="product-card-in bg-white dark:bg-gray-800 rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl hover:-translate-y-3 transition-all duration-500 group"
-                style={{
-                  animationDelay: `${Math.min(index, 12) * 60}ms`,
-                }}
+                style={{ animationDelay: `${Math.min(index, 12) * 60}ms` }}
               >
 
-                <Link
-                  to={`/product/${item.id}`}
-                  state={item}
-                >
-
+                <Link to={`/product/${item.id}`} state={item}>
                   <div className="h-64 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 flex items-center justify-center p-6 cursor-pointer overflow-hidden relative">
-
                     <div className="absolute inset-0 bg-gradient-to-t from-black/0 via-black/0 to-black/0 group-hover:from-black/5 dark:group-hover:from-white/5 transition-all duration-500" />
-
                     <img
                       src={item.rasm}
                       alt={item.nomi}
                       className="max-h-full max-w-full object-contain group-hover:scale-110 transition-transform duration-500"
                     />
-
                   </div>
-
                 </Link>
 
                 <div className="p-6">
@@ -284,26 +223,19 @@ export default function Katalog({ addToCart }) {
                   </p>
 
                   <div className="mt-6">
-
                     <span className="text-2xl font-extrabold text-gray-900 dark:text-white">
-                      {formatPrice(
-                        getProductPrice(item)
-                      )}
+                      {formatPrice(getProductPrice(item))}
                     </span>
-
                   </div>
 
                   <button
-                    onClick={() =>
-                      handleAddToCart(item)
-                    }
+                    onClick={() => handleAddToCart(item)}
                     className={`w-full mt-5 flex items-center justify-center gap-3 py-3 rounded-xl font-bold transition-all duration-300 shadow-lg ${
                       addedId === item.id
                         ? "bg-green-600 text-white scale-105"
                         : "bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-black dark:hover:bg-gray-100 hover:scale-105 active:scale-95"
                     }`}
                   >
-
                     {addedId === item.id ? (
                       <>✓ {t("addToCart")}</>
                     ) : (
@@ -312,7 +244,6 @@ export default function Katalog({ addToCart }) {
                         {t("addToCart")}
                       </>
                     )}
-
                   </button>
 
                 </div>
@@ -338,52 +269,23 @@ export default function Katalog({ addToCart }) {
 
       <style>{`
         @keyframes fadeUp {
-          from {
-            opacity: 0;
-            transform: translateY(25px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+          from { opacity: 0; transform: translateY(25px); }
+          to { opacity: 1; transform: translateY(0); }
         }
-
-        .fade-up {
-          animation: fadeUp 0.7s ease-out both;
-        }
+        .fade-up { animation: fadeUp 0.7s ease-out both; }
 
         @keyframes productCardIn {
-          from {
-            opacity: 0;
-            transform: translateY(30px) scale(0.97);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-          }
+          from { opacity: 0; transform: translateY(30px) scale(0.97); }
+          to { opacity: 1; transform: translateY(0) scale(1); }
         }
-
-        .product-card-in {
-          animation: productCardIn 0.5s ease-out both;
-        }
+        .product-card-in { animation: productCardIn 0.5s ease-out both; }
 
         @keyframes float {
-          0%, 100% {
-            transform: translate(0, 0) scale(1);
-          }
-          50% {
-            transform: translate(25px, -25px) scale(1.05);
-          }
+          0%, 100% { transform: translate(0, 0) scale(1); }
+          50% { transform: translate(25px, -25px) scale(1.05); }
         }
-
-        .floating-blob {
-          animation: float 14s ease-in-out infinite;
-        }
-
-        .floating-blob-delayed {
-          animation: float 17s ease-in-out infinite;
-          animation-delay: -6s;
-        }
+        .floating-blob { animation: float 14s ease-in-out infinite; }
+        .floating-blob-delayed { animation: float 17s ease-in-out infinite; animation-delay: -6s; }
 
         .gradient-text {
           background: linear-gradient(90deg, currentColor, currentColor 40%, #888, currentColor 60%, currentColor);
@@ -392,38 +294,18 @@ export default function Katalog({ addToCart }) {
           background-clip: text;
           animation: shine 6s linear infinite;
         }
+        @keyframes shine { to { background-position: -200% center; } }
 
-        @keyframes shine {
-          to {
-            background-position: -200% center;
-          }
-        }
-
-        .skeleton-card {
-          animation: fadeUp 0.4s ease-out both;
-        }
-
+        .skeleton-card { animation: fadeUp 0.4s ease-out both; }
         .skeleton-shimmer {
-          background: linear-gradient(
-            90deg,
-            rgba(0, 0, 0, 0.06) 25%,
-            rgba(0, 0, 0, 0.1) 37%,
-            rgba(0, 0, 0, 0.06) 63%
-          );
+          background: linear-gradient(90deg, rgba(0,0,0,0.06) 25%, rgba(0,0,0,0.1) 37%, rgba(0,0,0,0.06) 63%);
           background-size: 400% 100%;
           animation: shimmer 1.4s ease-in-out infinite;
         }
-
         .dark .skeleton-shimmer {
-          background: linear-gradient(
-            90deg,
-            rgba(255, 255, 255, 0.06) 25%,
-            rgba(255, 255, 255, 0.12) 37%,
-            rgba(255, 255, 255, 0.06) 63%
-          );
+          background: linear-gradient(90deg, rgba(255,255,255,0.06) 25%, rgba(255,255,255,0.12) 37%, rgba(255,255,255,0.06) 63%);
           background-size: 400% 100%;
         }
-
         @keyframes shimmer {
           0% { background-position: 100% 50%; }
           100% { background-position: 0 50%; }
